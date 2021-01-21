@@ -106,6 +106,7 @@ class Actor:
         self.renderer.SetBackground(1, 1, 1)
         self.renderer.InteractiveOff()
         self.renderer.SetBackgroundAlpha(0)
+        self.renderer_window.AddRenderer(self.renderer)
         return self.renderer
 
     def createBoxWidget(self):
@@ -126,6 +127,7 @@ class Actor:
 
         # boxWidget should be set first and then set the actor
         self.box_widget.SetTransform(transform)
+        self.box_widget.On()
         
 
 class ActorManager:
@@ -137,11 +139,12 @@ class ActorManager:
     def newActor(self, model_path):
         actor = Actor(self.render_window, self.interactor, model_path, len(self.actors)+1)
         self.actors.append(actor)
+        self.setActiveActor(-1)
 
     def setActiveActor(self, index):
         # very important for set the default render
         self.interactor.GetInteractorStyle().SetDefaultRenderer(self.actors[index].renderer)
-        self.style.SetCurrentRenderer(self.actors[index].renderer)
+        self.interactor.GetInteractorStyle().SetCurrentRenderer(self.actors[index].renderer)
         self.actors[index].renderer.Render()
 
     def getIndex(self, actor):
@@ -157,13 +160,16 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
     def __init__(self, parent):
         super().__init__(parent=parent)
         self.interactor = QVTKRenderWindowInteractor(self)
-        self.renderer_window = self.interactor.GetRenderWindow()
 
         self.bg_renderer = vtk.vtkRenderer()
         self.bg_renderer.SetBackground(0, 0, 0)
         self.bg_renderer.SetBackgroundAlpha(1)
         self.bg_renderer.SetLayer(0)
         self.bg_renderer.InteractiveOff()
+
+        self.renderer_window = self.interactor.GetRenderWindow()
+        self.renderer_window.SetNumberOfLayers(1)
+        self.renderer_window.AddRenderer(self.bg_renderer)
 
         self.style = MouseInteractorHighLightActor(self)
         self.interactor.SetInteractorStyle(self.style)
