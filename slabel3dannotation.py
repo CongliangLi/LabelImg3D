@@ -91,11 +91,11 @@ class Actor:
         # actor = self.readObj(model_path)
         self.actor = self.importObj(model_path)
 
-        # move the actor to (0, 0, 0)
-        min_x, _, min_y, _, min_z, _ = self.actor.GetBounds()
-        transform = vtk.vtkTransform()
-        transform.Translate(-min_x, -min_y, -min_z)
-        self.actor.SetUserTransform(transform)
+        # # move the actor to (0, 0, 0)
+        # min_x, _, min_y, _, min_z, _ = self.actor.GetBounds()
+        # transform = vtk.vtkTransform()
+        # transform.Translate(-min_x, -min_y, -min_z)
+        # self.actor.SetUserTransform(transform)
 
         self.renderer.AddActor(self.actor)
 
@@ -116,9 +116,9 @@ class Actor:
         self.box_widget.SetInteractor(self.interactor)
 
         # move the actor to (0, 0, 0)
-        min_x, _, min_y, _, min_z, _ =self.actor.GetBounds()
-        transform = vtk.vtkTransform()
-        transform.Translate(-min_x, -min_y, -min_z)
+        # min_x, _, min_y, _, min_z, _ =self.actor.GetBounds()
+        # transform = vtk.vtkTransform()
+        # transform.Translate(-min_x, -min_y, -min_z)
 
         self.box_widget.HandlesOff()
         self.box_widget.SetProp3D(self.actor)
@@ -126,7 +126,7 @@ class Actor:
         self.box_widget.PlaceWidget(self.actor.GetBounds())
 
         # boxWidget should be set first and then set the actor
-        self.box_widget.SetTransform(transform)
+        # self.box_widget.SetTransform(transform)
         self.box_widget.On()
         
 
@@ -147,6 +147,11 @@ class ActorManager:
         self.interactor.GetInteractorStyle().SetCurrentRenderer(self.actors[index].renderer)
         self.actors[index].renderer.Render()
 
+        # for a in self.actors:
+        #     a.box_widget.Off()
+        
+        # self.actors[index].box_widget.On()
+
     def getIndex(self, actor):
         i = -1
         for i in range(len(self.actors)):
@@ -154,7 +159,7 @@ class ActorManager:
                 break
         return i
 
-    
+
 class SLabel3DAnnotation(QtWidgets.QFrame):
 
     def __init__(self, parent):
