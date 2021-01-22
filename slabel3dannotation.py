@@ -9,11 +9,33 @@ import typing
 import math
 
 
+class MyBoxWidget(vtk.vtkBoxWidget):
+    def __init__(self, interactor, render_window, parent=None):
+        self.interactor = interactor
+        self.render_window = render_window
+
+    def OnLeftButtonUp(self):
+        print("hello world!")
+        super().OnLeftButtonUp()
+
+    def leftButtonPressEvent(self, obj, event):
+        print("hello world")
+
+    def leftButtonPressEvent(self, obj, event):
+        print("hello world")
+
+    def OnLeftButtonDown(self):
+        print("hello world")
+
 class MouseInteractorHighLightActor(vtk.vtkInteractorStyleTrackballCamera):
 
     def __init__(self, slabel, parent=None):
         self.slabel = slabel
         self.AddObserver("LeftButtonPressEvent", self.leftButtonPressEvent)
+
+    def switchBoxWidgets(actor):
+        self.slabel.switchBoxWidgets(actor)
+
 
     def leftButtonPressEvent(self, obj, event):
         clickPos = self.GetInteractor().GetEventPosition()
@@ -38,6 +60,20 @@ def boxCallback(obj, event):
     t = vtk.vtkTransform()
     obj.GetTransform(t)
     obj.GetProp3D().SetUserTransform(t)
+
+def boxStartCallback(obj, event):
+    actor_manager = obj.GetInteractor().GetInteractorStyle().slabel.actor_manager
+    actor = obj.GetProp3D()
+    if actor is actor_manager.getCurrentActiveActor():
+        return 
+    
+    index = actor_manager.getIndex(actor)
+    if index == -1:
+        return
+    
+    actor_manager.setActiveActor(index)
+    print("hello world")
+    pass
 
 
 class Actor:
@@ -88,8 +124,8 @@ class Actor:
 
     def loadModel(self, model_path):
         self.model_path = model_path
-        # actor = self.readObj(model_path)
-        self.actor = self.importObj(model_path)
+        self.actor = self.readObj(model_path)
+        # self.actor = self.importObj(model_path)
 
         # # move the actor to (0, 0, 0)
         # min_x, _, min_y, _, min_z, _ = self.actor.GetBounds()
@@ -111,8 +147,9 @@ class Actor:
 
     def createBoxWidget(self):
         # create box widget
-        self.box_widget = vtk.vtkBoxWidget()
+        self.box_widget = MyBoxWidget(self.interactor, self.renderer_window)
         self.box_widget.AddObserver("InteractionEvent", boxCallback)
+        self.box_widget.AddObserver("StartInteractionEvent", boxStartCallback)
         self.box_widget.SetInteractor(self.interactor)
 
         # move the actor to (0, 0, 0)
@@ -121,6 +158,7 @@ class Actor:
         # transform.Translate(-min_x, -min_y, -min_z)
 
         self.box_widget.HandlesOff()
+        self.box_widget.ScalingEnabledOff()
         self.box_widget.SetProp3D(self.actor)
         self.box_widget.SetPlaceFactor(1.0)
         self.box_widget.PlaceWidget(self.actor.GetBounds())
@@ -142,15 +180,36 @@ class ActorManager:
         self.setActiveActor(-1)
 
     def setActiveActor(self, index):
+        if index == -1:
+            index = len(self.actors) - 1
+        actor = self.actors[index]
+        del self.actors[index]
+        self.actors.append(actor)
+        
+        self.render_window.SetNumberOfLayers(len(self.actors)+1)
+
+        for i, a in enumerate(self.actors):
+            a.renderer.SetLayer(i+1)
+            # a.renderer.Render()
+        
+        self.actors[-1].box_widget.On()
+        renderer = self.actors[-1].renderer
         # very important for set the default render
-        self.interactor.GetInteractorStyle().SetDefaultRenderer(self.actors[index].renderer)
-        self.interactor.GetInteractorStyle().SetCurrentRenderer(self.actors[index].renderer)
-        self.actors[index].renderer.Render()
+        self.interactor.GetInteractorStyle().SetDefaultRenderer(renderer)
+        self.interactor.GetInteractorStyle().SetCurrentRenderer(renderer)
+        # self.actors[index].renderer.SetLayer(len(self.actors))
+        renderer.Render()
 
         # for a in self.actors:
         #     a.box_widget.Off()
         
         # self.actors[index].box_widget.On()
+
+    def getCurrentActiveActor(self):
+        return self.actors[-1].actor
+
+    def getCurrentActiveRenderer(self):
+        return self.actors[-1].renderer
 
     def getIndex(self, actor):
         i = -1
