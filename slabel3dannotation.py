@@ -9,24 +9,6 @@ import typing
 import math
 
 
-class MyBoxWidget(vtk.vtkBoxWidget):
-    def __init__(self, interactor, render_window, parent=None):
-        self.interactor = interactor
-        self.render_window = render_window
-
-    def OnLeftButtonUp(self):
-        print("hello world!")
-        super().OnLeftButtonUp()
-
-    def leftButtonPressEvent(self, obj, event):
-        print("hello world")
-
-    def leftButtonPressEvent(self, obj, event):
-        print("hello world")
-
-    def OnLeftButtonDown(self):
-        print("hello world")
-
 class MouseInteractorHighLightActor(vtk.vtkInteractorStyleTrackballCamera):
 
     def __init__(self, slabel, parent=None):
@@ -147,7 +129,7 @@ class Actor:
 
     def createBoxWidget(self):
         # create box widget
-        self.box_widget = MyBoxWidget(self.interactor, self.renderer_window)
+        self.box_widget = vtk.vtkBoxWidget()
         self.box_widget.AddObserver("InteractionEvent", boxCallback)
         self.box_widget.AddObserver("StartInteractionEvent", boxStartCallback)
         self.box_widget.SetInteractor(self.interactor)
@@ -163,9 +145,51 @@ class Actor:
         self.box_widget.SetPlaceFactor(1.0)
         self.box_widget.PlaceWidget(self.actor.GetBounds())
 
+        transform = vtk.vtkTransform()
+        pos = self.actor.GetBounds()
+        transform.Translate(-pos[0], -pos[2], -pos[4])
+        self.setUserTransform(transform)
+
         # boxWidget should be set first and then set the actor
         # self.box_widget.SetTransform(transform)
         self.box_widget.On()
+    
+    def setUserTransform(self, transform):
+        self.box_widget.SetTransform(transform)
+        self.actor.SetUserTransform(transform)
+
+    @staticmethod
+    def copyTransformFromActor(src_actor, dst_actor):  
+        # copy camera parameters      
+        src_camera = src_actor.renderer.GetActiveCamera()
+        dst_camera = dst_actor.renderer.GetActiveCamera()
+        dst_camera.SetPosition(src_camera.GetPosition())
+        dst_camera.SetFocalPoint(src_camera.GetFocalPoint())
+        dst_camera.SetViewUp(src_camera.GetViewUp())
+
+        # transform = vtk.vtkTransform()
+        # pos = dst_actor.actor.GetBounds()
+        # transform.Translate(-pos[0], -pos[2], -pos[4])
+        # dst_actor.setUserTransform(transform)
+
+        # copy actor parameters
+        transform = vtk.vtkTransform()
+        transform.DeepCopy(src_actor.actor.GetUserTransform())
+        dst_actor.setUserTransform(transform)
+
+        src_actor.renderer.Render()
+        dst_actor.renderer.Render()
+
+        # dst_camera.SetUserViewTransform(src_camera.GetUserViewTransform())
+        # dst_camera.SetModelTransformMatrix(src_camera.GetModelTransformMatrix())
+
+        # pre_actor = self.actors[-1]
+        # actor.setUserTransform(pre_actor.actor.GetUserTransform())
+        # pre_renderer = self.actors[-1].renderer
+        # camera = pre_renderer.GetActiveCamera()
+        # self.actors[-1].GetActiveCamera().SetUserTransform(camera.GetUserTransform())
+        # self.actors[-1].GetActiveCamera()
+
         
 
 class ActorManager:
@@ -176,6 +200,9 @@ class ActorManager:
 
     def newActor(self, model_path):
         actor = Actor(self.render_window, self.interactor, model_path, len(self.actors)+1)
+        if len(self.actors) > 0:
+            Actor.copyTransformFromActor(self.actors[-1], actor)
+            
         self.actors.append(actor)
         self.setActiveActor(-1)
 
@@ -190,20 +217,13 @@ class ActorManager:
 
         for i, a in enumerate(self.actors):
             a.renderer.SetLayer(i+1)
-            # a.renderer.Render()
+            a.renderer.Render()
         
-        self.actors[-1].box_widget.On()
         renderer = self.actors[-1].renderer
         # very important for set the default render
         self.interactor.GetInteractorStyle().SetDefaultRenderer(renderer)
         self.interactor.GetInteractorStyle().SetCurrentRenderer(renderer)
-        # self.actors[index].renderer.SetLayer(len(self.actors))
-        renderer.Render()
-
-        # for a in self.actors:
-        #     a.box_widget.Off()
-        
-        # self.actors[index].box_widget.On()
+        # renderer.Render()
 
     def getCurrentActiveActor(self):
         return self.actors[-1].actor
@@ -213,7 +233,7 @@ class ActorManager:
 
     def getIndex(self, actor):
         i = -1
-        for i in range(len(self.actors)):
+        for i in reversed(range(len(self.actors))):
             if self.actors[i].actor is actor:
                 break
         return i
