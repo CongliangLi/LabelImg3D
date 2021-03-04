@@ -1,6 +1,7 @@
 import os
 import sys
 import numpy as np
+import PyQt5
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QListWidgetItem, QLabel, QListWidget, QPushButton, QWidget, QHBoxLayout, QFileDialog, QFrame
 from PyQt5.QtCore import QSize, pyqtSignal, QCoreApplication
@@ -42,21 +43,26 @@ class SModelList(QFrame):
         self.verticalLayout.addWidget(self.listWidget)
 
         # connect
-        self.btnOpenFolder.clicked.connect(self.open_files)
+        # self.btnOpenFolder.clicked.connect(self.open_files)
         # connect the double click event of self.listWidget
         self.listWidget.doubleClicked.connect(self.listWidgetDoubleClicked)
 
         # file list
         self.file_list = []
 
-    def open_files(self):
-        file_list, _ = QtWidgets.QFileDialog.getOpenFileNames(
-            None, "Open 3D Model", "./", "3D Models (*.obj)")
+    @PyQt5.QtCore.pyqtSlot(list)
+    def open_files(self, file_list=None):
+        # file_list, _ = QtWidgets.QFileDialog.getOpenFileNames(
+        #     None, "Open 3D Model", "./", "3D Models (*.obj)")
 
-        # filter
-        file_list = list(set(file_list).difference(self.file_list))
-        self.file_list += file_list
+        # # filter
+        # file_list = list(set(file_list).difference(self.file_list))
+        # self.file_list += file_list
 
+        if file_list is None or len(file_list) == 0:
+            return 
+
+        self.file_list = file_list
         self.progress_bar_load.setVisible(True)
 
         num_model = len(file_list)

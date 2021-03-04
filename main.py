@@ -4,6 +4,7 @@ from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from PyQt5 import QtCore, uic, QtWidgets, QtGui
 # from label3d import QDraw3DViewer
 import Ui_main
+from scene_manager import SceneManager
 
 
 class Draw3D(QtWidgets.QMainWindow):
@@ -14,9 +15,18 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui = None
         self.setup()
 
+        self.scene_manager = SceneManager(self, self.ui.image_list,  self.ui.model_list, self.ui.vtk_panel)
+
         # connect
         self.ui.image_list.signal_double_click.connect(self.ui.vtk_panel.loadImage)
         self.ui.model_list.signal_double_click.connect(self.ui.vtk_panel.loadModel)
+        self.scene_manager.signal_open_files.connect(self.ui.image_list.open_files)
+        self.scene_manager.signal_open_models.connect(self.ui.model_list.open_files)
+
+        # menue in main window
+        self.ui.action_Load_Scenes.triggered.connect(self.load_scenes)
+        self.ui.action_Save_Scenes.triggered.connect(self.ui.vtk_panel.saveScenes)
+        
 
     def setup(self):
         self.ui = Ui_main.Ui_MainWindow()
@@ -34,6 +44,9 @@ class Draw3D(QtWidgets.QMainWindow):
     def mousePressEvent(self, ev: QtGui.QMouseEvent) -> None:
         print("hello world")
         return super().mousePressEvent(ev)
+
+    def load_scenes(self):
+        self.scene_manager.load_scenes()
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'main.ui'
+# Form implementation generated from reading ui file 'd:\ssj\gitlab\traffic-show\LabelImg3D\main.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.2
 #
@@ -36,10 +36,19 @@ class Ui_MainWindow(object):
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1513, 26))
         self.menubar.setObjectName("menubar")
+        self.menu = QtWidgets.QMenu(self.menubar)
+        self.menu.setObjectName("menu")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.action_Load_Scenes = QtWidgets.QAction(MainWindow)
+        self.action_Load_Scenes.setObjectName("action_Load_Scenes")
+        self.action_Save_Scenes = QtWidgets.QAction(MainWindow)
+        self.action_Save_Scenes.setObjectName("action_Save_Scenes")
+        self.menu.addAction(self.action_Load_Scenes)
+        self.menu.addAction(self.action_Save_Scenes)
+        self.menubar.addAction(self.menu.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -47,6 +56,11 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.menu.setTitle(_translate("MainWindow", "文件"))
+        self.action_Load_Scenes.setText(_translate("MainWindow", "&Load Scenes"))
+        self.action_Load_Scenes.setShortcut(_translate("MainWindow", "Ctrl+O"))
+        self.action_Save_Scenes.setText(_translate("MainWindow", "&Save Scenes"))
+        self.action_Save_Scenes.setShortcut(_translate("MainWindow", "Ctrl+S"))
 from simagelist import SImageList
 from slabel3dannotation import SLabel3DAnnotation
 from smodellist import SModelList
