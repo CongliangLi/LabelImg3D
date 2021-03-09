@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (QComboBox, QCheckBox, QAction,
                                 QDoubleSpinBox, QPlainTextEdit, QLineEdit,
                                 QListWidget, QSlider, QButtonGroup,
                                 QTabWidget, QApplication, QGridLayout,
-                                QTextEdit, QWidget, QMainWindow)
+                                QTextEdit, QWidget, QMainWindow, QDockWidget)
 
 Signal = pyqtSignal
 

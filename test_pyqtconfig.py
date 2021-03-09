@@ -32,35 +32,42 @@ class MainWindow(QMainWindow):
             'combo': CHOICE_C,
         })
 
-        gd = QGridLayout()
+        self.gd = QGridLayout()
 
-        sb = QSpinBox()
-        gd.addWidget(sb, 0, 1)
-        self.config.add_handler('number', sb)
+        self.add(QSpinBox, 'number', 110, 0, 1)
+        # sb = QSpinBox()
+        # self.gd.addWidget(sb, 0, 1)
+        # self.config.add_handler('number', sb)
 
         te = QLineEdit()
-        gd.addWidget(te, 1, 1)
+        self.gd.addWidget(te, 1, 1)
         self.config.add_handler('text', te)
 
         cb = QCheckBox()
-        gd.addWidget(cb, 2, 1)
+        self.gd.addWidget(cb, 2, 1)
         self.config.add_handler('active', cb)
 
         cmb = QComboBox()
         cmb.addItems(map_dict.keys())
-        gd.addWidget(cmb, 3, 1)
+        self.gd.addWidget(cmb, 3, 1)
         self.config.add_handler('combo', cmb, mapper=map_dict)
 
         self.current_config_output = QTextEdit()
-        gd.addWidget(self.current_config_output, 0, 3, 3, 1)
+        self.gd.addWidget(self.current_config_output, 0, 3, 3, 1)
 
         self.config.updated.connect(self.show_config)
 
         self.show_config()
 
         self.window = QWidget()
-        self.window.setLayout(gd)
+        self.window.setLayout(self.gd)
         self.setCentralWidget(self.window)
+
+    def add(self, ui_type, name, default_value, row, col):
+        ui = ui_type()
+        self.config.set_defaults({name:default_value})
+        self.gd.addWidget(ui, row, col)
+        self.config.add_handler(name, ui)
 
     def show_config(self):
         self.current_config_output.setText(str(self.config.as_dict()))
