@@ -18,12 +18,20 @@ from pyqtconfig.qt import (QComboBox, QCheckBox, QSpinBox, QMainWindow,
 
 
 class SConfig(QDockWidget):
+    """Configure Dockable Widgets. This is a class for showing and modifying the configure of the software
+    """
     def __init__(self, title, parent):
+        """Constructor
+
+        Args:
+            title (str): windows title
+            parent (QWdiget): the parent window
+        """
         super().__init__(parent=parent)
 
         self.setWindowTitle(title)
         self.grid_layout = QGridLayout()
-        self.setLayout(self.grid_layout)
+        # self.layout().addChildLayout(self.grid_layout)
         
         self.config_edit = QTextEdit()
         self.config = ConfigManager()
@@ -35,15 +43,22 @@ class SConfig(QDockWidget):
         height_spin = QSpinBox()
         height_spin.setMaximum(50000)
         self.add(height_spin, 'height', 540, 2, 1)
-        
-        self.config.updated.connect(self.show_config)
 
-        self.window = QWidget()
+        self.window = QFrame()
         self.window.setLayout(self.grid_layout)
         self.setWidget(self.window)
 
 
     def add(self, widget, name, default_value, row, col):
+        """The utils function of adding new configured items.
+
+        Args:
+            widget (QWidget): The widget you want to add for holding the configure item.
+            name (str): configure item name. a QLabel widget will also be created.
+            default_value (any): default value of the configure item.
+            row (int): row index. (1-index based)
+            col (int): column index. (1-index based)
+        """
         hlayout = QHBoxLayout()
         label = QLabel(self)
         label.setText(name+": ")
@@ -54,8 +69,24 @@ class SConfig(QDockWidget):
         self.grid_layout.addLayout(hlayout, row, col)
         self.config.add_handler(name, widget)
 
-    def show_config(self):
-        self.config_edit.setText(str(self.config.as_dict()))
+    def get(self, key):
+        """Get the configure items
+
+        Args:
+            key (str): the key of configure item
+
+        Returns:
+            any: the value of configure item
+        """
+        return self.config.get(key)
+
+    def connect(self, update):
+        """connect the function `update` when the configure updated
+
+        Args:
+            update (function): the update function, def update(sender):
+        """
+        self.config.updated.connect(update)
 
 
 if __name__ == '__main__':
@@ -65,12 +96,18 @@ if __name__ == '__main__':
             layout=QHBoxLayout()
 
             self.items=SConfig("Title", self)
+            self.items.connect(MainWindow.update)
 
             self.setCentralWidget(QTextEdit())
             self.addDockWidget(Qt.RightDockWidgetArea,self.items)
 
             self.setLayout(layout)
             self.setWindowTitle('Dock')
+
+        @staticmethod
+        def update(sender, value):
+            print(sender, value)
+
     app=QApplication(sys.argv)
     demo=MainWindow()
     demo.show()
