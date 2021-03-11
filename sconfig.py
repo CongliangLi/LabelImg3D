@@ -96,7 +96,6 @@ if __name__ == '__main__':
             layout=QHBoxLayout()
 
             self.items=SConfig("Title", self)
-            self.items.connect(MainWindow.update)
 
             self.setCentralWidget(QTextEdit())
             self.addDockWidget(Qt.RightDockWidgetArea,self.items)
@@ -105,8 +104,8 @@ if __name__ == '__main__':
             self.setWindowTitle('Dock')
 
         @staticmethod
-        def update(sender, value):
-            print(sender, value)
+        def update(sender):
+            print(sender)
 
     app=QApplication(sys.argv)
     demo=MainWindow()
