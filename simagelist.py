@@ -2,19 +2,21 @@ import os
 import sys
 import numpy as np
 import PyQt5
-from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtWidgets import QListWidgetItem, QLabel, QListWidget, QPushButton, QWidget, QHBoxLayout, QFileDialog, QFrame
-from PyQt5.QtCore import QSize, pyqtSignal, QCoreApplication
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 import typing
 from slabel3dshow import SLabel3dShow
 
 
-class SImageList(QFrame):
+class SImageList(QDockWidget):
     signal_load_model = pyqtSignal(int, int)
     signal_double_click = pyqtSignal(str)
 
-    def __init__(self, parent):
+    def __init__(self, parent, title="images"):
         super().__init__(parent=parent)
+        self.setWindowTitle(title)
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -29,6 +31,8 @@ class SImageList(QFrame):
         self.btnOpenFolder.setSizePolicy(sizePolicy)
         self.btnOpenFolder.setObjectName("btnOpenFolder")
         self.btnOpenFolder.setText("&Open Images")
+        self.btnOpenFolder.setMaximumWidth(80)
+        self.btnOpenFolder.setVisible(False)
         self.horizontalLayout.addWidget(self.btnOpenFolder)
         self.progress_bar_load = QtWidgets.QProgressBar(self)
         self.progress_bar_load.setProperty("value", 24)
@@ -42,7 +46,11 @@ class SImageList(QFrame):
         self.listWidget.setObjectName("listWidget")
         self.verticalLayout.addWidget(self.listWidget)
 
-        self.setLayout(self.verticalLayout)
+
+        self.window = QFrame()
+        self.window.setLayout(self.verticalLayout)
+        self.setWidget(self.window)
+        # self.setLayout(self.verticalLayout)
 
         ######### connect #########
         # connect openfiles
@@ -87,3 +95,28 @@ class SImageList(QFrame):
     def listWidgetDoubleClicked(self, index):
         self.signal_double_click.emit(self.file_list[index.row()])
         print(self.file_list[index.row()])
+
+
+
+if __name__ == '__main__':
+    class MainWindow(QMainWindow):
+        def __init__(self,parent=None):
+            super(MainWindow, self).__init__(parent)
+            layout=QHBoxLayout()
+
+            self.items=SImageList(self, "Images")
+
+            self.setCentralWidget(QTextEdit())
+            self.addDockWidget(Qt.RightDockWidgetArea,self.items)
+
+            self.setLayout(layout)
+            self.setWindowTitle('Dock')
+
+        @staticmethod
+        def update(sender):
+            print(sender)
+
+    app=QApplication(sys.argv)
+    demo=MainWindow()
+    demo.show()
+    sys.exit(app.exec_())

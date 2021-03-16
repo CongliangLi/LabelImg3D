@@ -83,12 +83,14 @@ class Actor:
 
     @staticmethod
     def boxWidgetInteractionCallback(obj, event):
+        print("boxWidgetInteractionCallback", event)
         t = vtk.vtkTransform()
         obj.GetTransform(t)
         obj.GetProp3D().SetUserTransform(t)
 
     @staticmethod
     def boxWidgetInteractionStartCallback(obj, event):
+        print('boxWidgetInteractionStartCallback', event)
         actor_manager = obj.GetInteractor().GetInteractorStyle().slabel.actor_manager
         actor = obj.GetProp3D()
         if actor is actor_manager.getCurrentActiveActor():
@@ -103,9 +105,9 @@ class Actor:
     def createBoxWidget(self):
         # create box widget
         self.box_widget = vtk.vtkBoxWidget()
+        self.box_widget.SetInteractor(self.interactor)
         self.box_widget.AddObserver("InteractionEvent", Actor.boxWidgetInteractionCallback)
         self.box_widget.AddObserver("StartInteractionEvent", Actor.boxWidgetInteractionStartCallback)
-        self.box_widget.SetInteractor(self.interactor)
 
         # move the actor to (0, 0, 0)
         # min_x, _, min_y, _, min_z, _ =self.actor.GetBounds()
@@ -221,7 +223,7 @@ class ActorManager:
 
         for i, a in enumerate(self.actors):
             a.renderer.SetLayer(i+1)
-            a.renderer.Render()
+            # a.renderer.Render()
         
         renderer = self.actors[-1].renderer
         # very important for set the default render

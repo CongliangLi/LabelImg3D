@@ -2,22 +2,18 @@ import os
 import sys
 import numpy as np
 from datetime import datetime
-import PyQt5
-from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtWidgets import QListWidgetItem, QLabel, QListWidget, QPushButton, QWidget, QHBoxLayout, QFileDialog, QFrame
-from PyQt5.QtCore import QSize, pyqtSignal, QCoreApplication
-import typing
 import sys
+import PyQt5
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from pyqtconfig.config import ConfigManager
 
 
 class SLog(QDockWidget):
     """The Log Window
     """
-    def __init__(self, title, parent):
+    def __init__(self, parent, title="Log"):
         """Constructor
 
         Args:
@@ -68,7 +64,7 @@ if __name__ == '__main__':
             super(MainWindow, self).__init__(parent)
             layout=QHBoxLayout()
 
-            self.items=SLog("Log", self)
+            self.items=SLog(self, "Log")
 
             self.setCentralWidget(QTextEdit())
             self.addDockWidget(Qt.BottomDockWidgetArea,self.items)

@@ -16,15 +16,23 @@ class MouseInteractorHighLightActor(vtk.vtkInteractorStyleTrackballCamera):
     def __init__(self, slabel, parent=None):
         self.slabel = slabel
         self.AddObserver("LeftButtonPressEvent", self.leftButtonPressEvent)
+        self.AddObserver("LeftButtonDownEvent", self.leftButtonDownEvent)
+        # self.AddObserver("MouseMoveEvent", self.leftButtonPressEvent)
+        self.AddObserver("RightButtonPressEvent", self.rightButtonPressEvent)
+        self.AddObserver("MouseWheelForwardEvent", self.mouseWheelForward)
+        self.AddObserver("MouseWheelBackwardEvent", self.mouseWheelBackward)
 
     def switchBoxWidgets(actor):
         self.slabel.switchBoxWidgets(actor)
 
+    def leftButtonDownEvent(self, obj, event):
+        print("leftButtonDownEvent")
 
     def leftButtonPressEvent(self, obj, event):
         clickPos = self.GetInteractor().GetEventPosition()
 
         picker = vtk.vtkPropPicker()
+        print("leftButtonPressEvent")
 
         for a in self.slabel.actor_manager.actors:
             picker.Pick(clickPos[0], clickPos[1], 0, a.renderer)
@@ -39,6 +47,18 @@ class MouseInteractorHighLightActor(vtk.vtkInteractorStyleTrackballCamera):
         self.OnLeftButtonDown()
         return
 
+
+    def rightButtonPressEvent(self, obj, event):
+        print("rightButtonPressEvent")
+        self.OnRightButtonDown()
+
+    def mouseWheelForward(self, obj, event):
+        print("mouseWheelForward")
+        self.OnMouseWheelForward()
+    
+    def mouseWheelBackward(self, obj, event):
+        print("mouseWheelBackward")
+        self.OnMouseWheelBackward()
 
 
 class SLabel3DAnnotation(QtWidgets.QFrame):

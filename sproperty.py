@@ -1,7 +1,5 @@
 import os
 import sys
-from PyQt5 import QtCore, QtWidgets, QtGui
-import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -12,10 +10,10 @@ from pyqtconfig.qt import (QComboBox, QCheckBox, QSpinBox, QMainWindow,
                 QGridLayout, QWidget, QDockWidget)
 
 
-class SConfig(QDockWidget):
+class SProperty(QDockWidget):
     """Configure Dockable Widgets. This is a class for showing and modifying the configure of the software
     """
-    def __init__(self, parent, title="config"):
+    def __init__(self, parent, title="3DProperty"):
         """Constructor
 
         Args:
@@ -31,13 +29,10 @@ class SConfig(QDockWidget):
         self.config_edit = QTextEdit()
         self.config = ConfigManager()
 
-        width_spin = QSpinBox()
-        width_spin.setMaximum(50000)
-        self.add(width_spin, 'width', 960, 1, 1)
-
-        height_spin = QSpinBox()
-        height_spin.setMaximum(50000)
-        self.add(height_spin, 'height', 540, 2, 1)
+        for i, x in enumerate(['x', 'y', 'z', 'rx', 'ry', 'rz', 'w', 'h', 'l']):
+            width_spin = QSpinBox()
+            width_spin.setMaximum(50000)
+            self.add(width_spin, x, 540, i+1, 1)
 
         self.window = QFrame()
         self.window.setLayout(self.grid_layout)
@@ -90,7 +85,7 @@ if __name__ == '__main__':
             super(MainWindow, self).__init__(parent)
             layout=QHBoxLayout()
 
-            self.items=SConfig(self, "Config")
+            self.items=SProperty(self, "3DProperty")
 
             self.setCentralWidget(QTextEdit())
             self.addDockWidget(Qt.RightDockWidgetArea,self.items)
