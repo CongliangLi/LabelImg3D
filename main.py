@@ -1,9 +1,28 @@
 import os
+from sproperty import SProperty
+import vtkmodules.all as vtk_all
+from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+import PyQt5
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+# from label3d import QDraw3DViewer
+import Ui_main
+from scene_manager import SceneManager
+from simagelist import SImageList
+from smodellist import SModelList
+from sproperty import SProperty
+from slog import SLog
+
+import os
 import vtkmodules.all as vtk_all
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from PyQt5 import QtCore, uic, QtWidgets, QtGui
 # from label3d import QDraw3DViewer
 import Ui_main
+from scene_manager import SceneManager
+from slog import SLog
 
 
 class Draw3D(QtWidgets.QMainWindow):
@@ -14,9 +33,27 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui = None
         self.setup()
 
-        # connect
-        self.ui.image_list.signal_double_click.connect(self.ui.vtk_panel.loadImage)
-        self.ui.model_list.signal_double_click.connect(self.ui.vtk_panel.loadModel)
+        self.image_list = SImageList(self, "Images")
+        self.model_list = SModelList(self, "Models")
+        self.property3d = SProperty(self, "3DProperty")
+        self.widget_log = SLog(self)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.image_list)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.model_list)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.property3d)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.widget_log)
+
+        self.scene_manager = SceneManager(self, self.image_list,  self.model_list, self.ui.vtk_panel)
+
+        # menue in main window
+        self.ui.action_Load_Scenes.triggered.connect(self.load_scenes)
+        self.ui.action_Save_Scenes.triggered.connect(self.ui.vtk_panel.saveScenes)
+
+        # connnect the signals and slots
+        self.image_list.signal_double_click.connect(self.ui.vtk_panel.loadImage)
+        self.model_list.signal_double_click.connect(self.ui.vtk_panel.loadModel)
+        self.scene_manager.signal_open_files.connect(self.image_list.open_files)
+        self.scene_manager.signal_open_models.connect(self.model_list.open_files)
+        
 
     def setup(self):
         self.ui = Ui_main.Ui_MainWindow()
@@ -34,6 +71,9 @@ class Draw3D(QtWidgets.QMainWindow):
     def mousePressEvent(self, ev: QtGui.QMouseEvent) -> None:
         print("hello world")
         return super().mousePressEvent(ev)
+
+    def load_scenes(self):
+        self.scene_manager.load_scenes()
 
 
 if __name__ == "__main__":
