@@ -10,55 +10,153 @@ import typing
 import math
 from actor_manager import Actor, ActorManager
 
+from vtk import *
 
-class MouseInteractorHighLightActor(vtk.vtkInteractorStyleTrackballCamera):
-
+class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
     def __init__(self, slabel, parent=None):
         self.slabel = slabel
-        self.AddObserver("LeftButtonPressEvent", self.leftButtonPressEvent)
-        self.AddObserver("LeftButtonDownEvent", self.leftButtonDownEvent)
-        # self.AddObserver("MouseMoveEvent", self.leftButtonPressEvent)
-        self.AddObserver("RightButtonPressEvent", self.rightButtonPressEvent)
-        self.AddObserver("MouseWheelForwardEvent", self.mouseWheelForward)
-        self.AddObserver("MouseWheelBackwardEvent", self.mouseWheelBackward)
+        self.AddObserver('LeftButtonPressEvent', self.OnLeftButtonDown, -1)
+        self.AddObserver('LeftButtonReleaseEvent', self.OnLeftButtonUp, -1)
+        self.AddObserver('RightButtonPressEvent', self.OnRightButtonDown, -1)
+        self.AddObserver('RightButtonReleaseEvent', self.OnRightButtonUp, -1)
+        self.AddObserver('MouseMoveEvent', self.OnMouseMove, -1)
+        self.AddObserver('MouseWheelForwardEvent', self.OnMouseWheelForward, -1)
+        self.AddObserver('MouseWheelBackwardEvent', self.OnMouseWheelBackward, -1)
+        self.isPressedRight = False
+        self.isPressedLeft = False
+        self.super = super(MouseInteractorHighLightActor, self)
+        self.InteractionPicker = vtkCellPicker()
+        self.InteractionProp = None
+        
+    def __del__(self):
+        del self.InteractionPicker
 
-    def switchBoxWidgets(actor):
-        self.slabel.switchBoxWidgets(actor)
+    def OnLeftButtonDown(self, obj, event):
+        self.isPressedLeft = True
+        x, y = self.GetInteractor().GetEventPosition()
 
-    def leftButtonDownEvent(self, obj, event):
-        print("leftButtonDownEvent")
-
-    def leftButtonPressEvent(self, obj, event):
-        clickPos = self.GetInteractor().GetEventPosition()
-
-        picker = vtk.vtkPropPicker()
-        print("leftButtonPressEvent")
-
-        for a in self.slabel.actor_manager.actors:
-            picker.Pick(clickPos[0], clickPos[1], 0, a.renderer)
-            # get the new
-            self.NewPickedActor = picker.GetProp3D()
-            # If something was selected
-            if self.NewPickedActor and self.NewPickedActor is self.slabel.actor_manager.actors[-1].actor:
+        all_picked_actors = [self.InteractionPicker.GetProp3D() for a in self.slabel.actor_manager.actors \
+                             if self.InteractionPicker.Pick(x, y, 0, a.renderer) != 0]
+        if len(all_picked_actors) > 0:
+            self.NewPickedActor = all_picked_actors[0]
+            if self.NewPickedActor and self.NewPickedActor is not self.slabel.actor_manager.actors[-1].actor:
                 print(self.NewPickedActor.GetBounds())
                 self.slabel.switchBoxWidgets(self.NewPickedActor)
-                break
 
-        self.OnLeftButtonDown()
-        return
+        self.InteractionPicker.Pick(x, y, 0.0, self.GetCurrentRenderer())
+        self.InteractionProp = self.InteractionPicker.GetViewProp()
+
+        self.super.OnLeftButtonDown()
+
+    def OnLeftButtonUp(self, obj, event):
+        self.isPressedLeft = False
+        self.super.OnLeftButtonUp()
+
+    def OnRightButtonDown(self, obj, event):
+        self.isPressedRight = True
+
+        x, y = self.GetInteractor().GetEventPosition()
+        self.InteractionPicker.Pick(x, y, 0.0, self.GetCurrentRenderer())
+        self.InteractionProp = self.InteractionPicker.GetViewProp()
+
+        self.super.OnRightButtonDown()
+
+    def OnRightButtonUp(self, obj, event):
+        self.isPressedRight = False
+        self.super.OnRightButtonUp()
 
 
-    def rightButtonPressEvent(self, obj, event):
-        print("rightButtonPressEvent")
-        self.OnRightButtonDown()
+    def Prop3DTransform(self, prop3D, boxCenter, numRotation, rotate, scale):
+        oldMatrix = vtkMatrix4x4()
+        prop3D.GetMatrix(oldMatrix)
+        
+        orig = prop3D.GetOrigin()
 
-    def mouseWheelForward(self, obj, event):
-        print("mouseWheelForward")
-        self.OnMouseWheelForward()
-    
-    def mouseWheelBackward(self, obj, event):
-        print("mouseWheelBackward")
-        self.OnMouseWheelBackward()
+        newTransform = vtkTransform()
+        newTransform.PostMultiply()
+        if prop3D.GetUserMatrix() is not None:
+            newTransform.SetMatrix(prop3D.GetUserMatrix())
+        else:
+            newTransform.SetMatrix(oldMatrix)
+        
+        newTransform.Translate(-boxCenter[0], -boxCenter[1], -boxCenter[2])
+
+        for i in range(numRotation):
+            newTransform.RotateWXYZ(*(rotate[i][j] for j in range(3)))
+
+        if 0 not in scale:
+            newTransform.Scale(*scale)
+        
+        newTransform.Translate(*boxCenter)
+
+        newTransform.Translate(*(-orig[i] for i in range(3)))
+        newTransform.PreMultiply()
+        newTransform.Translate(*orig)
+
+        if prop3D.GetUserMatrix() is not None:
+            newTransform.GetMatrix(prop3D.GetUserMatrix())
+        else:
+            prop3D.SetPosition(newTransform.GetPosition())
+            prop3D.SetScale(newTransform.GetScale())
+            prop3D.SetOrientation(newTransform.GetOrientation())
+
+        del oldMatrix
+        del newTransform
+
+    def UniformScale(self):
+        if self.GetCurrentRenderer() is None or self.InteractionProp is None:
+            return 
+        rwi = self.GetInteractor()
+        dy = rwi.GetEventPosition()[1] - rwi.GetLastEventPosition()[1]
+        obj_center = self.InteractionProp.GetCenter()
+        center = self.GetCurrentRenderer().GetCenter()
+
+        direction = []
+        camera = self.GetCurrentRenderer().GetActiveCamera()
+        if camera.GetParallelProjection():
+            camera.ComputeViewPlaneNormal()
+            direction = camera.GetViewPlaneNormal()
+        else:
+            cam_x, cam_y, cam_z = self.GetCurrentRenderer().GetActiveCamera().GetPosition()
+            direction = list((obj_center[0] - cam_x, obj_center[1] - cam_y, obj_center[2] - cam_z))
+
+        vtkMath.Normalize(direction)
+
+        # yf = dy / center[1] *  10.0
+        # scaleFactor = 0.1 * (1.1 ** yf)
+        motion_vector = [-0.1 * d * dy for d in direction]
+        if self.InteractionProp.GetUserMatrix() is not None:
+            t = vtkTransform()
+            t.PostMultiply()
+            t.SetMatrix(self.InteractionProp.GetUserMatrix())
+            t.Translate(*motion_vector)
+            self.InteractionProp.GetUserMatrix().DeepCopy(t.GetMatrix())
+            del t
+        else:
+            self.InteractionProp.AddPosition(*motion_vector)
+
+        if self.GetAutoAdjustCameraClippingRange():
+            self.GetCurrentRenderer().ResetCameraClippingRange()
+        
+        rwi.Render()
+
+
+    def OnMouseMove(self, obj, event):
+        x, y = self.GetInteractor().GetEventPosition()
+
+        if self.isPressedRight and not self.GetInteractor().GetShiftKey():
+            self.FindPokedRenderer(x, y)
+            self.UniformScale()
+            self.InvokeEvent(vtkCommand.InteractionEvent, None)
+            return 
+        self.super.OnMouseMove()
+
+    def OnMouseWheelForward(self, obj, event):
+        self.super.OnMouseWheelForward()
+
+    def OnMouseWheelBackward(self, obj, event):
+        self.super.OnMouseWheelBackward()
+
 
 
 class SLabel3DAnnotation(QtWidgets.QFrame):

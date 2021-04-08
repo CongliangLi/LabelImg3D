@@ -24,6 +24,8 @@ import Ui_main
 from scene_manager import SceneManager
 from slog import SLog
 
+from vtk import *
+
 
 class Draw3D(QtWidgets.QMainWindow):
     def __init__(self, data_dir):
@@ -44,17 +46,17 @@ class Draw3D(QtWidgets.QMainWindow):
 
         self.scene_manager = SceneManager(self, self.image_list,  self.model_list, self.ui.vtk_panel)
 
-        # menue in main window
+        # menu in main window
         self.ui.action_Load_Scenes.triggered.connect(self.load_scenes)
         self.ui.action_Save_Scenes.triggered.connect(self.ui.vtk_panel.saveScenes)
 
-        # connnect the signals and slots
+        # connect the signals and slots
         self.image_list.signal_double_click.connect(self.ui.vtk_panel.loadImage)
         self.model_list.signal_double_click.connect(self.ui.vtk_panel.loadModel)
         self.scene_manager.signal_open_files.connect(self.image_list.open_files)
         self.scene_manager.signal_open_models.connect(self.model_list.open_files)
+        self.ui.vtk_panel.actor_manager.signal_active_model.connect(self.property3d.updateBoxBounding)
         
-
     def setup(self):
         self.ui = Ui_main.Ui_MainWindow()
         self.ui.setupUi(self)
@@ -67,10 +69,9 @@ class Draw3D(QtWidgets.QMainWindow):
     def initialize(self):
         self.ui.vtk_panel.start()
 
-
     def mousePressEvent(self, ev: QtGui.QMouseEvent) -> None:
         print("hello world")
-        return super().mousePressEvent(ev)
+        return self.super.mousePressEvent(ev)
 
     def load_scenes(self):
         self.scene_manager.load_scenes()

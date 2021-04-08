@@ -1,11 +1,12 @@
 import os
 import sys
+import PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from pyqtconfig.config import ConfigManager
 
-from pyqtconfig.qt import (QComboBox, QCheckBox, QSpinBox, QMainWindow,
+from pyqtconfig.qt import (QComboBox, QCheckBox, QSpinBox, QDoubleSpinBox, QMainWindow,
                 QLineEdit, QApplication, QTextEdit,
                 QGridLayout, QWidget, QDockWidget)
 
@@ -30,7 +31,7 @@ class SProperty(QDockWidget):
         self.config = ConfigManager()
 
         for i, x in enumerate(['x', 'y', 'z', 'rx', 'ry', 'rz', 'w', 'h', 'l']):
-            width_spin = QSpinBox()
+            width_spin = QDoubleSpinBox()
             width_spin.setMaximum(50000)
             self.add(width_spin, x, 540, i+1, 1)
 
@@ -69,6 +70,15 @@ class SProperty(QDockWidget):
             any: the value of configure item
         """
         return self.config.get(key)
+
+    @PyQt5.QtCore.pyqtSlot(list)
+    def updateBoxBounding(self, data):
+        self.config.set('x', data[0])
+        self.config.set('y', data[2])
+        self.config.set('z', data[4])
+        self.config.set('w', data[1]-data[0])
+        self.config.set('h', data[3]-data[2])
+        self.config.set('l', data[5]-data[4])
 
     def connect(self, update):
         """connect the function `update` when the configure updated

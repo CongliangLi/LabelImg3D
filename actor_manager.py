@@ -9,6 +9,10 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 import typing
 import math
 from utils import *
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.Qt import QObject
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 class Actor:
     def __init__(self, render_window, interactor, model_path, layer_num):
@@ -20,7 +24,7 @@ class Actor:
         self.model_path = model_path
         self.createRenderer(layer_num)
         self.loadModel(model_path)
-        self.createBoxWidget()
+        # self.createBoxWidget()
         self.type_class = 0
 
     def readObj(self, model_path):
@@ -81,56 +85,8 @@ class Actor:
         return self.renderer
 
 
-    @staticmethod
-    def boxWidgetInteractionCallback(obj, event):
-        print("boxWidgetInteractionCallback", event)
-        t = vtk.vtkTransform()
-        obj.GetTransform(t)
-        obj.GetProp3D().SetUserTransform(t)
-
-    @staticmethod
-    def boxWidgetInteractionStartCallback(obj, event):
-        print('boxWidgetInteractionStartCallback', event)
-        actor_manager = obj.GetInteractor().GetInteractorStyle().slabel.actor_manager
-        actor = obj.GetProp3D()
-        if actor is actor_manager.getCurrentActiveActor():
-            return 
-        index = actor_manager.getIndex(actor)
-        if index == -1:
-            return
-        actor_manager.setActiveActor(index)
-        print("hello world")
-        pass
-
-    def createBoxWidget(self):
-        # create box widget
-        self.box_widget = vtk.vtkBoxWidget()
-        self.box_widget.SetInteractor(self.interactor)
-        self.box_widget.AddObserver("InteractionEvent", Actor.boxWidgetInteractionCallback)
-        self.box_widget.AddObserver("StartInteractionEvent", Actor.boxWidgetInteractionStartCallback)
-
-        # move the actor to (0, 0, 0)
-        # min_x, _, min_y, _, min_z, _ =self.actor.GetBounds()
-        # transform = vtk.vtkTransform()
-        # transform.Translate(-min_x, -min_y, -min_z)
-
-        self.box_widget.HandlesOff()
-        self.box_widget.ScalingEnabledOff()
-        self.box_widget.SetProp3D(self.actor)
-        self.box_widget.SetPlaceFactor(1.0)
-        self.box_widget.PlaceWidget(self.actor.GetBounds())
-
-        transform = vtk.vtkTransform()
-        pos = self.actor.GetBounds()
-        transform.Translate(-pos[0], -pos[2], -pos[4])
-        self.setUserTransform(transform)
-
-        # boxWidget should be set first and then set the actor
-        # self.box_widget.SetTransform(transform)
-        self.box_widget.On()
-    
     def setUserTransform(self, transform):
-        self.box_widget.SetTransform(transform)
+        # self.box_widget.SetTransform(transform)
         self.actor.SetUserTransform(transform)
 
     @staticmethod
@@ -142,26 +98,10 @@ class Actor:
         dst_camera.SetFocalPoint(src_camera.GetFocalPoint())
         dst_camera.SetViewUp(src_camera.GetViewUp())
 
-        # transform = vtk.vtkTransform()
-        # pos = dst_actor.actor.GetBounds()
-        # transform.Translate(-pos[0], -pos[2], -pos[4])
-        # dst_actor.setUserTransform(transform)
-
         # copy actor parameters
         transform = vtk.vtkTransform()
         transform.DeepCopy(src_actor.actor.GetUserTransform())
         dst_actor.setUserTransform(transform)
-
-        # dst_actor.renderer_window.Render()
-        # dst_camera.SetUserViewTransform(src_camera.GetUserViewTransform())
-        # dst_camera.SetModelTransformMatrix(src_camera.GetModelTransformMatrix())
-
-        # pre_actor = self.actors[-1]
-        # actor.setUserTransform(pre_actor.actor.GetUserTransform())
-        # pre_renderer = self.actors[-1].renderer
-        # camera = pre_renderer.GetActiveCamera()
-        # self.actors[-1].GetActiveCamera().SetUserTransform(camera.GetUserTransform())
-        # self.actors[-1].GetActiveCamera()
 
     def getCameraMatrix(self):
         matrix = self.renderer.GetActiveCamera().GetViewTransformMatrix()
@@ -176,8 +116,11 @@ class Actor:
         }
 
 
-class ActorManager:
+class ActorManager(QObject):
+    signal_active_model = pyqtSignal(list)
+
     def __init__(self, render_window, interactor):
+        super(ActorManager, self).__init__()
         self.render_window = render_window
         self.interactor = interactor
         self.actors = []
@@ -202,8 +145,8 @@ class ActorManager:
         self.actors.append(actor)
         self.setActiveActor(-1)
         self.interactor.Render()
-        self.interactor.GetInteractorStyle().OnMouseWheelForward()
-        self.interactor.GetInteractorStyle().OnMouseWheelBackward()
+        # self.interactor.GetInteractorStyle().OnMouseWheelForward()
+        # self.interactor.GetInteractorStyle().OnMouseWheelBackward()
 
         self.reformat()
 
@@ -229,6 +172,9 @@ class ActorManager:
         # very important for set the default render
         self.interactor.GetInteractorStyle().SetDefaultRenderer(renderer)
         self.interactor.GetInteractorStyle().SetCurrentRenderer(renderer)
+        if actor is not None:
+            self.signal_active_model.emit(list(actor.actor.GetBounds()))
+
 
     def reformat(self):
         for a in self.actors:
@@ -237,7 +183,7 @@ class ActorManager:
             actor_transform = getTransform(actor_matrix)
 
             a.actor.SetUserMatrix(vtk.vtkMatrix4x4())
-            a.box_widget.SetTransform(vtk.vtkTransform())
+            # a.box_widget.SetTransform(vtk.vtkTransform())
 
             print(a.actor.GetBounds())
             camera = a.renderer.GetActiveCamera()
