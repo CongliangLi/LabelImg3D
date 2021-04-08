@@ -9,6 +9,10 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 import typing
 import math
 from utils import *
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.Qt import QObject
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 class Actor:
     def __init__(self, render_window, interactor, model_path, layer_num):
@@ -176,8 +180,11 @@ class Actor:
         }
 
 
-class ActorManager:
+class ActorManager(QObject):
+    signal_active_model = pyqtSignal(list)
+
     def __init__(self, render_window, interactor):
+        super(ActorManager, self).__init__()
         self.render_window = render_window
         self.interactor = interactor
         self.actors = []
@@ -229,6 +236,9 @@ class ActorManager:
         # very important for set the default render
         self.interactor.GetInteractorStyle().SetDefaultRenderer(renderer)
         self.interactor.GetInteractorStyle().SetCurrentRenderer(renderer)
+        if actor is not None:
+            self.signal_active_model.emit(list(actor.actor.GetBounds()))
+
 
     def reformat(self):
         for a in self.actors:
