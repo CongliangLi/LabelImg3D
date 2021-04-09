@@ -31,8 +31,11 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
     def __del__(self):
         del self.InteractionPicker
 
-    def OnLeftButtonDown(self, obj, event):
-        self.isPressedLeft = True
+    def SetOpacity(self, op = 0.5):
+        if self.InteractionProp is not None:
+            self.InteractionProp.GetProperty().SetOpacity(op)
+
+    def switchLayer(self):
         x, y = self.GetInteractor().GetEventPosition()
 
         all_picked_actors = [self.InteractionPicker.GetProp3D() for a in self.slabel.actor_manager.actors \
@@ -43,11 +46,16 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
                 print(self.NewPickedActor.GetBounds())
                 self.slabel.switchBoxWidgets(self.NewPickedActor)
 
+    def OnLeftButtonDown(self, obj, event):
+        self.isPressedLeft = True
+        x, y = self.GetInteractor().GetEventPosition()
+        self.switchLayer()
+
         self.InteractionPicker.Pick(x, y, 0.0, self.GetCurrentRenderer())
         self.InteractionProp = self.InteractionPicker.GetViewProp()
 
         self.super.OnLeftButtonDown()
-
+            
     def OnLeftButtonUp(self, obj, event):
         self.isPressedLeft = False
         self.super.OnLeftButtonUp()
@@ -55,6 +63,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
     def OnRightButtonDown(self, obj, event):
         self.isPressedRight = True
 
+        self.switchLayer()
         x, y = self.GetInteractor().GetEventPosition()
         self.InteractionPicker.Pick(x, y, 0.0, self.GetCurrentRenderer())
         self.InteractionProp = self.InteractionPicker.GetViewProp()
@@ -144,15 +153,16 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
     def OnMouseMove(self, obj, event):
         x, y = self.GetInteractor().GetEventPosition()
 
-        # if self.InteractionProp is not None:
         self.HighlightProp3D(self.InteractionProp)
+        self.SetOpacity(0.5)
 
         if self.isPressedRight and not self.GetInteractor().GetShiftKey():
             self.FindPokedRenderer(x, y)
             self.UniformScale()
             self.InvokeEvent(vtkCommand.InteractionEvent, None)
-            return 
-        self.super.OnMouseMove()
+        else:
+            self.super.OnMouseMove()
+        self.SetOpacity(1)
 
     def OnMouseWheelForward(self, obj, event):
         self.super.OnMouseWheelForward()
