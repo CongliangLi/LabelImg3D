@@ -144,6 +144,9 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
     def OnMouseMove(self, obj, event):
         x, y = self.GetInteractor().GetEventPosition()
 
+        # if self.InteractionProp is not None:
+        self.HighlightProp3D(self.InteractionProp)
+
         if self.isPressedRight and not self.GetInteractor().GetShiftKey():
             self.FindPokedRenderer(x, y)
             self.UniformScale()
