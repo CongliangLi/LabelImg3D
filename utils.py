@@ -28,6 +28,8 @@ def matrixMultiple(matrix_a, matrix_b):
     vtk.vtkMatrix4x4.Multiply4x4(matrix_a, matrix_b, matrix)
     return matrix
 
+def matrix2List(matrix):
+    return [matrix.GetElement(i, j) for i in range(4) for j in range(4)]
 
 def getFiles(folder, filter):
     return [os.path.relpath(os.path.join(maindir, filename), folder) \
