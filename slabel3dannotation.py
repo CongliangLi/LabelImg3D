@@ -43,7 +43,6 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         if len(all_picked_actors) > 0:
             self.NewPickedActor = all_picked_actors[0]
             if self.NewPickedActor and self.NewPickedActor is not self.slabel.actor_manager.actors[-1].actor:
-                print(self.NewPickedActor.GetBounds())
                 self.slabel.switchBoxWidgets(self.NewPickedActor)
 
     def OnLeftButtonDown(self, obj, event):
