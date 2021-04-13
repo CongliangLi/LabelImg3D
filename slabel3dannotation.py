@@ -11,7 +11,6 @@ import math
 from vtk import *
 from utils import *
 
-
 from actor_manager import Actor, ActorManager
 from sproperty import *
 
@@ -28,14 +27,15 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.AddObserver('MouseWheelBackwardEvent', self.OnMouseWheelBackward, -1)
         self.isPressedRight = False
         self.isPressedLeft = False
+        self.isMouse_Pressed_Move = False
         self.super = super(MouseInteractorHighLightActor, self)
         self.InteractionPicker = vtkCellPicker()
         self.InteractionProp = None
-        
+
     def __del__(self):
         del self.InteractionPicker
 
-    def SetOpacity(self, op = 0.5):
+    def SetOpacity(self, op=0.5):
         if self.InteractionProp is not None:
             self.InteractionProp.GetProperty().SetOpacity(op)
 
@@ -51,21 +51,24 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
     def OnLeftButtonDown(self, obj, event):
         self.isPressedLeft = True
-        x, y = self.GetInteractor().GetEventPosition()
-        self.switchLayer()
+        self.isMouse_Pressed_Move = False
 
-        self.InteractionPicker.Pick(x, y, 0.0, self.GetCurrentRenderer())
-        self.InteractionProp = self.InteractionPicker.GetViewProp()
+        if not self.isMouse_Pressed_Move:
+            x, y = self.GetInteractor().GetEventPosition()
+            self.switchLayer()
 
-        self.super.OnLeftButtonDown()
-            
+            self.InteractionPicker.Pick(x, y, 0.0, self.GetCurrentRenderer())
+            self.InteractionProp = self.InteractionPicker.GetViewProp()
+
+            self.super.OnLeftButtonDown()
+
     def OnLeftButtonUp(self, obj, event):
         self.isPressedLeft = False
         self.super.OnLeftButtonUp()
 
     def OnRightButtonDown(self, obj, event):
         self.isPressedRight = True
-
+        self.isMouse_Pressed_Move = False
         self.switchLayer()
         x, y = self.GetInteractor().GetEventPosition()
         self.InteractionPicker.Pick(x, y, 0.0, self.GetCurrentRenderer())
@@ -75,13 +78,13 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
     def OnRightButtonUp(self, obj, event):
         self.isPressedRight = False
-        self.super.OnRightButtonUp()
 
+        self.super.OnRightButtonUp()
 
     def Prop3DTransform(self, prop3D, boxCenter, numRotation, rotate, scale):
         oldMatrix = vtkMatrix4x4()
         prop3D.GetMatrix(oldMatrix)
-        
+
         orig = prop3D.GetOrigin()
 
         newTransform = vtkTransform()
@@ -90,7 +93,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             newTransform.SetMatrix(prop3D.GetUserMatrix())
         else:
             newTransform.SetMatrix(oldMatrix)
-        
+
         newTransform.Translate(-boxCenter[0], -boxCenter[1], -boxCenter[2])
 
         for i in range(numRotation):
@@ -98,7 +101,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
         if 0 not in scale:
             newTransform.Scale(*scale)
-        
+
         newTransform.Translate(*boxCenter)
 
         newTransform.Translate(*(-orig[i] for i in range(3)))
@@ -117,7 +120,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
     def UniformScale(self):
         if self.GetCurrentRenderer() is None or self.InteractionProp is None:
-            return 
+            return
         rwi = self.GetInteractor()
         dy = rwi.GetEventPosition()[1] - rwi.GetLastEventPosition()[1]
         obj_center = self.InteractionProp.GetCenter()
@@ -153,8 +156,12 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         rwi.Render()
 
     def OnMouseMove(self, obj, event):
+        if self.isPressedLeft or self.isPressedRight:
+            self.isMouse_Pressed_Move = True
+
         x, y = self.GetInteractor().GetEventPosition()
-        self.switchLayer()
+        if not self.isMouse_Pressed_Move:
+            self.switchLayer()
         self.HighlightProp3D(self.InteractionProp)
         self.SetOpacity(0.5)
         # Modify property content
@@ -178,6 +185,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         else:
             self.super.OnMouseMove()
         self.SetOpacity(1)
+        self.GetInteractor().Render()
 
     def OnMouseWheelForward(self, obj, event):
         self.super.OnMouseWheelForward()
@@ -227,12 +235,11 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
     def start(self):
         self.interactor.Initialize()
         self.interactor.Start()
-    
 
     @PyQt5.QtCore.pyqtSlot(str)
     def loadImage(self, image_path):
         if not os.path.exists(image_path):
-            return 
+            return
 
         self.image_path = image_path
 
@@ -256,7 +263,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         transform = vtk.vtkTransform()
         transform.Scale(scale, scale, scale)
-        transform.Translate(-image_width/2, -image_height/2, 0)
+        transform.Translate(-image_width / 2, -image_height / 2, 0)
         self.image_actor.SetUserTransform(transform)
         self.bg_renderer.AddActor(self.image_actor)
         self.bg_renderer.ResetCamera()
@@ -288,12 +295,11 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         data = self.actor_manager.loadAnnotation(annotation_file)
 
         if data is None:
-            #TODO: create an empty file and reset the camera matrix by the image
+            # TODO: create an empty file and reset the camera matrix by the image
             pass
         self.actor_manager.setCamera(data["camera"])
         if data is not None:
             self.actor_manager.createActors(self.scene_folder, data)
-        
 
     @PyQt5.QtCore.pyqtSlot()
     def saveScenes(self):
