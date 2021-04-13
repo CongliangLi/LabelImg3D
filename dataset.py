@@ -4,7 +4,7 @@ class V3PDataset:
     def __init__(self, scene_folder):
         self.scene_folder = scene_folder
         self.scene_folder = ''
-        self.images_folder = ''
+        # self.images_folder = ''
         self.models_folder = ''
 
         self.image_name_list = []

@@ -43,7 +43,6 @@ class SConfig(QDockWidget):
         self.window.setLayout(self.grid_layout)
         self.setWidget(self.window)
 
-
     def add(self, widget, name, default_value, row, col):
         """The utils function of adding new configured items.
 

@@ -8,11 +8,13 @@ import PyQt5
 from PyQt5 import QtCore, QtWidgets, QtGui
 import typing
 import math
-from actor_manager import Actor, ActorManager
-from utils import matrix2List
 from vtk import *
 from utils import *
-from PyQt5.QtCore import pyqtSignal
+
+
+from actor_manager import Actor, ActorManager
+from sproperty import *
+
 
 class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
     def __init__(self, slabel, parent=None):
@@ -147,16 +149,28 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
         if self.GetAutoAdjustCameraClippingRange():
             self.GetCurrentRenderer().ResetCameraClippingRange()
-        
-        rwi.Render()
 
+        rwi.Render()
 
     def OnMouseMove(self, obj, event):
         x, y = self.GetInteractor().GetEventPosition()
-
+        self.switchLayer()
         self.HighlightProp3D(self.InteractionProp)
         self.SetOpacity(0.5)
+        # Modify property content
+        if self.isPressedLeft:
+            data = []
+            # x, y, z 坐标
+            for i in range(len(getTransform(self.InteractionProp.GetUserMatrix()).GetPosition())):
+                data.append(getTransform(self.InteractionProp.GetUserMatrix()).GetPosition()[i])
+                # print(self.InteractionProp.GetCenter()[i])
 
+            for i in range(len(getTransform(self.InteractionProp.GetUserMatrix()).GetOrientation())):
+                data.append(getTransform(self.InteractionProp.GetUserMatrix()).GetOrientation()[i])
+                # print(data[i+3])
+            self.slabel.signal_on_left_button_up.emit(data)
+
+        # Right mouse button movement operation
         if self.isPressedRight and not self.GetInteractor().GetShiftKey():
             self.FindPokedRenderer(x, y)
             self.UniformScale()
@@ -172,8 +186,9 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.super.OnMouseWheelBackward()
 
 
-
 class SLabel3DAnnotation(QtWidgets.QFrame):
+    signal_on_left_button_up = pyqtSignal(list)
+
     def __init__(self, parent):
         super().__init__(parent=parent)
         self.interactor = QVTKRenderWindowInteractor(self)
@@ -247,17 +262,14 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.bg_renderer.ResetCamera()
         self.interactor.Render()
 
-
     @PyQt5.QtCore.pyqtSlot(str)
     def loadModel(self, model_path):
         self.actor_manager.newActor(model_path)
-
 
     def switchBoxWidgets(self, actor):
         index = self.actor_manager.getIndex(actor)
         if index != -1:
             self.actor_manager.setActiveActor(index)
-
 
     @PyQt5.QtCore.pyqtSlot(str, str, str)
     def loadScenes(self, scene_folder, image_file, annotation_file):
@@ -288,7 +300,6 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.data = {}
         self.data["image_file"] = os.path.relpath(self.image_path, self.scene_folder)
         self.data.update(self.actor_manager.toJson(self.scene_folder))
-
         camera = self.bg_renderer.GetActiveCamera()
         self.data["camera"] = {}
 
@@ -304,3 +315,15 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         with open(self.annotation_file, 'w+') as f:
             json.dump(self.data, f, indent=4)
 
+    @PyQt5.QtCore.pyqtSlot()
+    def model_update_with_property(self):
+        if not self.style.isPressedLeft:
+            if self.style.InteractionProp is not None:
+                m_proper = ["x", "y", "z", "rz", "rx", "ry"]
+                data = []
+                for i in range(len(m_proper)):
+                    data.append(self.parent().parent().property3d.config.get(m_proper[i]))
+                self.style.InteractionProp.SetPosition(data[0], data[1], data[2])
+                self.style.InteractionProp.SetOrientation(data[3], data[4], data[5])
+                self.style.HighlightProp3D(self.style.InteractionProp)
+                self.style.GetInteractor().Render()

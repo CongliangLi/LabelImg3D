@@ -7,7 +7,6 @@ from PyQt5.QtCore import pyqtSignal
 import typing
 
 
-
 class SLabel3dShow(QtWidgets.QLabel):
 
     def __init__(self, parent, model_path):

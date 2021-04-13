@@ -14,11 +14,11 @@ from .qt import (QComboBox, QCheckBox, QAction,
                  QListWidget, QSlider, QButtonGroup,
                  QTabWidget, QVariant, Qt, QMutex, QMutexLocker, QSettings,
                  QObject, Signal)
+
 try:
     import xml.etree.cElementTree as et
 except ImportError:
     import xml.etree.ElementTree as et
-
 
 RECALCULATE_ALL = 1
 RECALCULATE_VIEW = 2
@@ -634,7 +634,6 @@ HOOKS = {
 # Supports default values, change signals, export/import from file
 # (for workspace saving)
 class ConfigManagerBase(QObject):
-
     # Signals
     # Triggered anytime configuration is changed (refresh)
     updated = Signal(int)
@@ -694,7 +693,7 @@ class ConfigManagerBase(QObject):
             :type key: str
             :param value: The value to set the configuration key to
             :type value: Any supported
-                         (str, int, bool, list-of-supported-types)
+            (str, int, bool, list-of-supported-types)
             :rtype: bool (success)
         """
         old = self._get(key)
@@ -768,7 +767,7 @@ class ConfigManagerBase(QObject):
         # Updating the defaults may update the config (if anything
         # without a config value is set by it; should check)
         self.updated.emit(eventhook)
-    # Completely replace current config (wipe all other settings)
+        # Completely replace current config (wipe all other settings)
 
     def replace(self, keyvalues):
         """

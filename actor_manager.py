@@ -244,7 +244,6 @@ class ActorManager(QObject):
             model_path = os.path.join(scene_folder, data["model"][str(i)]["model_file"])
             self.newActor(model_path, data["model"][str(i)]["matrix"])
 
-
     def toJson(self, scene_folder):
         self.reformat()
         # print info

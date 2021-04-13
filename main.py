@@ -56,6 +56,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.scene_manager.signal_open_files.connect(self.image_list.open_files)
         self.scene_manager.signal_open_models.connect(self.model_list.open_files)
         self.ui.vtk_panel.actor_manager.signal_active_model.connect(self.property3d.updateBoxBounding)
+        self.ui.vtk_panel.signal_on_left_button_up.connect(self.property3d.update_property)
         
     def setup(self):
         self.ui = Ui_main.Ui_MainWindow()

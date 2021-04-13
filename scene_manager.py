@@ -100,4 +100,3 @@ class SceneManager(QObject):
 
     def save(self):
         pass
-
