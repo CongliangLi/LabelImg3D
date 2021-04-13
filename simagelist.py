@@ -46,10 +46,6 @@ class SImageList(QDockWidget):
         self.listWidget.setObjectName("listWidget")
         self.verticalLayout.addWidget(self.listWidget)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> master
         self.window = QFrame()
         self.window.setLayout(self.verticalLayout)
         self.setWidget(self.window)

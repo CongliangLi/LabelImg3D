@@ -13,10 +13,6 @@ from actor_manager import ActorManager
 from simagelist import SImageList
 from slabel3dannotation import SLabel3DAnnotation
 
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 class SceneManager(QObject):
     signal_open_files = pyqtSignal(list)
     signal_open_models = pyqtSignal(list)

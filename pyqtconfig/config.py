@@ -634,10 +634,6 @@ HOOKS = {
 # Supports default values, change signals, export/import from file
 # (for workspace saving)
 class ConfigManagerBase(QObject):
-<<<<<<< HEAD
-=======
-
->>>>>>> master
     # Signals
     # Triggered anytime configuration is changed (refresh)
     updated = Signal(int)
