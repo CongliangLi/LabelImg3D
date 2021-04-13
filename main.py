@@ -44,7 +44,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.addDockWidget(Qt.RightDockWidgetArea, self.property3d)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.widget_log)
 
-        self.scene_manager = SceneManager(self, self.image_list, self.model_list, self.ui.vtk_panel)
+        self.scene_manager = SceneManager(self, self.image_list,  self.model_list, self.ui.vtk_panel)
 
         # menu in main window
         self.ui.action_Load_Scenes.triggered.connect(self.load_scenes)

@@ -634,6 +634,10 @@ HOOKS = {
 # Supports default values, change signals, export/import from file
 # (for workspace saving)
 class ConfigManagerBase(QObject):
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
     # Signals
     # Triggered anytime configuration is changed (refresh)
     updated = Signal(int)
@@ -767,8 +771,7 @@ class ConfigManagerBase(QObject):
         # Updating the defaults may update the config (if anything
         # without a config value is set by it; should check)
         self.updated.emit(eventhook)
-
-    # Completely replace current config (wipe all other settings)
+        # Completely replace current config (wipe all other settings)
 
     def replace(self, keyvalues):
         """
@@ -811,7 +814,6 @@ class ConfigManagerBase(QObject):
             self.updated.emit(RECALCULATE_ALL)
 
         return has_updated
-
     # HANDLERS
 
     # Handlers are UI elements (combo, select, checkboxes) that automatically

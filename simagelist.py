@@ -46,6 +46,10 @@ class SImageList(QDockWidget):
         self.listWidget.setObjectName("listWidget")
         self.verticalLayout.addWidget(self.listWidget)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
         self.window = QFrame()
         self.window.setLayout(self.verticalLayout)
         self.setWidget(self.window)
@@ -69,7 +73,7 @@ class SImageList(QDockWidget):
         #     file_list = list(set(file_list).difference(self.file_list))
         #     self.file_list += file_list
         if file_list is None or len(file_list) == 0:
-            return
+            return 
 
         self.file_list = file_list
         self.progress_bar_load.setVisible(True)
@@ -78,11 +82,12 @@ class SImageList(QDockWidget):
         for i in range(num_model):
             self.signal_load_model.emit(i, num_model)
             self.add_item(file_list[i])
-            self.progress_bar_load.setValue((i + 1) / num_model * 100)
+            self.progress_bar_load.setValue((i+1)/num_model*100)
             # event loop
             QCoreApplication.processEvents()
 
         self.progress_bar_load.setVisible(False)
+            
 
     def add_item(self, model_path):
         name = os.path.split(model_path)[-1][:-4]
@@ -95,16 +100,17 @@ class SImageList(QDockWidget):
         print(self.file_list[index.row()])
 
 
+
 if __name__ == '__main__':
     class MainWindow(QMainWindow):
-        def __init__(self, parent=None):
+        def __init__(self,parent=None):
             super(MainWindow, self).__init__(parent)
-            layout = QHBoxLayout()
+            layout=QHBoxLayout()
 
-            self.items = SImageList(self, "Images")
+            self.items=SImageList(self, "Images")
 
             self.setCentralWidget(QTextEdit())
-            self.addDockWidget(Qt.RightDockWidgetArea, self.items)
+            self.addDockWidget(Qt.RightDockWidgetArea,self.items)
 
             self.setLayout(layout)
             self.setWindowTitle('Dock')
@@ -113,8 +119,7 @@ if __name__ == '__main__':
         def update(sender):
             print(sender)
 
-
-    app = QApplication(sys.argv)
-    demo = MainWindow()
+    app=QApplication(sys.argv)
+    demo=MainWindow()
     demo.show()
     sys.exit(app.exec_())

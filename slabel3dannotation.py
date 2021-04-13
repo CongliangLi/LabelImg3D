@@ -31,11 +31,11 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.super = super(MouseInteractorHighLightActor, self)
         self.InteractionPicker = vtkCellPicker()
         self.InteractionProp = None
-
+        
     def __del__(self):
         del self.InteractionPicker
 
-    def SetOpacity(self, op=0.5):
+    def SetOpacity(self, op = 0.5):
         if self.InteractionProp is not None:
             self.InteractionProp.GetProperty().SetOpacity(op)
 
@@ -56,8 +56,9 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
         self.InteractionPicker.Pick(x, y, 0.0, self.GetCurrentRenderer())
         self.InteractionProp = self.InteractionPicker.GetViewProp()
-        self.super.OnLeftButtonDown()
 
+        self.super.OnLeftButtonDown()
+            
     def OnLeftButtonUp(self, obj, event):
         self.isPressedLeft = False
         self.super.OnLeftButtonUp()
@@ -76,10 +77,11 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.isPressedRight = False
         self.super.OnRightButtonUp()
 
+
     def Prop3DTransform(self, prop3D, boxCenter, numRotation, rotate, scale):
         oldMatrix = vtkMatrix4x4()
         prop3D.GetMatrix(oldMatrix)
-
+        
         orig = prop3D.GetOrigin()
 
         newTransform = vtkTransform()
@@ -88,7 +90,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             newTransform.SetMatrix(prop3D.GetUserMatrix())
         else:
             newTransform.SetMatrix(oldMatrix)
-
+        
         newTransform.Translate(-boxCenter[0], -boxCenter[1], -boxCenter[2])
 
         for i in range(numRotation):
@@ -96,7 +98,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
         if 0 not in scale:
             newTransform.Scale(*scale)
-
+        
         newTransform.Translate(*boxCenter)
 
         newTransform.Translate(*(-orig[i] for i in range(3)))
@@ -106,7 +108,6 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         if prop3D.GetUserMatrix() is not None:
             newTransform.GetMatrix(prop3D.GetUserMatrix())
         else:
-
             prop3D.SetPosition(newTransform.GetPosition())
             prop3D.SetScale(newTransform.GetScale())
             prop3D.SetOrientation(newTransform.GetOrientation())
@@ -116,7 +117,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
     def UniformScale(self):
         if self.GetCurrentRenderer() is None or self.InteractionProp is None:
-            return
+            return 
         rwi = self.GetInteractor()
         dy = rwi.GetEventPosition()[1] - rwi.GetLastEventPosition()[1]
         obj_center = self.InteractionProp.GetCenter()
@@ -176,7 +177,6 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             self.InvokeEvent(vtkCommand.InteractionEvent, None)
         else:
             self.super.OnMouseMove()
-
         self.SetOpacity(1)
 
     def OnMouseWheelForward(self, obj, event):
@@ -222,16 +222,17 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.image_actor = None
         self.image_path = None
 
-        self.actor_manager = ActorManager(self.renderer_window, self.interactor)
+        self.actor_manager = ActorManager(self.renderer_window, self.interactor, self.bg_renderer)
 
     def start(self):
         self.interactor.Initialize()
         self.interactor.Start()
+    
 
     @PyQt5.QtCore.pyqtSlot(str)
     def loadImage(self, image_path):
         if not os.path.exists(image_path):
-            return
+            return 
 
         self.image_path = image_path
 
@@ -255,7 +256,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         transform = vtk.vtkTransform()
         transform.Scale(scale, scale, scale)
-        transform.Translate(-image_width / 2, -image_height / 2, 0)
+        transform.Translate(-image_width/2, -image_height/2, 0)
         self.image_actor.SetUserTransform(transform)
         self.bg_renderer.AddActor(self.image_actor)
         self.bg_renderer.ResetCamera()
@@ -284,17 +285,35 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.loadImage(image_file)
 
         # load the scenes
-        self.actor_manager.loadAnnotation(self.scene_folder, annotation_file)
+        data = self.actor_manager.loadAnnotation(annotation_file)
+
+        if data is None:
+            #TODO: create an empty file and reset the camera matrix by the image
+            pass
+        self.actor_manager.setCamera(data["camera"])
+        if data is not None:
+            self.actor_manager.createActors(self.scene_folder, data)
+        
 
     @PyQt5.QtCore.pyqtSlot()
     def saveScenes(self):
         self.data = {}
         self.data["image_file"] = os.path.relpath(self.image_path, self.scene_folder)
         self.data.update(self.actor_manager.toJson(self.scene_folder))
+        camera = self.bg_renderer.GetActiveCamera()
+        self.data["camera"] = {}
+
+        transform = getTransform(camera.GetModelViewTransformMatrix()).GetInverse()
+        self.data["camera"]["matrix"] = matrix2List(transform.GetMatrix())
+        self.data["camera"]["position"] = transform.GetPosition()
+        self.data["camera"]["focalPoint"] = list(camera.GetFocalPoint())
+        self.data["camera"]["fov"] = camera.GetViewAngle()
+        self.data["camera"]["viewup"] = list(camera.GetViewUp())
+        self.data["camera"]["distance"] = camera.GetDistance()
         if not os.path.exists(os.path.dirname(self.annotation_file)):
             os.makedirs(os.path.dirname(self.annotation_file))
         with open(self.annotation_file, 'w+') as f:
-            json.dump(self.data, f)
+            json.dump(self.data, f, indent=4)
 
     @PyQt5.QtCore.pyqtSlot()
     def model_update_with_property(self):

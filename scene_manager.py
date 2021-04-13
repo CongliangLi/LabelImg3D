@@ -13,7 +13,10 @@ from actor_manager import ActorManager
 from simagelist import SImageList
 from slabel3dannotation import SLabel3DAnnotation
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 class SceneManager(QObject):
     signal_open_files = pyqtSignal(list)
     signal_open_models = pyqtSignal(list)
@@ -51,18 +54,16 @@ class SceneManager(QObject):
         """
         scene_folder = QtWidgets.QFileDialog.getExistingDirectory(None, "Choose Scene Folder")
         if scene_folder == '':
-            return
-
+            return 
+        
         self.scene_folder = scene_folder
         # 1. get all the images
         self.images_folder = os.path.join(self.scene_folder, 'images')
         self.image_name_list = getFiles(self.images_folder, ['.jpg'])
-
+        
         # 2. get all the annotations
         self.annotations_folder = os.path.join(self.scene_folder, 'annotations')
-        self.annotation_name_list = [
-            os.path.relpath(os.path.join(self.annotations_folder, i)[:-4] + '.json', self.annotations_folder) for i in
-            self.image_name_list]
+        self.annotation_name_list = [os.path.relpath(os.path.join(self.annotations_folder, i)[:-4]+'.json', self.annotations_folder) for i in self.image_name_list]
 
         # 3. get all the models
         self.models_folder = os.path.join(self.scene_folder, 'models')
@@ -73,6 +74,7 @@ class SceneManager(QObject):
             self.signal_open_models.emit([os.path.join(self.models_folder, i) for i in self.model_name_list])
             self.signal_open_files.emit([os.path.join(self.images_folder, i) for i in self.image_name_list])
             self[0]
+        
 
     def __len__(self):
         return len(self.image_name_list)
@@ -80,11 +82,13 @@ class SceneManager(QObject):
     def __getitem__(self, index):
         # 1. check annotation_folder
         self.vtk_panel.loadScenes(self.scene_folder, os.path.join(self.images_folder, self.image_name_list[index]), \
-                                  os.path.join(self.annotations_folder, self.annotation_name_list[index]))
+                        os.path.join(self.annotations_folder, self.annotation_name_list[index]))
         # 2. read annotation file
         # 3. clear all the renderers and actors
         # 4. add image and actors
         pass
+
+    
 
     def next(self):
         pass

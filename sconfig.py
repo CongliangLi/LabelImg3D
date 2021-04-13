@@ -8,14 +8,13 @@ from PyQt5.QtWidgets import *
 from pyqtconfig.config import ConfigManager
 
 from pyqtconfig.qt import (QComboBox, QCheckBox, QSpinBox, QMainWindow,
-                           QLineEdit, QApplication, QTextEdit,
-                           QGridLayout, QWidget, QDockWidget)
+                QLineEdit, QApplication, QTextEdit,
+                QGridLayout, QWidget, QDockWidget)
 
 
 class SConfig(QDockWidget):
     """Configure Dockable Widgets. This is a class for showing and modifying the configure of the software
     """
-
     def __init__(self, parent, title="config"):
         """Constructor
 
@@ -28,7 +27,7 @@ class SConfig(QDockWidget):
         self.setWindowTitle(title)
         self.grid_layout = QGridLayout()
         # self.layout().addChildLayout(self.grid_layout)
-
+        
         self.config_edit = QTextEdit()
         self.config = ConfigManager()
 
@@ -56,11 +55,11 @@ class SConfig(QDockWidget):
         """
         hlayout = QHBoxLayout()
         label = QLabel(self)
-        label.setText(name + ": ")
+        label.setText(name+": ")
         hlayout.addWidget(label)
         hlayout.addWidget(widget)
 
-        self.config.set_defaults({name: default_value})
+        self.config.set_defaults({name:default_value})
         self.grid_layout.addLayout(hlayout, row, col)
         self.config.add_handler(name, widget)
 
@@ -86,14 +85,14 @@ class SConfig(QDockWidget):
 
 if __name__ == '__main__':
     class MainWindow(QMainWindow):
-        def __init__(self, parent=None):
+        def __init__(self,parent=None):
             super(MainWindow, self).__init__(parent)
-            layout = QHBoxLayout()
+            layout=QHBoxLayout()
 
-            self.items = SConfig(self, "Config")
+            self.items=SConfig(self, "Config")
 
             self.setCentralWidget(QTextEdit())
-            self.addDockWidget(Qt.RightDockWidgetArea, self.items)
+            self.addDockWidget(Qt.RightDockWidgetArea,self.items)
 
             self.setLayout(layout)
             self.setWindowTitle('Dock')
@@ -102,8 +101,7 @@ if __name__ == '__main__':
         def update(sender):
             print(sender)
 
-
-    app = QApplication(sys.argv)
-    demo = MainWindow()
+    app=QApplication(sys.argv)
+    demo=MainWindow()
     demo.show()
     sys.exit(app.exec_())

@@ -5,7 +5,6 @@ from qt import (QComboBox, QCheckBox, QSpinBox, QMainWindow,
                 QLineEdit, QApplication, QTextEdit,
                 QGridLayout, QWidget)
 
-
 class MainWindow(QMainWindow):
 
     def __init__(self):
@@ -65,7 +64,6 @@ class MainWindow(QMainWindow):
 
     def show_config(self):
         self.current_config_output.setText(str(self.config.as_dict()))
-
 
 # Create a Qt application
 app = QApplication(sys.argv)

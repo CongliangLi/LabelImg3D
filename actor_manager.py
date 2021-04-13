@@ -104,7 +104,7 @@ class Actor:
         dst_actor.setUserTransform(transform)
 
     def getCameraMatrix(self):
-        matrix = self.renderer.GetActiveCamera().GetViewTransformMatrix()
+        matrix = self.renderer.GetActiveCamera().GetModelViewTransformMatrix()
         return [matrix.GetElement(i, j) for i in range(4) for j in range(4)]
 
 
@@ -119,10 +119,11 @@ class Actor:
 class ActorManager(QObject):
     signal_active_model = pyqtSignal(list)
 
-    def __init__(self, render_window, interactor):
+    def __init__(self, render_window, interactor, bg_renderer):
         super(ActorManager, self).__init__()
         self.render_window = render_window
         self.interactor = interactor
+        self.bg_renderer = bg_renderer
         self.actors = []
 
     def newActor(self, model_path, camera_matrix = None):
@@ -136,8 +137,18 @@ class ActorManager(QObject):
             matrix = vtk.vtkMatrix4x4()
             matrix.DeepCopy(camera_matrix)
             matrix.Invert()
+            transform = getTransform(matrix)
             camera = actor.renderer.GetActiveCamera()
-            camera.ApplyTransform(getTransform(matrix))
+            camera.ApplyTransform(transform)
+
+
+            # if actor.actor.GetUserMatrix() is not None:
+            #     transform.GetMatrix(actor.actor.GetUserMatrix())
+            # else:
+            #     actor.actor.SetOrientation(transform.GetOrientation())
+            #     actor.actor.SetPosition(transform.GetPosition())
+            #     actor.actor.SetScale(transform.GetScale())
+
             # self.interactor.Render()
             # self.interactor.GetInteractorStyle().OnMouseWheelForward()
             # self.interactor.GetInteractorStyle().OnMouseWheelBackward()
@@ -210,16 +221,25 @@ class ActorManager(QObject):
         self.actors = []
         pass
 
-    def loadAnnotation(self, scene_folder, annotation_file):
+    def loadAnnotation(self, annotation_file):
         if not os.path.exists(annotation_file):
             return
         data = None
         with open(annotation_file, 'r') as f:
             data = json.load(f)
-
-        if data is None or data["model"]["num"] == 0:
-            return
         
+        return data
+
+    def setCamera(self, camera_data):
+        camera = self.bg_renderer.GetActiveCamera()
+        camera.SetFocalPoint(camera_data["position"])
+        camera.SetFocalPoint(camera_data["focalPoint"])
+        camera.SetViewAngle(camera_data["fov"])
+        camera.SetViewUp(camera_data["viewup"])
+        camera.SetDistance(camera_data["distance"])
+        
+
+    def createActors(self, scene_folder, data):
         for i in range(data["model"]["num"]):
             model_path = os.path.join(scene_folder, data["model"][str(i)]["model_file"])
             self.newActor(model_path, data["model"][str(i)]["matrix"])

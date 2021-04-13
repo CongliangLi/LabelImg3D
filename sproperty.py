@@ -30,7 +30,6 @@ class SProperty(QDockWidget):
         self.setWindowTitle(title)
         self.grid_layout = QGridLayout()
         # self.layout().addChildLayout(self.grid_layout)
-
         self.config_edit = QTextEdit()
         self.config = ConfigManager()
 
@@ -77,9 +76,6 @@ class SProperty(QDockWidget):
         """
         return self.config.get(key)
 
-    def property_changed(self):
-        print("123")
-
     @PyQt5.QtCore.pyqtSlot(list)
     def updateBoxBounding(self, data):
         self.config.set('x', data[0])
@@ -111,14 +107,14 @@ class SProperty(QDockWidget):
 
 if __name__ == '__main__':
     class MainWindow(QMainWindow):
-        def __init__(self, parent=None):
+        def __init__(self,parent=None):
             super(MainWindow, self).__init__(parent)
-            layout = QHBoxLayout()
+            layout=QHBoxLayout()
 
-            self.items = SProperty(self, "3DProperty")
+            self.items=SProperty(self, "3DProperty")
 
             self.setCentralWidget(QTextEdit())
-            self.addDockWidget(Qt.RightDockWidgetArea, self.items)
+            self.addDockWidget(Qt.RightDockWidgetArea,self.items)
 
             self.setLayout(layout)
             self.setWindowTitle('Dock')
@@ -127,8 +123,7 @@ if __name__ == '__main__':
         def update(sender):
             print(sender)
 
-
-    app = QApplication(sys.argv)
-    demo = MainWindow()
+    app=QApplication(sys.argv)
+    demo=MainWindow()
     demo.show()
     sys.exit(app.exec_())

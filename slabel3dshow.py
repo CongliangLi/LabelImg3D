@@ -19,7 +19,7 @@ class SLabel3dShow(QtWidgets.QLabel):
         self.style = vtk.vtkInteractorStyleTrackballCamera()
         self.interactor.SetInteractorStyle(self.style)
         self.render_window.AddRenderer(self.renderer)
-
+        
         self.layout = QtWidgets.QHBoxLayout()
         self.layout.addWidget(self.interactor)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -29,11 +29,11 @@ class SLabel3dShow(QtWidgets.QLabel):
         self.model_path = model_path
         self.model_folder, self.obj_name = os.path.split(self.model_path)
         self.obj_name = self.obj_name[:-4]
-        self.mtl_path = self.model_folder + "/" + self.obj_name + ".mtl"
+        self.mtl_path = self.model_folder + "/" + self.obj_name+".mtl"
 
         self.load_3d_model()
 
-    def load_3d_model(self):
+    def load_3d_model(self):        
         reader = vtk.vtkOBJImporter()
         reader.SetFileName(self.model_path)
         reader.SetFileNameMTL(self.mtl_path)
