@@ -230,6 +230,15 @@ class ActorManager(QObject):
         
         return data
 
+    def setCamera(self, camera_data):
+        camera = self.bg_renderer.GetActiveCamera()
+        camera.SetFocalPoint(camera_data["position"])
+        camera.SetFocalPoint(camera_data["focalPoint"])
+        camera.SetViewAngle(camera_data["fov"])
+        camera.SetViewUp(camera_data["viewup"])
+        camera.SetDistance(camera_data["distance"])
+        
+
     def createActors(self, scene_folder, data):
         for i in range(data["model"]["num"]):
             model_path = os.path.join(scene_folder, data["model"][str(i)]["model_file"])

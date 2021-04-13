@@ -31,6 +31,12 @@ def matrixMultiple(matrix_a, matrix_b):
 def matrix2List(matrix):
     return [matrix.GetElement(i, j) for i in range(4) for j in range(4)]
 
+def list2Matrix(data):
+    matrix = vtk.vtkMatrix4x4()
+    matrix.DeepCopy(data)
+    return matrix
+
+
 def getFiles(folder, filter):
     return [os.path.relpath(os.path.join(maindir, filename), folder) \
             for maindir, _, file_name_list in os.walk(folder, followlinks=True) \
