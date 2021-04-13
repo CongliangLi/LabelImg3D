@@ -8,13 +8,9 @@ import PyQt5
 from PyQt5 import QtCore, QtWidgets, QtGui
 import typing
 import math
+from vtk import *
 from utils import *
 
-from vtkmodules_vtkCommonCore import vtkMath, vtkCommand
-from vtkmodules_vtkCommonMath import vtkMatrix4x4
-from vtkmodules_vtkCommonTransforms import vtkTransform
-from vtkmodules_vtkInteractionStyle import vtkInteractorStyleTrackballActor
-from vtkmodules_vtkRenderingCore import vtkCellPicker
 
 from actor_manager import Actor, ActorManager
 from sproperty import *
