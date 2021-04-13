@@ -9,8 +9,10 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 import typing
 import math
 from actor_manager import Actor, ActorManager
-
+from utils import matrix2List
 from vtk import *
+from utils import *
+from PyQt5.QtCore import pyqtSignal
 
 class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
     def __init__(self, slabel, parent=None):
@@ -172,7 +174,6 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
 
 class SLabel3DAnnotation(QtWidgets.QFrame):
-
     def __init__(self, parent):
         super().__init__(parent=parent)
         self.interactor = QVTKRenderWindowInteractor(self)
@@ -206,7 +207,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.image_actor = None
         self.image_path = None
 
-        self.actor_manager = ActorManager(self.renderer_window, self.interactor)
+        self.actor_manager = ActorManager(self.renderer_window, self.interactor, self.bg_renderer)
 
     def start(self):
         self.interactor.Initialize()
@@ -272,7 +273,14 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.loadImage(image_file)
 
         # load the scenes
-        self.actor_manager.loadAnnotation(self.scene_folder, annotation_file)
+        data = self.actor_manager.loadAnnotation(annotation_file)
+
+        if data is None:
+            #TODO: create an empty file and reset the camera matrix by the image
+            pass
+        self.actor_manager.setCamera(data["camera"])
+        if data is not None:
+            self.actor_manager.createActors(self.scene_folder, data)
         
 
     @PyQt5.QtCore.pyqtSlot()
@@ -280,8 +288,19 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.data = {}
         self.data["image_file"] = os.path.relpath(self.image_path, self.scene_folder)
         self.data.update(self.actor_manager.toJson(self.scene_folder))
+
+        camera = self.bg_renderer.GetActiveCamera()
+        self.data["camera"] = {}
+
+        transform = getTransform(camera.GetModelViewTransformMatrix()).GetInverse()
+        self.data["camera"]["matrix"] = matrix2List(transform.GetMatrix())
+        self.data["camera"]["position"] = transform.GetPosition()
+        self.data["camera"]["focalPoint"] = list(camera.GetFocalPoint())
+        self.data["camera"]["fov"] = camera.GetViewAngle()
+        self.data["camera"]["viewup"] = list(camera.GetViewUp())
+        self.data["camera"]["distance"] = camera.GetDistance()
         if not os.path.exists(os.path.dirname(self.annotation_file)):
             os.makedirs(os.path.dirname(self.annotation_file))
         with open(self.annotation_file, 'w+') as f:
-            json.dump(self.data, f)
+            json.dump(self.data, f, indent=4)
 
