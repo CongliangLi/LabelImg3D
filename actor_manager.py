@@ -127,7 +127,7 @@ class ActorManager(QObject):
         self.render_window = render_window
         self.interactor = interactor
         self.bg_renderer = bg_renderer
-        self.bg_renderer.GetActiveCamera()
+        # self.bg_renderer.GetActiveCamera()
         self.interactor.GetInteractorStyle().SetAutoAdjustCameraClippingRange(False)
         # self.bg_renderer.GetActiveCamera().SetClippingRange(0.00001, 1000000)
         self.actors = []
