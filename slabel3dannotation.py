@@ -45,7 +45,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         all_picked_actors = [self.InteractionPicker.GetProp3D() for a in self.slabel.actor_manager.actors \
                              if self.InteractionPicker.Pick(x, y, 0, a.renderer) != 0]
         if len(all_picked_actors) > 0:
-            self.NewPickedActor = all_picked_actors[0]
+            self.NewPickedActor = all_picked_actors[-1]
             if self.NewPickedActor and self.NewPickedActor is not self.slabel.actor_manager.actors[-1].actor:
                 self.slabel.switchBoxWidgets(self.NewPickedActor)
 
@@ -59,6 +59,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
             self.InteractionPicker.Pick(x, y, 0.0, self.GetCurrentRenderer())
             self.InteractionProp = self.InteractionPicker.GetViewProp()
+            self.HighlightProp3D(self.InteractionProp)
 
             self.super.OnLeftButtonDown()
 
@@ -74,6 +75,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         x, y = self.GetInteractor().GetEventPosition()
         self.InteractionPicker.Pick(x, y, 0.0, self.GetCurrentRenderer())
         self.InteractionProp = self.InteractionPicker.GetViewProp()
+        self.HighlightProp3D(self.InteractionProp)
 
         self.super.OnRightButtonDown()
 
@@ -157,9 +159,10 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         rwi.Render()
 
     def OnMouseMove(self, obj, event):
-        
         if self.InteractionProp is None or (not self.isPressedLeft and not self.isPressedRight):
             return 
+
+        self.isMouse_Pressed_Move = True
 
         self.HighlightProp3D(self.InteractionProp)
         self.SetOpacity(0.5)
@@ -173,14 +176,14 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             self.InvokeEvent(vtkCommand.InteractionEvent, None)
         else:
             self.super.OnMouseMove()
+            self.GetInteractor().Render()
             
+        # self.slabel.signal_on_left_button_up.emit(
+        #     list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation())
+        # )
         self.slabel.actor_manager.ResetCameraClippingRange()
-        
-        self.slabel.signal_on_left_button_up.emit(
-            list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation())
-        )
-        
         self.GetInteractor().Render()
+        
 
     def OnMouseWheelForward(self, obj, event):
         self.super.OnMouseWheelForward()
