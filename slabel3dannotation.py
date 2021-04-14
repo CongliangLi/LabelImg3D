@@ -159,6 +159,9 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         if self.isPressedLeft or self.isPressedRight:
             self.isMouse_Pressed_Move = True
 
+        if self.InteractionProp is None:
+            return
+
         x, y = self.GetInteractor().GetEventPosition()
         if not self.isMouse_Pressed_Move:
             self.switchLayer()
@@ -167,13 +170,15 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         # Modify property content
         if self.isPressedLeft:
             data = []
-            # x, y, z 坐标
-            for i in range(len(getTransform(self.InteractionProp.GetUserMatrix()).GetPosition())):
-                data.append(getTransform(self.InteractionProp.GetUserMatrix()).GetPosition()[i])
-                # print(self.InteractionProp.GetCenter()[i])
+            data += self.InteractionProp.GetPosition()
+            data += self.InteractionProp.GetOrientation()
+            # # x, y, z coordinate
+            # for i in range(len(getTransform(self.InteractionProp.GetUserMatrix()).GetPosition())):
+            #     data.append(getTransform(self.InteractionProp.GetUserMatrix()).GetPosition()[i])
+            #     # print(self.InteractionProp.GetCenter()[i])
 
-            for i in range(len(getTransform(self.InteractionProp.GetUserMatrix()).GetOrientation())):
-                data.append(getTransform(self.InteractionProp.GetUserMatrix()).GetOrientation()[i])
+            # for i in range(len(getTransform(self.InteractionProp.GetUserMatrix()).GetOrientation())):
+            #     data.append(getTransform(self.InteractionProp.GetUserMatrix()).GetOrientation()[i])
                 # print(data[i+3])
             self.slabel.signal_on_left_button_up.emit(data)
 
@@ -184,8 +189,8 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             self.InvokeEvent(vtkCommand.InteractionEvent, None)
         else:
             self.super.OnMouseMove()
-        self.SetOpacity(1)
         self.GetInteractor().Render()
+        self.SetOpacity(1)
 
     def OnMouseWheelForward(self, obj, event):
         self.super.OnMouseWheelForward()
