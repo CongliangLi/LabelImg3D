@@ -64,6 +64,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
     def OnLeftButtonUp(self, obj, event):
         self.isPressedLeft = False
+        self.SetOpacity(1)
         self.super.OnLeftButtonUp()
 
     def OnRightButtonDown(self, obj, event):
@@ -78,7 +79,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
     def OnRightButtonUp(self, obj, event):
         self.isPressedRight = False
-
+        self.SetOpacity(1)
         self.super.OnRightButtonUp()
 
     def Prop3DTransform(self, prop3D, boxCenter, numRotation, rotate, scale):
@@ -150,37 +151,20 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         else:
             self.InteractionProp.AddPosition(*motion_vector)
 
-        if self.GetAutoAdjustCameraClippingRange():
-            self.GetCurrentRenderer().ResetCameraClippingRange()
+        # if self.GetAutoAdjustCameraClippingRange():
+        #     self.GetCurrentRenderer().ResetCameraClippingRange()
 
         rwi.Render()
 
     def OnMouseMove(self, obj, event):
-        if self.isPressedLeft or self.isPressedRight:
-            self.isMouse_Pressed_Move = True
+        
+        if self.InteractionProp is None or (not self.isPressedLeft and not self.isPressedRight):
+            return 
 
-        if self.InteractionProp is None:
-            return
-
-        x, y = self.GetInteractor().GetEventPosition()
-        if not self.isMouse_Pressed_Move:
-            self.switchLayer()
         self.HighlightProp3D(self.InteractionProp)
         self.SetOpacity(0.5)
-        # Modify property content
-        if self.isPressedLeft:
-            data = []
-            data += self.InteractionProp.GetPosition()
-            data += self.InteractionProp.GetOrientation()
-            # # x, y, z coordinate
-            # for i in range(len(getTransform(self.InteractionProp.GetUserMatrix()).GetPosition())):
-            #     data.append(getTransform(self.InteractionProp.GetUserMatrix()).GetPosition()[i])
-            #     # print(self.InteractionProp.GetCenter()[i])
 
-            # for i in range(len(getTransform(self.InteractionProp.GetUserMatrix()).GetOrientation())):
-            #     data.append(getTransform(self.InteractionProp.GetUserMatrix()).GetOrientation()[i])
-                # print(data[i+3])
-            self.slabel.signal_on_left_button_up.emit(data)
+        x, y = self.GetInteractor().GetEventPosition()
 
         # Right mouse button movement operation
         if self.isPressedRight and not self.GetInteractor().GetShiftKey():
@@ -189,8 +173,14 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             self.InvokeEvent(vtkCommand.InteractionEvent, None)
         else:
             self.super.OnMouseMove()
+            
+        self.slabel.actor_manager.ResetCameraClippingRange()
+        
+        self.slabel.signal_on_left_button_up.emit(
+            list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation())
+        )
+        
         self.GetInteractor().Render()
-        self.SetOpacity(1)
 
     def OnMouseWheelForward(self, obj, event):
         self.super.OnMouseWheelForward()
@@ -329,12 +319,18 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
     @PyQt5.QtCore.pyqtSlot()
     def model_update_with_property(self):
         if not self.style.isPressedLeft:
-            if self.style.InteractionProp is not None:
-                m_proper = ["x", "y", "z", "rz", "rx", "ry"]
-                data = []
-                for i in range(len(m_proper)):
-                    data.append(self.parent().parent().property3d.config.get(m_proper[i]))
-                self.style.InteractionProp.SetPosition(data[0], data[1], data[2])
-                self.style.InteractionProp.SetOrientation(data[3], data[4], data[5])
+                if self.style.InteractionProp is None and len(self.actor_manager.actors) > 0:
+                    self.style.InteractionProp = self.actor_manager.actors[-1].actor
+                elif self.style.InteractionProp is None and len(self.actor_manager.actors) == 0:
+                    return
+
+                data = [self.parent().parent().property3d.config.get(p)
+                        for p in ["x", "y", "z", "rz", "rx", "ry"]]
+                self.style.InteractionProp.SetPosition(*data[:3])
+                self.style.InteractionProp.SetOrientation(*data[3:])
                 self.style.HighlightProp3D(self.style.InteractionProp)
                 self.style.GetInteractor().Render()
+
+                if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
+                    self.actor_manager.ResetCameraClippingRange()
+                    # self.style.GetCurrentRenderer().ResetCameraClippingRange()

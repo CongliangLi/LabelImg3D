@@ -114,7 +114,7 @@ class Actor:
     def toJson(self, scene_folder):
         return {
             "model_file": os.path.relpath(self.model_path, scene_folder),
-            "matrix": self.getCameraMatrix(),
+            "matrix": matrix2List(self.actor.GetMatrix()),
             "class": self.type_class
         }
 
@@ -128,8 +128,8 @@ class ActorManager(QObject):
         self.interactor = interactor
         self.bg_renderer = bg_renderer
         self.bg_renderer.GetActiveCamera()
-        self.interactor.GetInteractorStyle().SetAutoAdjustCameraClippingRange(False)
-        self.bg_renderer.GetActiveCamera().SetClippingRange(0.00001, 1000000)
+        # self.interactor.GetInteractorStyle().SetAutoAdjustCameraClippingRange(False)
+        # self.bg_renderer.GetActiveCamera().SetClippingRange(0.00001, 1000000)
         self.actors = []
 
     def newActor(self, model_path, camera_matrix = None):
@@ -149,8 +149,8 @@ class ActorManager(QObject):
             if actor.actor.GetUserMatrix() is not None:
                 transform.GetMatrix(actor.actor.GetUserMatrix())
             else:
-                actor.actor.SetOrientation(transform.GetOrientation())
                 actor.actor.SetPosition(transform.GetPosition())
+                actor.actor.SetOrientation(transform.GetOrientation())
                 actor.actor.SetScale(transform.GetScale())
         
         self.actors.append(actor)
@@ -234,6 +234,21 @@ class ActorManager(QObject):
         camera.SetViewAngle(camera_data["fov"])
         camera.SetViewUp(camera_data["viewup"])
         camera.SetDistance(camera_data["distance"])
+
+    def ResetCameraClippingRange(self):
+        bounds = []
+        bounds += [self.bg_renderer.ComputeVisiblePropBounds()]
+        bounds += [a.renderer.ComputeVisiblePropBounds() for a in self.actors]
+        bound = []
+        for i in range(6):
+            if i % 2 == 0:
+                bound += [min([b[i] for b in bounds])]
+            else:
+                bound += [max([b[i] for b in bounds])]
+        
+        self.bg_renderer.ResetCameraClippingRange(bound)
+        for a in self.actors:
+            a.renderer.ResetCameraClippingRange(bound)
         
 
     def createActors(self, scene_folder, data):
@@ -244,9 +259,9 @@ class ActorManager(QObject):
     def toJson(self, scene_folder):
         # self.reformat()
         # print info
-        for i, a in enumerate(self.actors):
-            print("======{}======\n".format(i), a.actor.GetUserTransform().GetMatrix())
-            print(a.renderer.GetActiveCamera().GetViewTransformMatrix())
+        # for i, a in enumerate(self.actors):
+        #     print("======{}======\n".format(i), a.actor.GetUserTransform().GetMatrix())
+        #     print(a.renderer.GetActiveCamera().GetViewTransformMatrix())
         data = {"model": {}}
         data["model"]["num"] = len(self.actors)
         for i in range(len(self.actors)):
