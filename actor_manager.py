@@ -78,9 +78,12 @@ class Actor:
         self.renderer = vtk.vtkRenderer()
         self.renderer_window.SetNumberOfLayers(layer_num+1)
         self.renderer.SetLayer(layer_num)
-        self.renderer.SetBackground(1, 1, 1)
+        self.renderer.SetBackground(0, 0, 0)
         self.renderer.InteractiveOff()
         self.renderer.SetBackgroundAlpha(0)
+        self.renderer.SetActiveCamera(
+            self.renderer_window.GetRenderers().GetFirstRenderer().GetActiveCamera()
+            )
         self.renderer_window.AddRenderer(self.renderer)
         return self.renderer
 
@@ -111,7 +114,7 @@ class Actor:
     def toJson(self, scene_folder):
         return {
             "model_file": os.path.relpath(self.model_path, scene_folder),
-            "matrix": self.getCameraMatrix(),
+            "matrix": matrix2List(self.actor.GetMatrix()),
             "class": self.type_class
         }
 
@@ -124,6 +127,9 @@ class ActorManager(QObject):
         self.render_window = render_window
         self.interactor = interactor
         self.bg_renderer = bg_renderer
+        self.bg_renderer.GetActiveCamera()
+        # self.interactor.GetInteractorStyle().SetAutoAdjustCameraClippingRange(False)
+        # self.bg_renderer.GetActiveCamera().SetClippingRange(0.00001, 1000000)
         self.actors = []
 
     def newActor(self, model_path, camera_matrix = None):
@@ -131,39 +137,29 @@ class ActorManager(QObject):
         if camera_matrix is None:
             # only copy the matrix of previous actors
             if len(self.actors) > 0:
-                Actor.copyTransformFromActor(self.actors[-1], actor)
+                pass
+                # Actor.copyTransformFromActor(self.actors[-1], actor)
         else:
             # copy the camera matrix
             matrix = vtk.vtkMatrix4x4()
             matrix.DeepCopy(camera_matrix)
-            matrix.Invert()
+            # matrix.Invert()
             transform = getTransform(matrix)
-            camera = actor.renderer.GetActiveCamera()
-            camera.ApplyTransform(transform)
 
-
-            # if actor.actor.GetUserMatrix() is not None:
-            #     transform.GetMatrix(actor.actor.GetUserMatrix())
-            # else:
-            #     actor.actor.SetOrientation(transform.GetOrientation())
-            #     actor.actor.SetPosition(transform.GetPosition())
-            #     actor.actor.SetScale(transform.GetScale())
-
-            # self.interactor.Render()
-            # self.interactor.GetInteractorStyle().OnMouseWheelForward()
-            # self.interactor.GetInteractorStyle().OnMouseWheelBackward()
+            if actor.actor.GetUserMatrix() is not None:
+                transform.GetMatrix(actor.actor.GetUserMatrix())
+            else:
+                actor.actor.SetPosition(transform.GetPosition())
+                actor.actor.SetOrientation(transform.GetOrientation())
+                actor.actor.SetScale(transform.GetScale())
         
         self.actors.append(actor)
         self.setActiveActor(-1)
+
+        if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
+            actor.renderer.ResetCameraClippingRange()
+
         self.interactor.Render()
-        # self.interactor.GetInteractorStyle().OnMouseWheelForward()
-        # self.interactor.GetInteractorStyle().OnMouseWheelBackward()
-
-        self.reformat()
-
-        for i, a in enumerate(self.actors):
-            print("======{}======\n".format(i), a.actor.GetUserTransform().GetMatrix())
-            print(a.renderer.GetActiveCamera().GetViewTransformMatrix())
 
 
     def setActiveActor(self, index):
@@ -187,6 +183,7 @@ class ActorManager(QObject):
             self.signal_active_model.emit(list(actor.actor.GetBounds()))
 
 
+    #TODO: Remove the function
     def reformat(self):
         for a in self.actors:
             actor_matrix = deepCopyMatrix(a.actor.GetMatrix())
@@ -232,11 +229,26 @@ class ActorManager(QObject):
 
     def setCamera(self, camera_data):
         camera = self.bg_renderer.GetActiveCamera()
-        camera.SetFocalPoint(camera_data["position"])
+        camera.SetPosition(camera_data["position"])
         camera.SetFocalPoint(camera_data["focalPoint"])
         camera.SetViewAngle(camera_data["fov"])
         camera.SetViewUp(camera_data["viewup"])
         camera.SetDistance(camera_data["distance"])
+
+    def ResetCameraClippingRange(self):
+        bounds = []
+        bounds += [self.bg_renderer.ComputeVisiblePropBounds()]
+        bounds += [a.renderer.ComputeVisiblePropBounds() for a in self.actors]
+        bound = []
+        for i in range(6):
+            if i % 2 == 0:
+                bound += [min([b[i] for b in bounds])]
+            else:
+                bound += [max([b[i] for b in bounds])]
+        
+        self.bg_renderer.ResetCameraClippingRange(bound)
+        for a in self.actors:
+            a.renderer.ResetCameraClippingRange(bound)
         
 
     def createActors(self, scene_folder, data):
@@ -245,11 +257,11 @@ class ActorManager(QObject):
             self.newActor(model_path, data["model"][str(i)]["matrix"])
 
     def toJson(self, scene_folder):
-        self.reformat()
+        # self.reformat()
         # print info
-        for i, a in enumerate(self.actors):
-            print("======{}======\n".format(i), a.actor.GetUserTransform().GetMatrix())
-            print(a.renderer.GetActiveCamera().GetViewTransformMatrix())
+        # for i, a in enumerate(self.actors):
+        #     print("======{}======\n".format(i), a.actor.GetUserTransform().GetMatrix())
+        #     print(a.renderer.GetActiveCamera().GetViewTransformMatrix())
         data = {"model": {}}
         data["model"]["num"] = len(self.actors)
         for i in range(len(self.actors)):
