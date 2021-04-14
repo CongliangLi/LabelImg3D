@@ -295,6 +295,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.actor_manager.setCamera(data["camera"])
         if data is not None:
             self.actor_manager.createActors(self.scene_folder, data)
+        self.actor_manager.ResetCameraClippingRange()
 
     @PyQt5.QtCore.pyqtSlot()
     def saveScenes(self):
