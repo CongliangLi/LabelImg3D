@@ -92,19 +92,11 @@ class Actor:
         # self.box_widget.SetTransform(transform)
         self.actor.SetUserTransform(transform)
 
-    @staticmethod
-    def copyTransformFromActor(src_actor, dst_actor):  
-        # copy camera parameters      
-        src_camera = src_actor.renderer.GetActiveCamera()
-        dst_camera = dst_actor.renderer.GetActiveCamera()
-        dst_camera.SetPosition(src_camera.GetPosition())
-        dst_camera.SetFocalPoint(src_camera.GetFocalPoint())
-        dst_camera.SetViewUp(src_camera.GetViewUp())
-
-        # copy actor parameters
-        transform = vtk.vtkTransform()
-        transform.DeepCopy(src_actor.actor.GetUserTransform())
-        dst_actor.setUserTransform(transform)
+    def setMatrix(self, matrix):
+        transform = getTransform(matrix)
+        self.actor.SetOrientation(transform.GetOrientation())
+        self.actor.SetPosition(transform.GetPosition())
+        self.actor.SetScale(transform.GetScale())
 
     def getCameraMatrix(self):
         matrix = self.renderer.GetActiveCamera().GetModelViewTransformMatrix()
@@ -137,8 +129,7 @@ class ActorManager(QObject):
         if camera_matrix is None:
             # only copy the matrix of previous actors
             if len(self.actors) > 0:
-                pass
-                # Actor.copyTransformFromActor(self.actors[-1], actor)
+                actor.setMatrix(self.actors[-1].actor.GetMatrix())
         else:
             # copy the camera matrix
             matrix = vtk.vtkMatrix4x4()
@@ -156,8 +147,8 @@ class ActorManager(QObject):
         self.actors.append(actor)
         self.setActiveActor(-1)
 
-        # if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
-        #     actor.renderer.ResetCameraClippingRange()
+        if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
+            self.ResetCameraClippingRange()
 
         self.interactor.Render()
 
