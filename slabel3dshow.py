@@ -29,9 +29,10 @@ class SLabel3dShow(QtWidgets.QLabel):
         self.model_path = model_path
         self.model_folder, self.obj_name = os.path.split(self.model_path)
         self.obj_name = self.obj_name[:-4]
-        self.mtl_path = self.model_folder + "/" + self.obj_name+".mtl"
+        self.mtl_path = self.model_folder + "/" + self.obj_name+".obj.mtl"
 
-        self.load_3d_model()
+        # self.load_3d_model()
+        self.read_3d_model()
 
     def load_3d_model(self):        
         reader = vtk.vtkOBJImporter()
@@ -41,6 +42,24 @@ class SLabel3dShow(QtWidgets.QLabel):
         reader.SetRenderWindow(self.render_window)
         reader.Update()
         self.renderer.ResetCamera()
+
+    def read_3d_model(self):
+        self.model_path = self.model_path
+        self.actor = self.readObj(self.model_path)
+        self.renderer.AddActor(self.actor)
+        self.renderer.ResetCamera()
+
+    def readObj(self, model_path):
+        reader = vtk.vtkOBJReader()
+        reader.SetFileName(model_path)
+        reader.Update()
+
+        mapper = vtk.vtkPolyDataMapper()
+        mapper.SetInputConnection(reader.GetOutputPort())
+
+        actor = vtk.vtkActor()
+        actor.SetMapper(mapper)
+        return actor
 
     def start(self):
         self.interactor.Initialize()

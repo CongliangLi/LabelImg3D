@@ -124,16 +124,23 @@ class ActorManager(QObject):
         # self.bg_renderer.GetActiveCamera().SetClippingRange(0.00001, 1000000)
         self.actors = []
 
-    def newActor(self, model_path, camera_matrix = None):
+    def newActor(self, model_path, actor_matrix = None):
         actor = Actor(self.render_window, self.interactor, model_path, len(self.actors)+1)
-        if camera_matrix is None:
+        if actor_matrix is None:
             # only copy the matrix of previous actors
-            if len(self.actors) > 0:
+            if len(self.actors) > 0 and self.actors[-1].model_path == actor.model_path:
                 actor.setMatrix(self.actors[-1].actor.GetMatrix())
+            else:
+                # newPosition = list(actor.renderer.GetActiveCamera().GetPosition())
+                # actor.actor.SetPosition(newPosition)
+                # matrix = actor.renderer.GetActiveCamera().GetModelViewTransformMatrix()
+                actor.actor.SetOrigin(actor.actor.GetCenter())
+                matrix = vtk.vtkMatrix4x4()
+                actor.setMatrix(matrix)
         else:
             # copy the camera matrix
             matrix = vtk.vtkMatrix4x4()
-            matrix.DeepCopy(camera_matrix)
+            matrix.DeepCopy(actor_matrix)
             # matrix.Invert()
             transform = getTransform(matrix)
 
@@ -149,7 +156,7 @@ class ActorManager(QObject):
 
         if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
             self.ResetCameraClippingRange()
-
+        
         self.interactor.Render()
 
 

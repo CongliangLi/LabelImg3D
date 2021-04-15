@@ -49,6 +49,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             if self.NewPickedActor and self.NewPickedActor is not self.slabel.actor_manager.actors[-1].actor:
                 self.slabel.switchBoxWidgets(self.NewPickedActor)
 
+
     def OnLeftButtonDown(self, obj, event):
         self.isPressedLeft = True
         self.isMouse_Pressed_Move = False
