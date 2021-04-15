@@ -149,8 +149,8 @@ class ActorManager(QObject):
             if actor.actor.GetUserMatrix() is not None:
                 transform.GetMatrix(actor.actor.GetUserMatrix())
             else:
-                actor.actor.SetPosition(transform.GetPosition())
                 actor.actor.SetOrientation(transform.GetOrientation())
+                actor.actor.SetPosition(transform.GetPosition())
                 actor.actor.SetScale(transform.GetScale())
         
         self.actors.append(actor)
@@ -163,11 +163,22 @@ class ActorManager(QObject):
 
 
     def setActiveActor(self, index):
-        if index == -1:
-            index = len(self.actors) - 1
-        actor = self.actors[index]
-        del self.actors[index]
-        self.actors.append(actor)
+        """Set Active Actor by index.
+        The specified actor will be moved to the last item
+
+        Args:
+            index (int): The index specified.
+        """
+        len_actors = len(self.actors)
+        if len_actors == 0 or index < -len_actors or index >= len_actors:
+            raise IndexError("index error")
+
+        index %= len(self.actors)
+
+        if index != len(self.actors) - 1:
+            actor = self.actors[index]
+            del self.actors[index]
+            self.actors.append(actor)
         
         self.render_window.SetNumberOfLayers(len(self.actors)+1)
 
@@ -179,8 +190,8 @@ class ActorManager(QObject):
         # very important for set the default render
         self.interactor.GetInteractorStyle().SetDefaultRenderer(renderer)
         self.interactor.GetInteractorStyle().SetCurrentRenderer(renderer)
-        if actor is not None:
-            self.signal_active_model.emit(list(actor.actor.GetBounds()))
+        # if actor is not None:
+        #     self.signal_active_model.emit(list(actor.actor.GetBounds()))
 
 
     #TODO: Remove the function

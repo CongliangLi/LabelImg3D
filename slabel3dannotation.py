@@ -178,9 +178,9 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             self.super.OnMouseMove()
             self.GetInteractor().Render()
             
-        # self.slabel.signal_on_left_button_up.emit(
-        #     list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation())
-        # )
+        self.slabel.signal_on_left_button_up.emit(
+            list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation())
+        )
         self.slabel.actor_manager.ResetCameraClippingRange()
         self.GetInteractor().Render()
         
