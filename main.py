@@ -13,6 +13,7 @@ from scene_manager import SceneManager
 from simagelist import SImageList
 from smodellist import SModelList
 from sproperty import SProperty
+from lcamera_property import LCamera_Property
 from slog import SLog
 
 import os
@@ -39,10 +40,13 @@ class Draw3D(QtWidgets.QMainWindow):
         self.model_list = SModelList(self, "Models")
         self.property3d = SProperty(self, "3DProperty")
         self.widget_log = SLog(self)
+        self.camera_property = LCamera_Property(self, "Camera_Property")
+
         self.addDockWidget(Qt.RightDockWidgetArea, self.image_list)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.model_list)
         self.addDockWidget(Qt.RightDockWidgetArea, self.property3d)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.widget_log)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.camera_property)
 
         self.scene_manager = SceneManager(self, self.image_list,  self.model_list, self.ui.vtk_panel)
 
@@ -57,6 +61,8 @@ class Draw3D(QtWidgets.QMainWindow):
         self.scene_manager.signal_open_models.connect(self.model_list.open_files)
         self.ui.vtk_panel.actor_manager.signal_active_model.connect(self.property3d.updateBoxBounding)
         self.ui.vtk_panel.signal_on_left_button_up.connect(self.property3d.update_property)
+        self.scene_manager.signal_load_scene.connect(self.camera_property.new_camera_data)
+
         
     def setup(self):
         self.ui = Ui_main.Ui_MainWindow()

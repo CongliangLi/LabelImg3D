@@ -14,6 +14,7 @@ from PyQt5.Qt import QObject
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
+
 class Actor:
     def __init__(self, render_window, interactor, model_path, layer_num):
         self.renderer_window = render_window
@@ -42,7 +43,7 @@ class Actor:
     def importObj(self, model_path):
         self.model_folder, self.obj_name = os.path.split(self.model_path)
         self.obj_name = self.obj_name[:-4]
-        self.mtl_path = self.model_folder + "/" + self.obj_name+".mtl"
+        self.mtl_path = self.model_folder + "/" + self.obj_name + ".mtl"
         importer = vtk.vtkOBJImporter()
         importer.SetFileName(self.model_path)
         importer.SetFileNameMTL(self.mtl_path)
@@ -76,17 +77,16 @@ class Actor:
 
     def createRenderer(self, layer_num):
         self.renderer = vtk.vtkRenderer()
-        self.renderer_window.SetNumberOfLayers(layer_num+1)
+        self.renderer_window.SetNumberOfLayers(layer_num + 1)
         self.renderer.SetLayer(layer_num)
         self.renderer.SetBackground(0, 0, 0)
         self.renderer.InteractiveOff()
         self.renderer.SetBackgroundAlpha(0)
         self.renderer.SetActiveCamera(
             self.renderer_window.GetRenderers().GetFirstRenderer().GetActiveCamera()
-            )
+        )
         self.renderer_window.AddRenderer(self.renderer)
         return self.renderer
-
 
     def setUserTransform(self, transform):
         # self.box_widget.SetTransform(transform)
@@ -101,7 +101,6 @@ class Actor:
     def getCameraMatrix(self):
         matrix = self.renderer.GetActiveCamera().GetModelViewTransformMatrix()
         return [matrix.GetElement(i, j) for i in range(4) for j in range(4)]
-
 
     def toJson(self, scene_folder):
         return {
@@ -124,8 +123,8 @@ class ActorManager(QObject):
         # self.bg_renderer.GetActiveCamera().SetClippingRange(0.00001, 1000000)
         self.actors = []
 
-    def newActor(self, model_path, actor_matrix = None):
-        actor = Actor(self.render_window, self.interactor, model_path, len(self.actors)+1)
+    def newActor(self, model_path, actor_matrix=None):
+        actor = Actor(self.render_window, self.interactor, model_path, len(self.actors) + 1)
         if actor_matrix is None:
             # only copy the matrix of previous actors
             if len(self.actors) > 0 and self.actors[-1].model_path == actor.model_path:
@@ -150,15 +149,14 @@ class ActorManager(QObject):
                 actor.actor.SetOrientation(transform.GetOrientation())
                 actor.actor.SetPosition(transform.GetPosition())
                 actor.actor.SetScale(transform.GetScale())
-        
+
         self.actors.append(actor)
         self.setActiveActor(-1)
 
         if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
             self.ResetCameraClippingRange()
-        
-        self.interactor.Render()
 
+        self.interactor.Render()
 
     def setActiveActor(self, index):
         """Set Active Actor by index.
@@ -177,13 +175,13 @@ class ActorManager(QObject):
             actor = self.actors[index]
             del self.actors[index]
             self.actors.append(actor)
-        
-        self.render_window.SetNumberOfLayers(len(self.actors)+1)
+
+        self.render_window.SetNumberOfLayers(len(self.actors) + 1)
 
         for i, a in enumerate(self.actors):
-            a.renderer.SetLayer(i+1)
+            a.renderer.SetLayer(i + 1)
             # a.renderer.Render()
-        
+
         renderer = self.actors[-1].renderer
         # very important for set the default render
         self.interactor.GetInteractorStyle().SetDefaultRenderer(renderer)
@@ -191,8 +189,7 @@ class ActorManager(QObject):
         # if actor is not None:
         #     self.signal_active_model.emit(list(actor.actor.GetBounds()))
 
-
-    #TODO: Remove the function
+    # TODO: Remove the function
     def reformat(self):
         for a in self.actors:
             actor_matrix = deepCopyMatrix(a.actor.GetMatrix())
@@ -233,7 +230,7 @@ class ActorManager(QObject):
         data = None
         with open(annotation_file, 'r') as f:
             data = json.load(f)
-        
+
         return data
 
     def setCamera(self, camera_data):
@@ -254,11 +251,10 @@ class ActorManager(QObject):
                 bound += [min([b[i] for b in bounds])]
             else:
                 bound += [max([b[i] for b in bounds])]
-        
+
         self.bg_renderer.ResetCameraClippingRange(bound)
         for a in self.actors:
             a.renderer.ResetCameraClippingRange(bound)
-        
 
     def createActors(self, scene_folder, data):
         for i in range(data["model"]["num"]):
@@ -276,3 +272,20 @@ class ActorManager(QObject):
         for i in range(len(self.actors)):
             data["model"]["{}".format(i)] = self.actors[i].toJson(scene_folder)
         return data
+
+    @PyQt5.QtCore.pyqtSlot(list, bool)
+    def update_camera(self, camera_data, is_change):
+        if is_change is False:
+            return
+        camera = self.bg_renderer.GetActiveCamera()
+        camera_position = [camera_data[0], camera_data[1], camera_data[2]]
+        camera.SetPosition(camera_position)
+        camera.SetViewAngle(camera_data[3])
+        camera.SetDistance(camera_data[4])
+        camera.SetViewUp([0, 1, 0])
+
+        # Refresh the content in the field of view
+        # self.slabel.actor_manager.ResetCameraClippingRange()
+        # self.GetInteractor().Render()
+        self.ResetCameraClippingRange()
+        self.interactor.Render()
