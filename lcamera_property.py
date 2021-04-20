@@ -11,9 +11,9 @@ from pyqtconfig.qt import (QComboBox, QCheckBox, QSpinBox, QDoubleSpinBox, QMain
                            QGridLayout, QWidget, QDockWidget)
 
 from vtk import *
-from math import atan
-from math import tan
+from math import degrees, radians, tan, atan
 from PIL import Image
+
 
 
 class LCamera_Property(QDockWidget):
@@ -114,9 +114,10 @@ class LCamera_Property(QDockWidget):
         # The three(z, fov and distance) are interrelated
         if num == 2:  # z
             self.is_change = False
-            self.config.set("distance", camera_data_present[2])
             if camera_data_present[2] != 0:
-                fov = 2 * atan((self.img_size[1] * self.parent().ui.vtk_panel.image_scale) / (2 * camera_data_present[2]))
+                self.config.set("distance", camera_data_present[2])
+                fov = degrees(2 * atan((self.img_size[0] * self.parent().ui.vtk_panel.image_scale) /
+                                       (2 * camera_data_present[2])))
                 self.config.set("fov", fov)
 
             self.is_change = True
@@ -124,8 +125,8 @@ class LCamera_Property(QDockWidget):
         if num == 3:  # fov
             self.is_change = False
             try:
-                distance = (self.img_size[1] * self.parent().ui.vtk_panel.image_scale) / \
-                        (2 * (tan(camera_data_present[3] / 2)))
+                distance = (self.img_size[0] * self.parent().ui.vtk_panel.image_scale) / \
+                        (2 * (tan(radians(camera_data_present[3] / 2))))
                 self.config.set("z", distance)
                 self.config.set("distance", distance)
             except Exception as e:
@@ -135,10 +136,10 @@ class LCamera_Property(QDockWidget):
 
         if num == 4:  # distance
             self.is_change = False
-            self.config.set("z", camera_data_present[4])
-
             if camera_data_present[4] != 0:
-                fov = 2 * atan((self.img_size[1] * self.parent().ui.vtk_panel.image_scale) / (2 * camera_data_present[4]))
+                self.config.set("z", camera_data_present[4])
+                fov = degrees(2 * atan((self.img_size[0] * self.parent().ui.vtk_panel.image_scale) /
+                                       (2 * camera_data_present[4])))
                 self.config.set("fov", fov)
 
             self.is_change = True
