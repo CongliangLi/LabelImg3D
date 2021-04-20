@@ -178,9 +178,9 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         else:
             self.super.OnMouseMove()
             self.GetInteractor().Render()
-            
+        bounds = self.InteractionProp.GetBounds()
         self.slabel.signal_on_left_button_up.emit(
-            list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation())
+            list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation()) + [bounds[2*i+1]-bounds[2*i] for i in range(3)]
         )
         self.slabel.actor_manager.ResetCameraClippingRange()
         self.GetInteractor().Render()
@@ -224,7 +224,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         transform = vtk.vtkTransform()
         transform.Translate(0, 0, 0.01)
         axes.SetUserTransform(transform)
-        self.bg_renderer.AddActor(axes)
+        # self.bg_renderer.AddActor(axes)
 
         self.image_actor = None
         self.image_path = None
