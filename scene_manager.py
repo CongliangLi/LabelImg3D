@@ -16,7 +16,7 @@ from slabel3dannotation import SLabel3DAnnotation
 class SceneManager(QObject):
     signal_open_files = pyqtSignal(list)
     signal_open_models = pyqtSignal(list)
-    signal_load_scene = pyqtSignal(str, str)
+    signal_load_scene = pyqtSignal(list)
 
     def __init__(self, parent, image_list_panel, model_list_panel, vtk_panel) -> None:
         super().__init__(parent=parent)
@@ -70,6 +70,12 @@ class SceneManager(QObject):
             self.signal_open_models.emit([os.path.join(self.models_folder, i) for i in self.model_name_list])
             self.signal_open_files.emit([os.path.join(self.images_folder, i) for i in self.image_name_list])
             self[0]
+
+        camera = self.parent().ui.vtk_panel.bg_renderer.GetActiveCamera()
+        camera_data = [camera.GetPosition()[0], camera.GetPosition()[1], camera.GetPosition()[2],
+                       camera.GetViewAngle(), camera.GetDistance()]
+
+        self.signal_load_scene.emit(camera_data)
         
 
     def __len__(self):

@@ -9,7 +9,7 @@ from pyqtconfig.config import ConfigManager
 from pyqtconfig.qt import (QComboBox, QCheckBox, QSpinBox, QDoubleSpinBox, QMainWindow,
                            QLineEdit, QApplication, QTextEdit,
                            QGridLayout, QWidget, QDockWidget)
-from slabel3dannotation import MouseInteractorHighLightActor
+
 from vtk import *
 
 

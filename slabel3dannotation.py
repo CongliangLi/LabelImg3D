@@ -231,6 +231,8 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         self.actor_manager = ActorManager(self.renderer_window, self.interactor, self.bg_renderer)
 
+        self.image_scale = 0.1
+
     def start(self):
         self.interactor.Initialize()
         self.interactor.Start()
@@ -250,7 +252,6 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         # get image width and height
         image = cv2.imread(image_path)
         image_height, image_width, _ = image.shape
-        scale = 0.1
 
         # Read image data
         jpeg_reader = vtk.vtkJPEGReader()
@@ -261,7 +262,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.image_actor.SetInputData(image_data)
 
         transform = vtk.vtkTransform()
-        transform.Scale(scale, scale, scale)
+        transform.Scale(self.image_scale, self.image_scale, self.image_scale)
         transform.Translate(-image_width / 2, -image_height / 2, 0)
         self.image_actor.SetUserTransform(transform)
         self.bg_renderer.AddActor(self.image_actor)
