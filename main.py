@@ -31,7 +31,8 @@ from vtk import *
 class Draw3D(QtWidgets.QMainWindow):
     def __init__(self, data_dir):
         # Parent constructor
-        super(Draw3D, self).__init__()
+        self.super = super(Draw3D, self)
+        self.super.__init__()
         self.vtk_widget = None
         self.ui = None
         self.setup()

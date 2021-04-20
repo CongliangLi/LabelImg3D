@@ -115,25 +115,31 @@ class LCamera_Property(QDockWidget):
         if num == 2:  # z
             self.is_change = False
             self.config.set("distance", camera_data_present[2])
-            fov = 2 * atan((self.img_size[1] * self.parent().ui.vtk_panel.image_scale) / (2 * camera_data_present[2]))
-            self.config.set("fov", fov)
+            if camera_data_present[2] != 0:
+                fov = 2 * atan((self.img_size[1] * self.parent().ui.vtk_panel.image_scale) / (2 * camera_data_present[2]))
+                self.config.set("fov", fov)
 
             self.is_change = True
 
         if num == 3:  # fov
             self.is_change = False
-            distance = (self.img_size[1] * self.parent().ui.vtk_panel.image_scale) / \
-                       (2 * (tan(camera_data_present[3] / 2)))
-            self.config.set("z", distance)
-            self.config.set("distance", distance)
+            try:
+                distance = (self.img_size[1] * self.parent().ui.vtk_panel.image_scale) / \
+                        (2 * (tan(camera_data_present[3] / 2)))
+                self.config.set("z", distance)
+                self.config.set("distance", distance)
+            except Exception as e:
+                print(f"Exception in {__name__}: {e}")
             self.is_change = True
+            pass
 
         if num == 4:  # distance
             self.is_change = False
             self.config.set("z", camera_data_present[4])
 
-            fov = 2 * atan((self.img_size[1] * self.parent().ui.vtk_panel.image_scale) / (2 * camera_data_present[2]))
-            self.config.set("fov", fov)
+            if camera_data_present[4] != 0:
+                fov = 2 * atan((self.img_size[1] * self.parent().ui.vtk_panel.image_scale) / (2 * camera_data_present[4]))
+                self.config.set("fov", fov)
 
             self.is_change = True
 

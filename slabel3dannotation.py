@@ -231,7 +231,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         self.actor_manager = ActorManager(self.renderer_window, self.interactor, self.bg_renderer)
 
-        self.image_scale = 0.1
+        self.image_scale = 1/960.
 
     def start(self):
         self.interactor.Initialize()
