@@ -55,7 +55,7 @@ class SImageList(QDockWidget):
         # connect openfiles
         # self.btnOpenFolder.clicked.connect(self.open_files)
         # connect the double click event of self.listWidget
-        self.listWidget.doubleClicked.connect(self.listWidgetDoubleClicked)
+        # self.listWidget.doubleClicked.connect(self.listWidgetDoubleClicked)
 
         # file list
         self.file_list = []
@@ -91,9 +91,10 @@ class SImageList(QDockWidget):
         item.setText(name)
         self.listWidget.addItem(item)
 
-    def listWidgetDoubleClicked(self, index):
-        self.signal_double_click.emit(self.file_list[index.row()])
-        print(self.file_list[index.row()])
+    # def listWidgetDoubleClicked(self, index):
+        
+    #     self.signal_double_click.emit(self.file_list[index.row()])
+    #     print(self.file_list[index.row()])
 
 
 

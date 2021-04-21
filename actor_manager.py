@@ -218,11 +218,9 @@ class ActorManager(QObject):
 
     def clear(self):
         for a in self.actors:
-            a.renderer.RemoveActor(a)
-            a.actor.Delete()
+            a.renderer.RemoveActor(a.actor)
             self.render_window.RemoveRenderer(a.renderer)
         self.actors = []
-        pass
 
     def loadAnnotation(self, annotation_file):
         if not os.path.exists(annotation_file):
@@ -289,3 +287,17 @@ class ActorManager(QObject):
         # self.GetInteractor().Render()
         self.ResetCameraClippingRange()
         self.interactor.Render()
+
+    def getEmptyJson(self, image_file):
+        return {
+            "image_file": image_file,
+            "model": {"num": 0},
+            "camera": {
+                "matrix": [1,0,0,1,0.0,1,0,0.0,0,0,1,0.52,0.0,0.0,0.0,1.0],
+                "position": [0, 0.0, 0.52],
+                "focalPoint": [ 0, 0, 0],
+                "fov": 88.0,
+                "viewup": [0, 1, 0],
+                "distance": 0.52
+            }
+        }

@@ -52,11 +52,12 @@ class Draw3D(QtWidgets.QMainWindow):
         self.scene_manager = SceneManager(self, self.image_list,  self.model_list, self.ui.vtk_panel)
 
         # menu in main window
-        self.ui.action_Load_Scenes.triggered.connect(self.load_scenes)
+        self.ui.action_Load_Scenes.triggered.connect(self.init_scenes)
         self.ui.action_Save_Scenes.triggered.connect(self.ui.vtk_panel.saveScenes)
 
         # connect the signals and slots
-        self.image_list.signal_double_click.connect(self.ui.vtk_panel.loadImage)
+        # self.image_list.signal_double_click.connect(self.ui.vtk_panel.loadImage)
+        self.image_list.listWidget.doubleClicked.connect(self.scene_manager.__getitem__)
         self.model_list.signal_double_click.connect(self.ui.vtk_panel.loadModel)
         self.scene_manager.signal_open_files.connect(self.image_list.open_files)
         self.scene_manager.signal_open_models.connect(self.model_list.open_files)
@@ -81,8 +82,8 @@ class Draw3D(QtWidgets.QMainWindow):
         print("hello world")
         return self.super.mousePressEvent(ev)
 
-    def load_scenes(self):
-        self.scene_manager.load_scenes()
+    def init_scenes(self):
+        self.scene_manager.init_scenes()
 
 
 if __name__ == "__main__":

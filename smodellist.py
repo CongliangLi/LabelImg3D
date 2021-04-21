@@ -66,7 +66,7 @@ class SModelList(QDockWidget):
         # self.file_list += file_list
 
         if file_list is None or len(file_list) == 0:
-            return 
+            return
 
         self.file_list = file_list
         self.progress_bar_load.setVisible(True)
@@ -80,7 +80,6 @@ class SModelList(QDockWidget):
             QCoreApplication.processEvents()
 
         self.progress_bar_load.setVisible(False)
-            
 
     def add_item(self, model_path):
         name = os.path.split(model_path)[-1][:-4]
