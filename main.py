@@ -54,6 +54,10 @@ class Draw3D(QtWidgets.QMainWindow):
         # menu in main window
         self.ui.action_Load_Scenes.triggered.connect(self.init_scenes)
         self.ui.action_Save_Scenes.triggered.connect(self.ui.vtk_panel.saveScenes)
+        self.ui.actionHome.triggered.connect(self.scene_manager.home)
+        self.ui.actionEnd.triggered.connect(self.scene_manager.end)
+        self.ui.actionPrevious.triggered.connect(self.scene_manager.previous)
+        self.ui.actionNext.triggered.connect(self.scene_manager.next)
 
         # connect the signals and slots
         # self.image_list.signal_double_click.connect(self.ui.vtk_panel.loadImage)
