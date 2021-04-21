@@ -33,6 +33,8 @@ class SceneManager(QObject):
         self.model_name_list = []
         self.annotation_name_list = []
 
+        self.current_index = -1
+
     def init_scenes(self):
         """load the scenes, the folder structure should be as follows:
 
@@ -89,21 +91,23 @@ class SceneManager(QObject):
         # 1. check annotation_folder
         self.vtk_panel.loadScenes(self.scene_folder, os.path.join(self.images_folder, self.image_name_list[index]), \
                         os.path.join(self.annotations_folder, self.annotation_name_list[index]))
-        # 2. read annotation file
-        # 3. clear all the renderers and actors
-        # 4. add image and actors
+
+        if self.current_index != index:
+            self.vtk_panel.saveScenes()
+            self.current_index = index
+
 
     def next(self):
-        pass
+        self[self.current_index + 1]
 
     def previous(self):
-        pass
+        self[self.current_index - 1]
 
     def home(self):
-        pass
+        self[0]
 
     def end(self):
-        pass
+        self[len(self)-1]
 
     def save(self):
         pass
