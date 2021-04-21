@@ -51,6 +51,9 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
 
     def OnLeftButtonDown(self, obj, event):
+        if self.GetCurrentRenderer() is None:
+            return 
+
         self.isPressedLeft = True
         self.isMouse_Pressed_Move = False
 
