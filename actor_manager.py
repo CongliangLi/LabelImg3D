@@ -136,6 +136,9 @@ class ActorManager(QObject):
                 actor.actor.SetOrigin(actor.actor.GetCenter())
                 matrix = vtk.vtkMatrix4x4()
                 actor.setMatrix(matrix)
+
+                # Set the initial loading position of the model
+                actor.actor.SetPosition(0, 0, -15)
         else:
             # copy the camera matrix
             matrix = vtk.vtkMatrix4x4()
