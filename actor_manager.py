@@ -28,7 +28,6 @@ class Actor:
         # self.createBoxWidget()
         self.type_class = 0
 
-
     def readObj(self, model_path):
         reader = vtk.vtkOBJReader()
         reader.SetFileName(model_path)
@@ -141,7 +140,7 @@ class ActorManager(QObject):
                 actor.setMatrix(matrix)
 
                 # Set the initial loading position of the model
-                actor.actor.SetPosition(self.model_initial_position )
+                actor.actor.SetPosition(self.model_initial_position)
         else:
             # copy the camera matrix
             matrix = vtk.vtkMatrix4x4()
@@ -304,11 +303,20 @@ class ActorManager(QObject):
             "image_file": image_file,
             "model": {"num": 0},
             "camera": {
-                "matrix": [1,0,0,1,0.0,1,0,0.0,0,0,1,0.52,0.0,0.0,0.0,1.0],
+                "matrix": [1, 0, 0, 1, 0.0, 1, 0, 0.0, 0, 0, 1, 0.52, 0.0, 0.0, 0.0, 1.0],
                 "position": [0, 0.0, 0.52],
-                "focalPoint": [ 0, 0, 0],
+                "focalPoint": [0, 0, 0],
                 "fov": 88.0,
                 "viewup": [0, 1, 0],
                 "distance": 0.52
             }
         }
+
+    def delete_actor(self):
+        if self.getCurrentActiveActor() is not None:
+            a = self.actors[-1]
+            a.renderer.RemoveActor(a.actor)
+            self.render_window.RemoveRenderer(a.renderer)
+            self.actors.pop()
+            self.ResetCameraClippingRange()
+            self.interactor.Render()

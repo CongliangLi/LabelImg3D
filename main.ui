@@ -67,6 +67,7 @@
     <addaction name="actionEnd"/>
     <addaction name="actionPrevious"/>
     <addaction name="actionNext"/>
+    <addaction name="action_Delete_Model"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menuEdit"/>
@@ -118,6 +119,14 @@
    </property>
    <property name="shortcut">
     <string>S</string>
+   </property>
+  </action>
+  <action name="action_Delete_Model">
+   <property name="text">
+    <string>&amp;Delete Model</string>
+   </property>
+   <property name="shortcut">
+    <string>X</string>
    </property>
   </action>
  </widget>

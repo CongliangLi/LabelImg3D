@@ -58,6 +58,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui.actionEnd.triggered.connect(self.scene_manager.end)
         self.ui.actionPrevious.triggered.connect(self.scene_manager.previous)
         self.ui.actionNext.triggered.connect(self.scene_manager.next)
+        self.ui.action_Delete_Model.triggered.connect(self.ui.vtk_panel.delete_model)
 
         # connect the signals and slots
         # self.image_list.signal_double_click.connect(self.ui.vtk_panel.loadImage)
