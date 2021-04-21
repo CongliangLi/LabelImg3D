@@ -32,6 +32,7 @@ class SProperty(QDockWidget):
         # self.layout().addChildLayout(self.grid_layout)
         self.config_edit = QTextEdit()
         self.config = ConfigManager()
+        self.is_changed = True
 
         for i, x in enumerate(['x', 'y', 'z', 'rx', 'ry', 'rz', 'w', 'h', 'l']):
             width_spin = QDoubleSpinBox()
@@ -39,7 +40,7 @@ class SProperty(QDockWidget):
             width_spin.setMinimum(-50000)
             self.add(width_spin, x, 540, i + 1, 1)
 
-            width_spin.valueChanged.connect(lambda: self.parent().ui.vtk_panel.model_update_with_property())
+            width_spin.valueChanged.connect(lambda: self.parent().ui.vtk_panel.model_update_with_property(self.is_changed))
 
         self.window = QFrame()
         self.window.setLayout(self.grid_layout)
@@ -89,18 +90,11 @@ class SProperty(QDockWidget):
     def update_property(self, data):
         # for i in range(len(data)):
         #     print(data[i])
+        self.is_changed = False
         [self.config.set(s, d) for s, d in zip(
             ["x", "y", "z", "rz", "rx", "ry", "w", "h", "l"], data)
         ]
-        # self.config.set("x", data[0])
-        # self.config.set("y", data[1])
-        # self.config.set("z", data[2])
-        # self.config.set("rx", data[4])
-        # self.config.set("ry", data[5])
-        # self.config.set("rz", data[3])
-        # self.config.set("w", data[4])
-        # self.config.set("h", data[5])
-        # self.config.set("l", data[3])
+        self.is_changed = True
 
     def connect(self, update):
         """connect the function `update` when the configure updated
