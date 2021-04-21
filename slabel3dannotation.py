@@ -250,6 +250,8 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         self.json_data = None
 
+        self.is_first_scene = True
+
     def start(self):
         self.interactor.Initialize()
         self.interactor.Start()
@@ -298,6 +300,12 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
     @PyQt5.QtCore.pyqtSlot(str, str, str)
     def loadScenes(self, scene_folder, image_file, annotation_file):
+        # save the last scene before switch scenes
+        if self.is_first_scene is True:
+            self.is_first_scene = False
+        else:
+            self.saveScenes()
+
         # clear all the actors
         self.scene_folder, self.image_file, self.annotation_file = scene_folder, image_file, annotation_file
         # remove the image layer
