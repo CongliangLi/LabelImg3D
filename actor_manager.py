@@ -253,6 +253,10 @@ class ActorManager(QObject):
             else:
                 bound += [max([b[i] for b in bounds])]
 
+        # if there only an image
+        if bound[-1] - bound[-2] == 0:
+            bound[-1] = 0.5
+
         self.bg_renderer.ResetCameraClippingRange(bound)
         for a in self.actors:
             a.renderer.ResetCameraClippingRange(bound)

@@ -25,11 +25,14 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.AddObserver('MouseMoveEvent', self.OnMouseMove, -1)
         self.AddObserver('MouseWheelForwardEvent', self.OnMouseWheelForward, -1)
         self.AddObserver('MouseWheelBackwardEvent', self.OnMouseWheelBackward, -1)
+        self.super = super(MouseInteractorHighLightActor, self)
+        self.reset()
+
+    def reset(self):
+        self.InteractionPicker = vtkCellPicker()
         self.isPressedRight = False
         self.isPressedLeft = False
         self.isMouse_Pressed_Move = False
-        self.super = super(MouseInteractorHighLightActor, self)
-        self.InteractionPicker = vtkCellPicker()
         self.InteractionProp = None
 
     def __del__(self):
@@ -204,6 +207,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.super.OnMouseWheelBackward()
 
 
+
 class SLabel3DAnnotation(QtWidgets.QFrame):
     signal_on_left_button_up = pyqtSignal(list)
 
@@ -301,6 +305,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             self.bg_renderer.RemoveActor(self.image_actor)
         # remove all actors
         self.actor_manager.clear()
+        self.style.reset()
 
         # load the image
         self.loadImage(image_file)
@@ -318,6 +323,8 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
     @PyQt5.QtCore.pyqtSlot()
     def saveScenes(self):
+        if self.image_path is None or self.image_actor is None or len(self.actor_manager.actors) == 0:
+            return
         self.data = {}
         self.data["image_file"] = os.path.relpath(self.image_path, self.scene_folder)
         self.data.update(self.actor_manager.toJson(self.scene_folder))
