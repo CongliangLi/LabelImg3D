@@ -68,6 +68,8 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
     def OnLeftButtonUp(self, obj, event):
         self.isPressedLeft = False
+        if self.InteractionProp is None:
+            return
         self.SetOpacity(1)
 
         bounds = self.InteractionProp.GetBounds()
