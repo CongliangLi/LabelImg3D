@@ -35,6 +35,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.isPressedLeft = False
         self.isMouse_Pressed_Move = False
         self.InteractionProp = None
+        self.HighlightProp3D(self.InteractionProp)
 
     def __del__(self):
         del self.InteractionPicker
@@ -66,10 +67,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
             self.InteractionPicker.Pick(x, y, 0.0, self.GetCurrentRenderer())
             self.InteractionProp = self.InteractionPicker.GetViewProp()
-            if not self.is_first:
-                self.HighlightProp3D(self.InteractionProp)
-            else:
-                self.is_first = False
+            self.HighlightProp3D(self.InteractionProp)
 
             self.super.OnLeftButtonDown()
 
@@ -183,6 +181,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
         self.isMouse_Pressed_Move = True
 
+        self.HighlightProp3D(self.InteractionProp)
         self.SetOpacity(0.5)
 
         x, y = self.GetInteractor().GetEventPosition()
