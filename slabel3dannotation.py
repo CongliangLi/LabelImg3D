@@ -236,6 +236,8 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         self.image_scale = 1/960.
 
+        self.json_data = None
+
     def start(self):
         self.interactor.Initialize()
         self.interactor.Start()
@@ -283,11 +285,11 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
     @PyQt5.QtCore.pyqtSlot(str, str, str)
     def loadScenes(self, scene_folder, image_file, annotation_file):
+        # clear all the actors
         self.scene_folder, self.image_file, self.annotation_file = scene_folder, image_file, annotation_file
         # remove the image layer
         if self.image_actor is not None:
             self.bg_renderer.RemoveActor(self.image_actor)
-            self.image_actor.Delete()
         # remove all actors
         self.actor_manager.clear()
 
@@ -298,11 +300,11 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         data = self.actor_manager.loadAnnotation(annotation_file)
 
         if data is None:
-            # TODO: create an empty file and reset the camera matrix by the image
-            pass
-        self.actor_manager.setCamera(data["camera"])
-        if data is not None:
-            self.actor_manager.createActors(self.scene_folder, data)
+            data = self.actor_manager.getEmptyJson(os.path.relpath(self.image_path, self.scene_folder))
+
+        self.json_data = data
+        self.actor_manager.setCamera(self.json_data["camera"])
+        self.actor_manager.createActors(self.scene_folder, self.json_data)
         self.actor_manager.ResetCameraClippingRange()
 
     @PyQt5.QtCore.pyqtSlot()

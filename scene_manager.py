@@ -33,7 +33,7 @@ class SceneManager(QObject):
         self.model_name_list = []
         self.annotation_name_list = []
 
-    def load_scenes(self):
+    def init_scenes(self):
         """load the scenes, the folder structure should be as follows:
 
         ..--------
@@ -50,7 +50,7 @@ class SceneManager(QObject):
         """
         scene_folder = QtWidgets.QFileDialog.getExistingDirectory(None, "Choose Scene Folder")
         if scene_folder == '':
-            return 
+            return
         
         self.scene_folder = scene_folder
         # 1. get all the images
@@ -76,21 +76,22 @@ class SceneManager(QObject):
                        camera.GetViewAngle(), camera.GetDistance()]
 
         self.signal_load_scene.emit(camera_data)
-        
+
 
     def __len__(self):
         return len(self.image_name_list)
 
     def __getitem__(self, index):
+        if type(index) is not int:
+            index = index.row()
+        if index < 0 or index >= len(self):
+            return
         # 1. check annotation_folder
         self.vtk_panel.loadScenes(self.scene_folder, os.path.join(self.images_folder, self.image_name_list[index]), \
                         os.path.join(self.annotations_folder, self.annotation_name_list[index]))
         # 2. read annotation file
         # 3. clear all the renderers and actors
         # 4. add image and actors
-        pass
-
-    
 
     def next(self):
         pass
