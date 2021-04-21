@@ -207,7 +207,6 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.super.OnMouseWheelBackward()
 
 
-
 class SLabel3DAnnotation(QtWidgets.QFrame):
     signal_on_left_button_up = pyqtSignal(list)
 
@@ -371,3 +370,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
                 self.actor_manager.ResetCameraClippingRange()
                 # self.style.GetCurrentRenderer().ResetCameraClippingRange()
+
+    # Shortcut key operation: delete selected model
+    def delete_model(self):
+        self.actor_manager.delete_actor()

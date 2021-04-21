@@ -57,12 +57,15 @@ class Ui_MainWindow(object):
         self.actionPrevious.setObjectName("actionPrevious")
         self.actionNext = QtWidgets.QAction(MainWindow)
         self.actionNext.setObjectName("actionNext")
+        self.action_Delete_Model = QtWidgets.QAction(MainWindow)
+        self.action_Delete_Model.setObjectName("action_Delete_Model")
         self.menu.addAction(self.action_Load_Scenes)
         self.menu.addAction(self.action_Save_Scenes)
         self.menuEdit.addAction(self.actionHome)
         self.menuEdit.addAction(self.actionEnd)
         self.menuEdit.addAction(self.actionPrevious)
         self.menuEdit.addAction(self.actionNext)
+        self.menuEdit.addAction(self.action_Delete_Model)
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
 
@@ -86,4 +89,6 @@ class Ui_MainWindow(object):
         self.actionPrevious.setShortcut(_translate("MainWindow", "W"))
         self.actionNext.setText(_translate("MainWindow", "Next"))
         self.actionNext.setShortcut(_translate("MainWindow", "S"))
+        self.action_Delete_Model.setText(_translate("MainWindow", "&Delete Model"))
+        self.action_Delete_Model.setShortcut(_translate("MainWindow", "X"))
 from slabel3dannotation import SLabel3DAnnotation

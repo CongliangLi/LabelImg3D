@@ -13,6 +13,7 @@ from actor_manager import ActorManager
 from simagelist import SImageList
 from slabel3dannotation import SLabel3DAnnotation
 
+
 class SceneManager(QObject):
     signal_open_files = pyqtSignal(list)
     signal_open_models = pyqtSignal(list)
@@ -53,15 +54,17 @@ class SceneManager(QObject):
         scene_folder = QtWidgets.QFileDialog.getExistingDirectory(None, "Choose Scene Folder")
         if scene_folder == '':
             return
-        
+
         self.scene_folder = scene_folder
         # 1. get all the images
         self.images_folder = os.path.join(self.scene_folder, 'images')
         self.image_name_list = getFiles(self.images_folder, ['.jpg'])
-        
+
         # 2. get all the annotations
         self.annotations_folder = os.path.join(self.scene_folder, 'annotations')
-        self.annotation_name_list = [os.path.relpath(os.path.join(self.annotations_folder, i)[:-4]+'.json', self.annotations_folder) for i in self.image_name_list]
+        self.annotation_name_list = [
+            os.path.relpath(os.path.join(self.annotations_folder, i)[:-4] + '.json', self.annotations_folder) for i in
+            self.image_name_list]
 
         # 3. get all the models
         self.models_folder = os.path.join(self.scene_folder, 'models')
@@ -79,7 +82,6 @@ class SceneManager(QObject):
 
         self.signal_load_scene.emit(camera_data)
 
-
     def __len__(self):
         return len(self.image_name_list)
 
@@ -89,14 +91,14 @@ class SceneManager(QObject):
         if index < 0 or index >= len(self):
             return
         # 1. check annotation_folder
-        self.vtk_panel.loadScenes(self.scene_folder, os.path.join(self.images_folder, self.image_name_list[index]), \
-                        os.path.join(self.annotations_folder, self.annotation_name_list[index]))
+        self.vtk_panel.loadScenes(self.scene_folder, os.path.join(self.images_folder, self.image_name_list[index]),
+                                  os.path.join(self.annotations_folder, self.annotation_name_list[index]))
 
         if self.current_index != index:
             self.vtk_panel.saveScenes()
             self.current_index = index
 
-
+    # Shortcut key operation
     def next(self):
         self[self.current_index + 1]
 
@@ -107,7 +109,9 @@ class SceneManager(QObject):
         self[0]
 
     def end(self):
-        self[len(self)-1]
+        self[len(self) - 1]
 
     def save(self):
         pass
+
+
