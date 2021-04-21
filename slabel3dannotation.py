@@ -29,6 +29,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.reset()
 
     def reset(self):
+        self.is_first = True
         self.InteractionPicker = vtkCellPicker()
         self.isPressedRight = False
         self.isPressedLeft = False
@@ -65,7 +66,10 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
             self.InteractionPicker.Pick(x, y, 0.0, self.GetCurrentRenderer())
             self.InteractionProp = self.InteractionPicker.GetViewProp()
-            self.HighlightProp3D(self.InteractionProp)
+            if not self.is_first:
+                self.HighlightProp3D(self.InteractionProp)
+            else:
+                self.is_first = False
 
             self.super.OnLeftButtonDown()
 
@@ -179,7 +183,6 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
         self.isMouse_Pressed_Move = True
 
-        self.HighlightProp3D(self.InteractionProp)
         self.SetOpacity(0.5)
 
         x, y = self.GetInteractor().GetEventPosition()
@@ -199,6 +202,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         )
         self.slabel.actor_manager.ResetCameraClippingRange()
         self.GetInteractor().Render()
+
 
     def OnMouseWheelForward(self, obj, event):
         self.super.OnMouseWheelForward()
