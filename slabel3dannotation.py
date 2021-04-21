@@ -13,7 +13,7 @@ from utils import *
 
 from actor_manager import Actor, ActorManager
 from sproperty import *
-
+from PIL import Image
 
 class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
     def __init__(self, slabel, parent=None):
@@ -237,7 +237,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         self.actor_manager = ActorManager(self.renderer_window, self.interactor, self.bg_renderer)
 
-        self.image_scale = 1 / 960.
+        self.image_scale = 0
 
     def start(self):
         self.interactor.Initialize()
@@ -258,6 +258,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         # get image width and height
         image = cv2.imread(image_path)
         image_height, image_width, _ = image.shape
+        self.image_scale = 1 / image_width
 
         # Read image data
         jpeg_reader = vtk.vtkJPEGReader()
