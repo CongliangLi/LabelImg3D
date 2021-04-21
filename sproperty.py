@@ -78,18 +78,12 @@ class SProperty(QDockWidget):
         return self.config.get(key)
 
     @PyQt5.QtCore.pyqtSlot(list)
-    def updateBoxBounding(self, data):
-        self.config.set('x', data[0])
-        self.config.set('y', data[2])
-        self.config.set('z', data[4])
-        self.config.set('w', data[1] - data[0])
-        self.config.set('h', data[3] - data[2])
-        self.config.set('l', data[5] - data[4])
-
-    @PyQt5.QtCore.pyqtSlot(list)
     def update_property(self, data):
         # for i in range(len(data)):
         #     print(data[i])
+        if data[2] > -5.:
+            self.config.set("z", -15.)
+
         self.is_changed = False
         [self.config.set(s, d) for s, d in zip(
             ["x", "y", "z", "rz", "rx", "ry", "w", "h", "l"], data)
