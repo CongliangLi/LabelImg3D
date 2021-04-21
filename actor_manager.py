@@ -74,6 +74,7 @@ class Actor:
         # self.actor.SetUserTransform(transform)
 
         self.renderer.AddActor(self.actor)
+        self.interactor.Render()
 
     def createRenderer(self, layer_num):
         self.renderer = vtk.vtkRenderer()
@@ -159,6 +160,7 @@ class ActorManager(QObject):
         if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
             self.ResetCameraClippingRange()
 
+        self.ResetCameraClippingRange()
         self.interactor.Render()
 
     def setActiveActor(self, index):
