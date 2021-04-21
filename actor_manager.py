@@ -28,6 +28,7 @@ class Actor:
         # self.createBoxWidget()
         self.type_class = 0
 
+
     def readObj(self, model_path):
         reader = vtk.vtkOBJReader()
         reader.SetFileName(model_path)
@@ -123,6 +124,7 @@ class ActorManager(QObject):
         self.interactor.GetInteractorStyle().SetAutoAdjustCameraClippingRange(False)
         # self.bg_renderer.GetActiveCamera().SetClippingRange(0.00001, 1000000)
         self.actors = []
+        self.model_initial_position = [0, 0, -20]
 
     def newActor(self, model_path, actor_matrix=None):
         actor = Actor(self.render_window, self.interactor, model_path, len(self.actors) + 1)
@@ -139,7 +141,7 @@ class ActorManager(QObject):
                 actor.setMatrix(matrix)
 
                 # Set the initial loading position of the model
-                actor.actor.SetPosition(0, 0, -15)
+                actor.actor.SetPosition(self.model_initial_position )
         else:
             # copy the camera matrix
             matrix = vtk.vtkMatrix4x4()

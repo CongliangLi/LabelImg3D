@@ -82,7 +82,9 @@ class SProperty(QDockWidget):
         # for i in range(len(data)):
         #     print(data[i])
         if data[2] > -5.:
-            self.config.set("z", -15.)
+            self.config.set("x", self.parent().ui.vtk_panel.actor_manager.model_initial_position[0])
+            self.config.set("y", self.parent().ui.vtk_panel.actor_manager.model_initial_position[1])
+            self.config.set("z", self.parent().ui.vtk_panel.actor_manager.model_initial_position[2])
 
         self.is_changed = False
         [self.config.set(s, d) for s, d in zip(
