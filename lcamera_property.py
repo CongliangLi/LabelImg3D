@@ -15,7 +15,6 @@ from math import degrees, radians, tan, atan
 from PIL import Image
 
 
-
 class LCamera_Property(QDockWidget):
     """Configure Dockable Widgets. This is a class for showing and modifying the configure of the camera
     """
@@ -126,7 +125,7 @@ class LCamera_Property(QDockWidget):
             self.is_change = False
             try:
                 distance = (self.img_size[0] * self.parent().ui.vtk_panel.image_scale) / \
-                        (2 * (tan(radians(camera_data_present[3] / 2))))
+                           (2 * (tan(radians(camera_data_present[3] / 2))))
                 self.config.set("z", distance)
                 self.config.set("distance", distance)
             except Exception as e:

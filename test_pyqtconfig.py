@@ -2,8 +2,9 @@ import sys
 from pyqtconfig.config import ConfigManager
 
 from pyqtconfig.qt import (QComboBox, QCheckBox, QSpinBox, QMainWindow,
-                QLineEdit, QApplication, QTextEdit,
-                QGridLayout, QWidget)
+                           QLineEdit, QApplication, QTextEdit,
+                           QGridLayout, QWidget)
+
 
 class MainWindow(QMainWindow):
 
@@ -65,12 +66,13 @@ class MainWindow(QMainWindow):
 
     def add(self, ui_type, name, default_value, row, col):
         ui = ui_type()
-        self.config.set_defaults({name:default_value})
+        self.config.set_defaults({name: default_value})
         self.gd.addWidget(ui, row, col)
         self.config.add_handler(name, ui)
 
     def show_config(self):
         self.current_config_output.setText(str(self.config.as_dict()))
+
 
 # Create a Qt application
 app = QApplication(sys.argv)
