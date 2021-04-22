@@ -34,7 +34,17 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.isPressedRight = False
         self.isPressedLeft = False
         self.isMouse_Pressed_Move = False
+        # self.resetHighlight()
         self.InteractionProp = None
+        self.HighlightProp3D(None)
+
+    def resetHighlight(self):
+        if len(self.slabel.actor_manager.actors) > 0:
+            self.InteractionProp = self.slabel.actor_manager.actors[-1].actor
+            self.slabel.switchBoxWidgets(self.InteractionProp)
+        else:
+            self.InteractionProp = None
+
         self.HighlightProp3D(self.InteractionProp)
 
     def __del__(self):

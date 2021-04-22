@@ -320,3 +320,4 @@ class ActorManager(QObject):
             self.actors.pop()
             self.ResetCameraClippingRange()
             self.interactor.Render()
+            self.interactor.GetInteractorStyle().resetHighlight()
