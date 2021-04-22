@@ -36,6 +36,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.vtk_widget = None
         self.ui = None
         self.setup()
+        self.setWindowIcon(QIcon('icons/icon.ico'))
 
         self.image_list = SImageList(self, "Images")
         self.model_list = SModelList(self, "Models")
