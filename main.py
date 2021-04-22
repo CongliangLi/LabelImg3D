@@ -1,7 +1,7 @@
 import os
 from sproperty import SProperty
 import vtkmodules.all as vtk_all
-from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 import PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtCore import *
@@ -18,7 +18,7 @@ from slog import SLog
 
 import os
 import vtkmodules.all as vtk_all
-from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from PyQt5 import QtCore, uic, QtWidgets, QtGui
 # from label3d import QDraw3DViewer
 import Ui_main

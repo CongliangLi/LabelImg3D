@@ -2,7 +2,7 @@ import os
 import sys
 import vtk
 import cv2
-from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 import PyQt5
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import QSize, pyqtSignal, QCoreApplication, QObject

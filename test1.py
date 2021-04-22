@@ -1,7 +1,7 @@
 import os
 from sproperty import SProperty
 import vtkmodules.all as vtk_all
-from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 import PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtCore import *
