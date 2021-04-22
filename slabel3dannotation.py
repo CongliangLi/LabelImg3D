@@ -343,7 +343,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
     @PyQt5.QtCore.pyqtSlot()
     def saveScenes(self):
-        if self.image_path is None or self.image_actor is None or len(self.actor_manager.actors) == 0:
+        if self.image_path is None or self.image_actor is None:
             return
         self.data = {}
         self.data["image_file"] = os.path.relpath(self.image_path, self.scene_folder)
