@@ -34,11 +34,11 @@ class SProperty(QDockWidget):
         self.config = ConfigManager()
         self.is_changed = True
 
-        for i, x in enumerate(['x', 'y', 'z', 'rx', 'ry', 'rz', 'w', 'h', 'l']):
+        for i, x in enumerate(['x', 'y', 'z', 'rx', 'ry', 'rz', 'w', 'l', 'h']):
             width_spin = QDoubleSpinBox()
             width_spin.setMaximum(50000)
             width_spin.setMinimum(-50000)
-            self.add(width_spin, x, 540, i + 1, 1)
+            self.add(width_spin, x, 0, i + 1, 1)
 
             width_spin.valueChanged.connect(lambda: self.parent().ui.vtk_panel.model_update_with_property(self.is_changed))
 
