@@ -15,6 +15,7 @@ from actor_manager import Actor, ActorManager
 from sproperty import *
 from PIL import Image
 
+
 class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
     def __init__(self, slabel, parent=None):
         self.slabel = slabel
@@ -66,7 +67,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
     def OnLeftButtonDown(self, obj, event):
         if self.GetCurrentRenderer() is None:
-            return 
+            return
 
         self.isPressedLeft = True
         self.isMouse_Pressed_Move = False
@@ -87,10 +88,9 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             return
         self.SetOpacity(1)
 
-        bounds = self.InteractionProp.GetBounds()
         self.slabel.signal_on_left_button_up.emit(
-            list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation()) + [
-                bounds[2 * i + 1] - bounds[2 * i] for i in range(3)]
+            list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation()) +
+            self.slabel.actor_manager.actors[-1].size
         )
 
         self.super.OnLeftButtonUp()
@@ -205,14 +205,12 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             self.super.OnMouseMove()
             self.GetInteractor().Render()
 
-        bounds = self.InteractionProp.GetBounds()
         self.slabel.signal_on_left_button_up.emit(
-            list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation()) + [
-                bounds[2 * i + 1] - bounds[2 * i] for i in range(3)]
+            list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation()) +
+            self.slabel.actor_manager.actors[-1].size
         )
         self.slabel.actor_manager.ResetCameraClippingRange()
         self.GetInteractor().Render()
-
 
     def OnMouseWheelForward(self, obj, event):
         self.super.OnMouseWheelForward()
