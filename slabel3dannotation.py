@@ -204,6 +204,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         else:
             self.super.OnMouseMove()
             self.GetInteractor().Render()
+
         bounds = self.InteractionProp.GetBounds()
         self.slabel.signal_on_left_button_up.emit(
             list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation()) + [
@@ -301,9 +302,9 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.bg_renderer.ResetCamera()
         self.interactor.Render()
 
-    @PyQt5.QtCore.pyqtSlot(str)
-    def loadModel(self, model_path):
-        self.actor_manager.newActor(model_path)
+    @PyQt5.QtCore.pyqtSlot(str, int)
+    def loadModel(self, model_path, model_class):
+        self.actor_manager.newActor(model_path, model_class)
 
     def switchBoxWidgets(self, actor):
         index = self.actor_manager.getIndex(actor)
