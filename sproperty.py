@@ -88,7 +88,7 @@ class SProperty(QDockWidget):
 
         self.is_changed = False
         [self.config.set(s, d) for s, d in zip(
-            ["x", "y", "z", "rz", "rx", "ry", "w", "h", "l"], data)
+            ["x", "y", "z", "rz", "rx", "ry", "w", "l", "h"], data)
         ]
         self.is_changed = True
 

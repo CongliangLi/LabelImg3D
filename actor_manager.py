@@ -26,6 +26,7 @@ class Actor:
         self.createRenderer(layer_num)
         self.loadModel(model_path)
         self.type_class = model_class
+        self.size = []  # [w, l, h]
 
     def readObj(self, model_path):
         reader = vtk.vtkOBJReader()
@@ -106,7 +107,8 @@ class Actor:
         return {
             "model_file": os.path.relpath(self.model_path, scene_folder),
             "matrix": matrix2List(self.actor.GetMatrix()),
-            "class": self.type_class
+            "class": self.type_class,
+            "size": self.size
         }
 
 
@@ -124,12 +126,13 @@ class ActorManager(QObject):
         self.actors = []
         self.model_initial_position = [0, 0, -20]
 
-    def newActor(self, model_path, model_class, actor_matrix=None):
+    def newActor(self, model_path, model_class, actor_matrix=None, actor_size=[]):
         actor = Actor(self.render_window, self.interactor, model_path, model_class, len(self.actors) + 1)
-        if actor_matrix is None:
+        if actor_matrix is None and actor_size == []:
             # only copy the matrix of previous actors
             if len(self.actors) > 0 and self.actors[-1].model_path == actor.model_path:
                 actor.setMatrix(self.actors[-1].actor.GetMatrix())
+                actor.size = self.actors[-1].size
             else:
                 # newPosition = list(actor.renderer.GetActiveCamera().GetPosition())
                 # actor.actor.SetPosition(newPosition)
@@ -140,22 +143,22 @@ class ActorManager(QObject):
 
                 # Set the initial loading position of the model
                 actor.actor.SetPosition(self.model_initial_position)
-
-
-
+                bounds = actor.actor.GetBounds()
+                actor.size = [bounds[2 * i + 1] - bounds[2 * i] for i in range(3)]
         else:
             # copy the camera matrix
             matrix = vtk.vtkMatrix4x4()
             matrix.DeepCopy(actor_matrix)
             # matrix.Invert()
             transform = getTransform(matrix)
-
             if actor.actor.GetUserMatrix() is not None:
                 transform.GetMatrix(actor.actor.GetUserMatrix())
+                actor.size = actor_size
             else:
                 actor.actor.SetOrientation(transform.GetOrientation())
                 actor.actor.SetPosition(transform.GetPosition())
                 actor.actor.SetScale(transform.GetScale())
+                actor.size = actor_size
 
         self.actors.append(actor)
         self.setActiveActor(-1)
@@ -269,7 +272,8 @@ class ActorManager(QObject):
     def createActors(self, scene_folder, data):
         for i in range(data["model"]["num"]):
             model_path = os.path.join(scene_folder, data["model"][str(i)]["model_file"])
-            self.newActor(model_path, data["model"][str(i)]["class"], data["model"][str(i)]["matrix"])
+            self.newActor(model_path, data["model"][str(i)]["class"], data["model"][str(i)]["matrix"],
+                          data["model"][str(i)]["size"])
 
     def toJson(self, scene_folder):
         # self.reformat()
