@@ -12,7 +12,8 @@ from slabel3dshow import SLabel3dShow
 
 class SModelList(QDockWidget):
     signal_load_model = pyqtSignal(int, int)
-    signal_double_click = pyqtSignal(str)
+    signal_double_click = pyqtSignal(str, int)
+    signal_model_class = pyqtSignal(list)
 
     def __init__(self, parent, title="models"):
         super().__init__(parent=parent)
@@ -99,7 +100,7 @@ class SModelList(QDockWidget):
         image_label.start()
 
     def listWidgetDoubleClicked(self, index):
-        self.signal_double_click.emit(self.file_list[index.row()])
+        self.signal_double_click.emit(self.file_list[index.row()], index.row())
         print(self.file_list[index.row()])
 
 

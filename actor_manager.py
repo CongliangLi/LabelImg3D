@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import *
 
 
 class Actor:
-    def __init__(self, render_window, interactor, model_path, layer_num):
+    def __init__(self, render_window, interactor, model_path, model_class, layer_num):
         self.renderer_window = render_window
         self.interactor = interactor
         self.renderer = None
@@ -25,8 +25,7 @@ class Actor:
         self.model_path = model_path
         self.createRenderer(layer_num)
         self.loadModel(model_path)
-        # self.createBoxWidget()
-        self.type_class = 0
+        self.type_class = model_class
 
     def readObj(self, model_path):
         reader = vtk.vtkOBJReader()
@@ -125,8 +124,8 @@ class ActorManager(QObject):
         self.actors = []
         self.model_initial_position = [0, 0, -20]
 
-    def newActor(self, model_path, actor_matrix=None):
-        actor = Actor(self.render_window, self.interactor, model_path, len(self.actors) + 1)
+    def newActor(self, model_path, model_class, actor_matrix=None):
+        actor = Actor(self.render_window, self.interactor, model_path, model_class, len(self.actors) + 1)
         if actor_matrix is None:
             # only copy the matrix of previous actors
             if len(self.actors) > 0 and self.actors[-1].model_path == actor.model_path:
@@ -141,6 +140,9 @@ class ActorManager(QObject):
 
                 # Set the initial loading position of the model
                 actor.actor.SetPosition(self.model_initial_position)
+
+
+
         else:
             # copy the camera matrix
             matrix = vtk.vtkMatrix4x4()
@@ -267,7 +269,7 @@ class ActorManager(QObject):
     def createActors(self, scene_folder, data):
         for i in range(data["model"]["num"]):
             model_path = os.path.join(scene_folder, data["model"][str(i)]["model_file"])
-            self.newActor(model_path, data["model"][str(i)]["matrix"])
+            self.newActor(model_path, data["model"][str(i)]["class"], data["model"][str(i)]["matrix"])
 
     def toJson(self, scene_folder):
         # self.reformat()
