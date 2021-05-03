@@ -20,11 +20,19 @@ In this work, we try to find a **way to re-align 3D models in 3D space guided by
 | Task Name                | Start/End Date        | Des                                                         |
 | ------------------------ | --------------------- | ----------------------------------------------------------- |
 | Labeling                 | 2021/3/20 - now       | Start Labeling image with 3D vehicle model                  |
-| Optimize the label tools | 2021/3/3 - now        | Make the tools easy to use                                  |
-| Collect 3D Model         | 2021/1/12 - now       | Collect 3D vehicle model for this idea                      |
+| Optimize the label tools | 2021/3/3 - 2021/4/30        | Make the tools easy to use                                  |
+| Collect 3D Model         | 2021/1/12 - 2021/3/1      | Collect 3D vehicle model for this idea                      |
 | Design the label tools   | 2020/12/10 - 2021/3/2 | Start the idea of 3D detection and tracking in single image |
 
 ***
+
+## Run Label Tools
+There are two ways for installing the labeltools:
+```sh
+conda create -n labelimg3D python=3.8
+```
+1. install from the released .exe
+2. 
 
 ## Dataset
 
