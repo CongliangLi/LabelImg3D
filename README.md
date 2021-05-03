@@ -38,7 +38,7 @@ or
 2. run from the code, by the following sh
 
 ```sh
-conda create -n pylabel3D
+conda create -n pylabel3D python=3.8
 pip install -r requirement.txt
 conda activate pylabel3D
 python main.py

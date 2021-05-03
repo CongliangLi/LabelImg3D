@@ -13,7 +13,7 @@ from utils import *
 
 from actor_manager import Actor, ActorManager
 from sproperty import *
-from PIL import Image
+# from PIL import Image
 
 
 class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
