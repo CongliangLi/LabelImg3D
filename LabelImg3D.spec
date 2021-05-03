@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['D:\\ssj\\gitlab\\traffic-show\\LabelImg3D'],
+             pathex=[''],
              binaries=[],
              datas=[("main.ui", "."), ("icons/*.ico", "icons")],
              hiddenimports=[],

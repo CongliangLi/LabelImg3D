@@ -32,7 +32,25 @@ There are two ways for installing the labeltools:
 conda create -n labelimg3D python=3.8
 ```
 1. install from the released .exe
-2. 
+
+or 
+
+2. run from the code, by the following sh
+
+```sh
+conda create -n pylabel3D
+pip install -r requirement.txt
+conda activate pylabel3D
+python main.py
+```
+
+## Package
+If you want to make the installer, you can use the `pyinstaller`. Try the following command:
+
+```sh
+pip install pyinstaller
+pyinstaller --clean -y LabelImg3D.spec
+```
 
 ## Dataset
 
