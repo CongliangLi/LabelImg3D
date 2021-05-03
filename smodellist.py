@@ -8,12 +8,23 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import typing
 from slabel3dshow import SLabel3dShow
+import vtk
 
 
 class SModelList(QDockWidget):
     signal_load_model = pyqtSignal(int, int)
     signal_double_click = pyqtSignal(str, int)
     signal_model_class = pyqtSignal(list)
+    obj = None
+
+    @staticmethod
+    def create(parent, title="models"):
+        SModelList.obj = SModelList(parent, title)
+        return SModelList.obj
+
+    @staticmethod
+    def get():
+        return SModelList.obj
 
     def __init__(self, parent, title="models"):
         super().__init__(parent=parent)
@@ -56,6 +67,7 @@ class SModelList(QDockWidget):
 
         # file list
         self.file_list = []
+        self.model_list = {}
 
     @PyQt5.QtCore.pyqtSlot(list)
     def open_files(self, file_list=None):
@@ -86,18 +98,35 @@ class SModelList(QDockWidget):
         name = os.path.split(model_path)[-1][:-4]
         item = QListWidgetItem(self.listWidget, 0)
         widgets = QWidget(self)
-        image_label = SLabel3dShow(self, model_path)
+        model_label = SLabel3dShow(self, model_path)
+        self.model_list[model_path] = model_label.actor
         text_label = QLabel(name)
         widget_layout = QHBoxLayout()
 
         item.setSizeHint(QSize(300, 300))
-        widget_layout.addWidget(image_label)
+        widget_layout.addWidget(model_label)
         widget_layout.addWidget(text_label)
         widget_layout.setStretch(0, 3)
         widget_layout.setStretch(1, 1)
         widgets.setLayout(widget_layout)
         self.listWidget.setItemWidget(item, widgets)
-        image_label.start()
+        model_label.start()
+
+    def getActor(self, model_path):
+        if model_path not in self.model_list.keys():
+            print("Cannot find the 3d model {}".format(model_path))
+            return None
+        actor = self.model_list[model_path]
+        copy_data = vtk.vtkPolyData()
+        copy_data.DeepCopy(actor.GetMapper().GetInput())
+
+        mapper = vtk.vtkPolyDataMapper()
+        mapper.SetInputData(copy_data)
+
+        actor = vtk.vtkActor()
+        actor.SetMapper(mapper)
+        return actor
+
 
     def listWidgetDoubleClicked(self, index):
         self.signal_double_click.emit(self.file_list[index.row()], index.row())

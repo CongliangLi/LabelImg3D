@@ -39,7 +39,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.setWindowIcon(QIcon('icons/icon.ico'))
 
         self.image_list = SImageList(self, "Images")
-        self.model_list = SModelList(self, "Models")
+        self.model_list = SModelList.create(self, "Models")
         self.property3d = SProperty(self, "3DProperty")
         self.widget_log = SLog(self)
         self.camera_property = LCamera_Property(self, "Camera_Property")
