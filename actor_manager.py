@@ -13,6 +13,7 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.Qt import QObject
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from smodellist import SModelList
 
 
 class Actor:
@@ -64,7 +65,9 @@ class Actor:
 
     def loadModel(self, model_path):
         self.model_path = model_path
-        self.actor = self.readObj(model_path)
+        self.actor = SModelList.get().getActor(model_path)
+        if self.actor is None:
+            self.actor = self.readObj(model_path)
         # self.actor = self.importObj(model_path)
 
         # # move the actor to (0, 0, 0)
