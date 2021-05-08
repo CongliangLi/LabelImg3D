@@ -285,10 +285,14 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.image_scale = 1 / image_width
 
         # Read image data
-        jpeg_reader = vtk.vtkJPEGReader()
-        jpeg_reader.SetFileName(image_path)
-        jpeg_reader.Update()
-        image_data = jpeg_reader.GetOutput()
+        if self.image_path.split(".")[1] == "png":
+            img_reader = vtk.vtkPNGReader()
+        else:
+            img_reader = vtk.vtkJPEGReader()
+
+        img_reader.SetFileName(image_path)
+        img_reader.Update()
+        image_data = img_reader.GetOutput()
         self.image_actor = vtk.vtkImageActor()
         self.image_actor.SetInputData(image_data)
 
