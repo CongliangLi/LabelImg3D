@@ -59,6 +59,8 @@ class SceneManager(QObject):
         # 1. get all the images
         self.images_folder = os.path.join(self.scene_folder, 'images')
         self.image_name_list = getFiles(self.images_folder, ['.jpg'])
+        if not self.image_name_list:
+            self.image_name_list = getFiles(self.images_folder, ['.png'])
 
         # 2. get all the annotations
         self.annotations_folder = os.path.join(self.scene_folder, 'annotations')
