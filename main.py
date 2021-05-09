@@ -71,7 +71,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui.vtk_panel.signal_load_scene.connect(self.camera_property.new_camera_data)
 
     def setup(self):
-        self.ui = Ui_main.Ui_MainWindow()R
+        self.ui = Ui_main.Ui_MainWindow()
         self.ui.setupUi(self)
         # self.vtk_widget = ui.vtk_panel
         # self.ui.vtk_layout = QtWidgets.QHBoxLayout()
