@@ -50,7 +50,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.addDockWidget(Qt.LeftDockWidgetArea, self.widget_log)
         self.addDockWidget(Qt.RightDockWidgetArea, self.camera_property)
 
-        self.scene_manager = SceneManager(self, self.image_list,  self.model_list, self.ui.vtk_panel)
+        self.scene_manager = SceneManager(self, self.image_list, self.model_list, self.ui.vtk_panel)
 
         # menu in main window
         self.ui.action_Load_Scenes.triggered.connect(self.init_scenes)
@@ -68,11 +68,10 @@ class Draw3D(QtWidgets.QMainWindow):
         self.scene_manager.signal_open_files.connect(self.image_list.open_files)
         self.scene_manager.signal_open_models.connect(self.model_list.open_files)
         self.ui.vtk_panel.signal_on_left_button_up.connect(self.property3d.update_property)
-        self.scene_manager.signal_load_scene.connect(self.camera_property.new_camera_data)
+        self.ui.vtk_panel.signal_load_scene.connect(self.camera_property.new_camera_data)
 
-        
     def setup(self):
-        self.ui = Ui_main.Ui_MainWindow()
+        self.ui = Ui_main.Ui_MainWindow()R
         self.ui.setupUi(self)
         # self.vtk_widget = ui.vtk_panel
         # self.ui.vtk_layout = QtWidgets.QHBoxLayout()

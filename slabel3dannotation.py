@@ -221,6 +221,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
 class SLabel3DAnnotation(QtWidgets.QFrame):
     signal_on_left_button_up = pyqtSignal(list)
+    signal_load_scene = pyqtSignal(list)
 
     def __init__(self, parent):
         super().__init__(parent=parent)
@@ -303,7 +304,6 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.bg_renderer.AddActor(self.image_actor)
         self.bg_renderer.ResetCamera()
         self.interactor.Render()
-
     @PyQt5.QtCore.pyqtSlot(str, int)
     def loadModel(self, model_path, model_class):
         self.actor_manager.newActor(model_path, model_class)
@@ -343,6 +343,12 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.actor_manager.setCamera(self.json_data["camera"])
         self.actor_manager.createActors(self.scene_folder, self.json_data)
         self.actor_manager.ResetCameraClippingRange()
+
+        camera = self.bg_renderer.GetActiveCamera()
+        camera_data = [camera.GetPosition()[0], camera.GetPosition()[1], camera.GetPosition()[2],
+                       camera.GetViewAngle(), camera.GetDistance()]
+        self.signal_load_scene.emit(camera_data)
+
 
     @PyQt5.QtCore.pyqtSlot()
     def saveScenes(self):
