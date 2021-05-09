@@ -34,13 +34,14 @@ class SProperty(QDockWidget):
         self.config = ConfigManager()
         self.is_changed = True
 
-        for i, x in enumerate(['x', 'y', 'z', 'rx', 'ry', 'rz', 'w', 'l', 'h']):
+        for i, x in enumerate(['x', 'y', 'z', 'rx', 'ry', 'rz', 'w', 'l', 'h', 's']):
             width_spin = QDoubleSpinBox()
             width_spin.setMaximum(50000)
             width_spin.setMinimum(-50000)
-            self.add(width_spin, x, 0, i + 1, 1)
+            self.add(width_spin, x, 1 if x == 's' else 0, i + 1, 1)
 
-            width_spin.valueChanged.connect(lambda: self.parent().ui.vtk_panel.model_update_with_property(self.is_changed))
+            width_spin.valueChanged.connect(lambda: self.parent(
+            ).ui.vtk_panel.model_update_with_property(self.is_changed))
 
         self.window = QFrame()
         self.window.setLayout(self.grid_layout)
@@ -82,14 +83,17 @@ class SProperty(QDockWidget):
         # for i in range(len(data)):
         #     print(data[i])
         if data[2] > 0.:
-            self.config.set("x", self.parent().ui.vtk_panel.actor_manager.model_initial_position[0])
-            self.config.set("y", self.parent().ui.vtk_panel.actor_manager.model_initial_position[1])
-            self.config.set("z", self.parent().ui.vtk_panel.actor_manager.model_initial_position[2])
+            self.config.set(
+                "x", self.parent().ui.vtk_panel.actor_manager.model_initial_position[0])
+            self.config.set(
+                "y", self.parent().ui.vtk_panel.actor_manager.model_initial_position[1])
+            self.config.set(
+                "z", self.parent().ui.vtk_panel.actor_manager.model_initial_position[2])
 
         self.is_changed = False
         [self.config.set(s, d) for s, d in zip(
             ["x", "y", "z", "rz", "rx", "ry", "w", "l", "h"], data)
-        ]
+         ]
         self.is_changed = True
 
     def connect(self, update):
@@ -100,17 +104,42 @@ class SProperty(QDockWidget):
         """
         self.config.updated.connect(update)
 
+    def roateX(self):
+        self.is_changed = True
+        self.config.set("rx", float(self.config.get("rx")) +
+                        float(self.config.get("s")))
+
+    def roateX_M(self):
+        self.config.set("rx", float(self.config.get("rx")) -
+                        float(self.config.get("s")))
+
+    def roateY(self):
+        self.config.set("ry", float(self.config.get("ry")) +
+                        float(self.config.get("s")))
+
+    def roateY_M(self):
+        self.config.set("ry", float(self.config.get("ry")) -
+                        float(self.config.get("s")))
+
+    def roateZ(self):
+        self.config.set("rz", float(self.config.get("rz")) +
+                        float(self.config.get("s")))
+
+    def roateZ_M(self):
+        self.config.set("rz", float(self.config.get("rz")) -
+                        float(self.config.get("s")))
+
 
 if __name__ == '__main__':
     class MainWindow(QMainWindow):
-        def __init__(self,parent=None):
+        def __init__(self, parent=None):
             super(MainWindow, self).__init__(parent)
-            layout=QHBoxLayout()
+            layout = QHBoxLayout()
 
-            self.items=SProperty(self, "3DProperty")
+            self.items = SProperty(self, "3DProperty")
 
             self.setCentralWidget(QTextEdit())
-            self.addDockWidget(Qt.RightDockWidgetArea,self.items)
+            self.addDockWidget(Qt.RightDockWidgetArea, self.items)
 
             self.setLayout(layout)
             self.setWindowTitle('Dock')
@@ -119,7 +148,7 @@ if __name__ == '__main__':
         def update(sender):
             print(sender)
 
-    app=QApplication(sys.argv)
-    demo=MainWindow()
+    app = QApplication(sys.argv)
+    demo = MainWindow()
     demo.show()
     sys.exit(app.exec_())

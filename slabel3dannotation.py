@@ -26,8 +26,15 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.AddObserver('MouseMoveEvent', self.OnMouseMove, -1)
         self.AddObserver('MouseWheelForwardEvent', self.OnMouseWheelForward, -1)
         self.AddObserver('MouseWheelBackwardEvent', self.OnMouseWheelBackward, -1)
+        self.AddObserver('CharEvent', self.RemoveKeyR, -1)
         self.super = super(MouseInteractorHighLightActor, self)
         self.reset()
+
+    def RemoveKeyR(self, obj, event):
+        key = self.GetInteractor().GetKeySym()
+        if key == 'r' or key == 'R':
+            return
+        self.super.OnKeyPress()
 
     def reset(self):
         self.is_first = True

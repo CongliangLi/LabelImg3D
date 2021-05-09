@@ -61,6 +61,9 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui.actionNext.triggered.connect(self.scene_manager.next)
         self.ui.action_Delete_Model.triggered.connect(self.ui.vtk_panel.delete_model)
 
+        # rotate
+        for s in ['X', 'Y', 'Z', 'X_M', 'Y_M', 'Z_M']:
+            eval('self.ui.actionRoate{}.triggered.connect'.format(s))(eval('self.property3d.roate{}'.format(s)))
         # connect the signals and slots
         # self.image_list.signal_double_click.connect(self.ui.vtk_panel.loadImage)
         self.image_list.listWidget.doubleClicked.connect(self.scene_manager.__getitem__)
