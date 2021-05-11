@@ -14,6 +14,7 @@ import pandas as pd
 from actor_manager import Actor, ActorManager
 from sproperty import *
 import tqdm
+import numpy as np
 
 
 # from PIL import Image
@@ -261,7 +262,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         transform = vtk.vtkTransform()
         transform.Translate(0, 0, 0.01)
         axes.SetUserTransform(transform)
-        # self.bg_renderer.AddActor(axes)
+        self.bg_renderer.AddActor(axes)
 
         self.image_actor = None
         self.image_path = None
@@ -361,6 +362,16 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
                        camera.GetViewAngle(), camera.GetDistance()]
         self.signal_load_scene.emit(camera_data)
 
+
+    def cart2hom(self, pts_3d):
+        """ Input: nx3 points in Cartesian
+            Oupput: nx4 points in Homogeneous by pending 1
+        """
+        n = pts_3d.shape[0]
+        pts_3d_hom = np.hstack((pts_3d, np.ones((n, 1))))
+        return pts_3d_hom
+
+
     @PyQt5.QtCore.pyqtSlot()
     def exportScenes(self):
         if self.image_path is None or self.image_actor is None:
@@ -371,9 +382,20 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         for i in range(len(self.actor_manager.actors)):
             actor = self.actor_manager.actors[i]
             all_actor['name'].append(base_name)
-            all_actor['x'].append(actor.actor.GetCenter()[0])
-            all_actor['y'].append(actor.actor.GetCenter()[1])
-            all_actor['z'].append(-actor.actor.GetCenter()[2] + camera.GetDistance())
+            p = np.array([actor.actor.GetCenter()])
+            p = self.cart2hom(p)
+            x_c, y_c, z_c = camera.GetPosition()
+            p_w_c = np.array([
+                [-1, 0,  0,  x_c],
+                [0, 1,   0,  y_c],
+                [0, 0,  -1,  z_c],
+                [0, 0,   0,   1],
+            ])
+            p_c = np.matmul(p_w_c, p.T).T
+
+            all_actor['x'].append(p_c[0])
+            all_actor['y'].append(p_c[1])
+            all_actor['z'].append(p_c[2])
 
         all_actor = pd.DataFrame(all_actor)
 
