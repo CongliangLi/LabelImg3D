@@ -10,9 +10,12 @@ import typing
 import math
 from vtk import *
 from utils import *
-
+import pandas as pd
 from actor_manager import Actor, ActorManager
 from sproperty import *
+import tqdm
+
+
 # from PIL import Image
 
 
@@ -311,6 +314,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.bg_renderer.AddActor(self.image_actor)
         self.bg_renderer.ResetCamera()
         self.interactor.Render()
+
     @PyQt5.QtCore.pyqtSlot(str, int)
     def loadModel(self, model_path, model_class):
         self.actor_manager.newActor(model_path, model_class)
@@ -327,6 +331,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             self.is_first_scene = False
         else:
             self.saveScenes()
+            self.exportScenes()
 
         # clear all the actors
         self.scene_folder, self.image_file, self.annotation_file = scene_folder, image_file, annotation_file
@@ -356,6 +361,29 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
                        camera.GetViewAngle(), camera.GetDistance()]
         self.signal_load_scene.emit(camera_data)
 
+    @PyQt5.QtCore.pyqtSlot()
+    def exportScenes(self):
+        if self.image_path is None or self.image_actor is None:
+            return
+        all_actor = {'name': [], 'x': [], 'y': [], 'z': []}
+        base_name = os.path.relpath(self.image_path, self.scene_folder)
+        camera = self.bg_renderer.GetActiveCamera()
+        for i in range(len(self.actor_manager.actors)):
+            actor = self.actor_manager.actors[i]
+            all_actor['name'].append(base_name)
+            all_actor['x'].append(actor.actor.GetCenter()[0])
+            all_actor['y'].append(actor.actor.GetCenter()[1])
+            all_actor['z'].append(-actor.actor.GetCenter()[2] + camera.GetDistance())
+
+        all_actor = pd.DataFrame(all_actor)
+
+        file = "./LabelImg3D.csv"
+        if not os.path.exists(file) or not os.path.getsize(file):
+            with open(file, "a") as fp:
+                all_actor.to_csv(fp, line_terminator='\n')
+        else:
+            with open(file, "a") as fp:
+                all_actor.to_csv(fp, line_terminator='\n', header=None)
 
     @PyQt5.QtCore.pyqtSlot()
     def saveScenes(self):
