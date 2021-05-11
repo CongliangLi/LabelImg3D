@@ -1,6 +1,6 @@
 import vtk
 import os
-importn numpy as np
+import numpy as np
 
 def getTransform(matrix):
     transform = vtk.vtkTransform()

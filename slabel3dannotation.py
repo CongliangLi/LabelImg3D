@@ -13,7 +13,7 @@ from utils import *
 import pandas as pd
 from actor_manager import Actor, ActorManager
 from sproperty import *
-import tqdm
+# import tqdm
 import numpy as np
 
 
@@ -362,7 +362,6 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
                        camera.GetViewAngle(), camera.GetDistance()]
         self.signal_load_scene.emit(camera_data)
 
-
     def cart2hom(self, pts_3d):
         """ Input: nx3 points in Cartesian
             Oupput: nx4 points in Homogeneous by pending 1
@@ -370,7 +369,6 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         n = pts_3d.shape[0]
         pts_3d_hom = np.hstack((pts_3d, np.ones((n, 1))))
         return pts_3d_hom
-
 
     @PyQt5.QtCore.pyqtSlot()
     def exportScenes(self):
@@ -393,9 +391,9 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             ])
             p_c = np.matmul(p_w_c, p.T).T
 
-            all_actor['x'].append(p_c[0])
-            all_actor['y'].append(p_c[1])
-            all_actor['z'].append(p_c[2])
+            all_actor['x'].append(p_c[0][0])
+            all_actor['y'].append(p_c[0][1])
+            all_actor['z'].append(p_c[0][2])
 
         all_actor = pd.DataFrame(all_actor)
 
