@@ -42,3 +42,19 @@ def getFiles(folder, filter):
     return [os.path.relpath(os.path.join(maindir, filename), folder) \
             for maindir, _, file_name_list in os.walk(folder, followlinks=True) \
             for filename in file_name_list if os.path.splitext(filename)[-1] in filter]
+
+
+def worldToDisplay(renderer, points):
+    ret = []
+    for p in points:
+        renderer.SetWorldPoint(p)
+        renderer.WorldToDisplay()
+        ret.append(renderer.GetDisplayPoint())
+    return ret
+
+def worldToDisplayBBox(renderer, points):
+    display_points = worldToDisplay(renderer, points)
+    display_points = np.array(display_points)
+    min_x, min_y, _ = tuple(display_points.min(axis=0))
+    max_x, max_y, _ = tuple(display_points.max(axis=0))
+    return min_x, min_y, max_x, max_y
