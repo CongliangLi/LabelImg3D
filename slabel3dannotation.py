@@ -293,8 +293,9 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         # get image width and height
         image = cv2.imread(image_path)
-        image_height, image_width, _ = image.shape
-        self.image_scale = 1 / image_width
+        self.image_height, self.image_width, _ = image.shape
+        self.image_scale = 1 / self.image_width
+        self.image_ratio = self.image_width / self.image_height
 
         # Read image data
         if self.image_path.split(".")[-1] == "png":
@@ -310,7 +311,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         transform = vtk.vtkTransform()
         transform.Scale(self.image_scale, self.image_scale, self.image_scale)
-        transform.Translate(-image_width / 2, -image_height / 2, 0)
+        transform.Translate(-self.image_width / 2, -self.image_height / 2, 0)
         self.image_actor.SetUserTransform(transform)
         self.bg_renderer.AddActor(self.image_actor)
         self.bg_renderer.ResetCamera()
@@ -381,6 +382,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         camera = self.bg_renderer.GetActiveCamera()
         for i in range(len(self.actor_manager.actors)):
             actor = self.actor_manager.actors[i]
+            actor.toKITTI("./")
             all_actor['name'].append(base_name)
             p = np.array([actor.actor.GetCenter()])
             p = self.cart2hom(p)
@@ -393,9 +395,9 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             ])
             p_c = np.matmul(p_w_c, p.T).T
 
-            all_actor['x'].append(p_c[0])
-            all_actor['y'].append(p_c[1])
-            all_actor['z'].append(p_c[2])
+            all_actor['x'].append(p_c[0, 0])
+            all_actor['y'].append(p_c[0, 1])
+            all_actor['z'].append(p_c[0, 2])
 
         all_actor = pd.DataFrame(all_actor)
 
