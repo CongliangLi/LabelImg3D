@@ -15,6 +15,7 @@ from actor_manager import Actor, ActorManager
 from sproperty import *
 # import tqdm
 import numpy as np
+from pathlib import Path
 
 
 # from PIL import Image
@@ -396,12 +397,13 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
     def exportScenes(self):
         if self.image_path is None or self.image_actor is None:
             return
-        all_actor = {'name': [], 'x': [], 'y': [], 'z': [], "alpha": [], "theta": []}
-        base_name = os.path.relpath(self.image_path, self.scene_folder)
+        text_file = Path(self.image_path).parent / (Path(self.image_path).stem + "_l3.txt")
+
         camera = self.bg_renderer.GetActiveCamera()
+        data = []
         for i in range(len(self.actor_manager.actors)):
             actor = self.actor_manager.actors[i]
-            all_actor['name'].append(base_name)
+
             p = np.array([actor.actor.GetCenter()])
             p = self.cart2hom(p)
             x_c, y_c, z_c = camera.GetPosition()
@@ -423,23 +425,17 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
                                    for i in range(3)]
             r_y = self.included_angle(model_center2bounds_center, [1, 0, 0])
             theta = self.included_angle(camera_optical_axis, camera2model_center)
-            alpha = r_y -theta
+            alpha = r_y - theta
 
-            all_actor['x'].append(round(p_c[0, 0], 2))
-            all_actor['y'].append(round(p_c[0, 1], 2))
-            all_actor['z'].append(round(p_c[0, 2], 2))
-            all_actor["alpha"].append(round(alpha, 2))
-            all_actor["theta"].append(round(theta, 2))
 
-        all_actor = pd.DataFrame(all_actor)
+            data += [[
+                "Car", 0, 0, round(alpha, 2),
+                0, 0, 20, 20,
+                actor.size[2], actor.size[0], actor.size[1],
+                round(p_c[0, 0], 2), round(p_c[0, 1], 2), round(p_c[0, 2], 2), round(theta, 2)
+            ]]
 
-        file = "./LabelImg3D.csv"
-        if not os.path.exists(file) or not os.path.getsize(file):
-            with open(file, "a") as fp:
-                all_actor.to_csv(fp, line_terminator='\n')
-        else:
-            with open(file, "a") as fp:
-                all_actor.to_csv(fp, line_terminator='\n', header=None)
+        np.savetxt(text_file, np.array(data), delimiter=" ", fmt='%s')
 
     @PyQt5.QtCore.pyqtSlot()
     def saveScenes(self):
