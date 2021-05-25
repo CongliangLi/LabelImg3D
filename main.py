@@ -7,7 +7,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-# from label3d import QDraw3DViewer
 import Ui_main
 from scene_manager import SceneManager
 from simagelist import SImageList

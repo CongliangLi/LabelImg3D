@@ -77,8 +77,6 @@ class SceneManager(QObject):
             self.signal_open_files.emit([os.path.join(self.images_folder, i) for i in self.image_name_list])
             self[0]
 
-
-
     def __len__(self):
         return len(self.image_name_list)
 
@@ -110,5 +108,3 @@ class SceneManager(QObject):
 
     def save(self):
         pass
-
-

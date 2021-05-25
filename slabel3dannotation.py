@@ -371,31 +371,58 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         pts_3d_hom = np.hstack((pts_3d, np.ones((n, 1))))
         return pts_3d_hom
 
+    def included_angle(self, v1, v2):
+
+        x = np.array([v1[3 + i] - v1[i] for i in range(3)])
+        y = np.array([v2[3 + i] - v1[i] for i in range(3)])
+
+        l_x = np.sqrt(x.dot(x))
+        l_y = np.sqrt(v2.dot(y))
+
+        dot_product = x.dot(y)
+
+        cos_x_y = dot_product / (l_x * l_y)
+
+        angle_Radian = np.cross(cos_x_y)
+        included_angle = angle_Radian * 180 / np.pi
+
+        if included_angle < -180:
+            included_angle = included_angle + 360
+
+        if included_angle >= 180:
+            included_angle = 360 - included_angle
+        return included_angle
+
     @PyQt5.QtCore.pyqtSlot()
     def exportScenes(self):
         if self.image_path is None or self.image_actor is None:
             return
-        all_actor = {'name': [], 'x': [], 'y': [], 'z': []}
+        all_actor = {'name': [], 'x': [], 'y': [], 'z': [], "alpha": [], "theta": []}
         base_name = os.path.relpath(self.image_path, self.scene_folder)
         camera = self.bg_renderer.GetActiveCamera()
         for i in range(len(self.actor_manager.actors)):
             actor = self.actor_manager.actors[i]
-            actor.toKITTI("./")
             all_actor['name'].append(base_name)
             p = np.array([actor.actor.GetCenter()])
             p = self.cart2hom(p)
             x_c, y_c, z_c = camera.GetPosition()
             p_w_c = np.array([
-                [-1, 0,  0,  x_c],
-                [0, 1,   0,  y_c],
-                [0, 0,  -1,  z_c],
-                [0, 0,   0,   1],
+                [-1, 0, 0, x_c],
+                [0, 1, 0, y_c],
+                [0, 0, -1, z_c],
+                [0, 0, 0, 1],
             ])
-            p_c = np.matmul(p_w_c, p.T).T
+            p_c = np.matmul(p_w_c, p.T).T  # x, y, z
+
+            # alpha and theta
+            bounds = actor.actor.GetBounds()
+            Optical_axis = [0, 0, -1]
 
             all_actor['x'].append(p_c[0, 0])
             all_actor['y'].append(p_c[0, 1])
             all_actor['z'].append(p_c[0, 2])
+            # all_actor["alpha"].append()
+            # all_actor["theta"].append()
 
         all_actor = pd.DataFrame(all_actor)
 
@@ -441,14 +468,52 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
             data = [self.parent().parent().property3d.config.get(p)
                     for p in ["x", "y", "z", "rz", "rx", "ry"]]
+            data = [round(Ro, 2) for Ro in data]
+            data = self.resize_Angle(data)
+
+            Rotate = self.style.InteractionProp.GetOrientation()  # Z, X, Y
+            Rotate = [round(Ro, 2) for Ro in Rotate]
+            Angle_dif = [Rotate[i] - data[i + 3] for i in range(3)]
+
+            self.style.InteractionProp.SetPosition((0, 0, 0))
+
+            # print("Rotate:", Rotate)
+            # print("data:", *data[3:])
+            # print("data[3] - Rotate[0] = ", (data[3] - Rotate[0]))
+            # print("data[4] - Rotate[1] = ", (data[4] - Rotate[1]))
+            # print("data[5] - Rotate[2] = ", data[5] - Rotate[2])
+
+            if Angle_dif[0] != 0:
+                self.style.InteractionProp.RotateZ(Angle_dif[0])
+            if Angle_dif[1] != 0:
+                self.style.InteractionProp.RotateX(Angle_dif[1])
+            if Angle_dif[2] != 0:
+                self.style.InteractionProp.RotateY(Angle_dif[2])
+
+            Rotate = [round(Ro, 2) for Ro in self.style.InteractionProp.GetOrientation()]
+            data = [data[i] for i in range(3)] + [Rotate[i] for i in range(3)]
+
+            self.parent().parent().property3d.update_property(data)
+
+            # Rotate = [round(Ro, 2) for Ro in self.style.InteractionProp.GetOrientation()]
+            # print("present_Rotate:", Rotate, "\n")
+
             self.style.InteractionProp.SetPosition(*data[:3])
-            self.style.InteractionProp.SetOrientation(*data[3:])
+
             self.style.HighlightProp3D(self.style.InteractionProp)
             self.style.GetInteractor().Render()
 
             if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
                 self.actor_manager.ResetCameraClippingRange()
                 # self.style.GetCurrentRenderer().ResetCameraClippingRange()
+
+    def resize_Angle(self, data):
+        for i in range(len(data)):
+            if data[i] > 180:
+                data[i] -= 360
+            if data[i] <= -180:
+                data[i] += 360
+        return data
 
     # Shortcut key operation: delete selected model
     def delete_model(self):
