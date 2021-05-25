@@ -371,19 +371,18 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         pts_3d_hom = np.hstack((pts_3d, np.ones((n, 1))))
         return pts_3d_hom
 
-    def included_angle(self, v1, v2):
-
-        x = np.array([v1[3 + i] - v1[i] for i in range(3)])
-        y = np.array([v2[3 + i] - v1[i] for i in range(3)])
+    def included_angle(self, x, y):
+        x = np.array(x)
+        y = np.array(y)
 
         l_x = np.sqrt(x.dot(x))
-        l_y = np.sqrt(v2.dot(y))
+        l_y = np.sqrt(y.dot(y))
 
         dot_product = x.dot(y)
 
         cos_x_y = dot_product / (l_x * l_y)
 
-        angle_Radian = np.cross(cos_x_y)
+        angle_Radian = np.arccos(cos_x_y)
         included_angle = angle_Radian * 180 / np.pi
 
         if included_angle < -180:
@@ -414,15 +413,23 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             ])
             p_c = np.matmul(p_w_c, p.T).T  # x, y, z
 
-            # alpha and theta
-            bounds = actor.actor.GetBounds()
-            Optical_axis = [0, 0, -1]
+            # alpha theta and r_y
+            # alpha = r_y - theta
 
-            all_actor['x'].append(p_c[0, 0])
-            all_actor['y'].append(p_c[0, 1])
-            all_actor['z'].append(p_c[0, 2])
-            # all_actor["alpha"].append()
-            # all_actor["theta"].append()
+            camera_optical_axis = [0, 0, -1]
+            matrix = matrix2List(actor.actor.GetMatrix())
+            model_center2bounds_center = [matrix[i*4] for i in range(3)]
+            camera2model_center = [actor.actor.GetCenter()[i] - camera.GetPosition()[i]
+                                   for i in range(3)]
+            r_y = self.included_angle(model_center2bounds_center, [1, 0, 0])
+            theta = self.included_angle(camera_optical_axis, camera2model_center)
+            alpha = r_y -theta
+
+            all_actor['x'].append(round(p_c[0, 0], 2))
+            all_actor['y'].append(round(p_c[0, 1], 2))
+            all_actor['z'].append(round(p_c[0, 2], 2))
+            all_actor["alpha"].append(round(alpha, 2))
+            all_actor["theta"].append(round(theta, 2))
 
         all_actor = pd.DataFrame(all_actor)
 
