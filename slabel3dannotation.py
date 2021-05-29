@@ -420,17 +420,18 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
             camera_optical_axis = [0, 0, -1]
             matrix = matrix2List(actor.actor.GetMatrix())
-            model_center2bounds_center = [matrix[i*4] for i in range(3)]
+            model_center2bounds_center = [matrix[i * 4] for i in range(3)]
             camera2model_center = [actor.actor.GetCenter()[i] - camera.GetPosition()[i]
                                    for i in range(3)]
             r_y = self.included_angle(model_center2bounds_center, [1, 0, 0])
             theta = self.included_angle(camera_optical_axis, camera2model_center)
             alpha = r_y - theta
 
+            l, t, r, b = actor.getBBox2D()
 
             data += [[
                 "Car", 0, 0, round(alpha, 2),
-                0, 0, 20, 20,
+                l, t, r, b,
                 actor.size[2], actor.size[0], actor.size[1],
                 round(p_c[0, 0], 2), round(p_c[0, 1], 2), round(p_c[0, 2], 2), round(theta, 2)
             ]]
