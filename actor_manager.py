@@ -108,27 +108,31 @@ class Actor:
         return [matrix.GetElement(i, j) for i in range(4) for j in range(4)]
 
     def getBBox2D(self):
-        bbox3d = self.actor.GetBounds()
+        bbox3d = self.actor.GetBounds()  # (xmin, xmax, ymin, ymax, zmin, zmax)
         bbox3d_points_world = [
-            [bbox3d[2 * i + j] for i, j in enumerate(p)] + [1.0] for p in product(set(range(2)), repeat=3)
+            [bbox3d[2 * i + j] for i, j in enumerate(p)] for p in product(set(range(2)), repeat=3)
         ]
         bbox3d_min_x, bbox3d_min_y, bbox3d_max_x, bbox3d_max_y \
             = worldToDisplayBBox(self.renderer, bbox3d_points_world)
 
         image_ratio = self.interactor.parent().image_ratio
         image_width, image_height = self.interactor.parent().image_width, self.interactor.parent().image_height
-        image_points_world = [[-0.5, 0.5 / image_ratio, 0, 1], [0.5, -0.5 / image_ratio, 0, 1]]
+        image_points_world = [[-0.5, 0.5 / image_ratio, 0], [0.5, -0.5 / image_ratio, 0]]
         image_min_x, image_min_y, image_max_x, image_max_y = worldToDisplayBBox(self.renderer, image_points_world)
         p1, p2 = [image_min_x, image_min_y], [image_max_x, image_max_y]
 
         w, h = (p2[0] - p1[0]) / image_width, (p2[1] - p1[1]) / image_height
-        l, t, r, b = (bbox3d_min_x - p1[0]) / w, (bbox3d_min_y - p1[1]) / h, \
-                     (bbox3d_max_x - p1[0]) / w, (bbox3d_max_y - p1[1]) / h
-        return int(l), int(t), int(r), int(b)
-
-        image_min_x
-
-        return min_x, min_y, max_x, max_y
+        l, t, r, b = abs((bbox3d_min_x - p1[0]) / w), abs((bbox3d_min_y - p1[1]) / h), \
+                     abs((bbox3d_max_x - p1[0]) / w), abs((bbox3d_max_y - p1[1]) / h)
+        if l > image_width:
+            l = image_width
+        if r > image_width:
+            r = image_width
+        if t > image_height:
+            t = image_height
+        if b > image_height:
+            b = image_height
+        return round(l, 2), round(t, 2), round(r, 2), round(b, 2)
 
     def toJson(self, scene_folder):
         return {
