@@ -41,6 +41,32 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             return
         self.super.OnKeyPress()
 
+    def HighlightProp3D(self, prop3D):
+        # no prop picked now
+        if prop3D is None:
+            if (self.PickedRenderer != None and self.OutlineActor):
+                self.PickedRenderer.RemoveActor(self.OutlineActor)
+                self.PickedRenderer = None
+        else:
+            if self.OutlineActor is None:
+                self.OutlineActor = vtkActor()
+                self.OutlineActor.PickableOff()
+                self.OutlineActor.DragableOff()
+                self.OutlineActor.SetMapper(self.OutlineMapper)
+                self.OutlineActor.GetProperty().SetColor(self.PickColor)
+                self.OutlineActor.GetProperty().SetAmbient(1.0)
+                self.OutlineActor.GetProperty().SetLineWidth(3)
+                self.OutlineActor.GetProperty().SetDiffuse(0.0)
+
+            if self.GetCurrentRenderer() != self.PickedRenderer:
+                if self.PickedRenderer is not None and self.OutlineActor is not None:
+                    self.PickedRenderer.RemoveActor(self.OutlineActor)
+                if self.GetCurrentRenderer() is not None:
+                    self.GetCurrentRenderer().AddActor(self.OutlineActor)
+                self.PickedRenderer = self.GetCurrentRenderer()
+            self.Outline.SetBoxTypeToOriented()
+            self.Outline.SetCorners(Actor.get8Corners(prop3D).reshape(-1))
+
     def reset(self):
         self.is_first = True
         self.InteractionPicker = vtkCellPicker()
@@ -49,7 +75,17 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.isMouse_Pressed_Move = False
         # self.resetHighlight()
         self.InteractionProp = None
-        self.HighlightProp3D(None)
+
+        # for hightlight3D
+        self.OutlineActor = None
+        self.Outline = vtkOutlineSource()
+        self.OutlineMapper = vtkPolyDataMapper()
+        if (self.OutlineMapper and self.Outline):
+            self.OutlineMapper.SetInputConnection(self.Outline.GetOutputPort())
+        self.PickedRenderer = None
+        self.CurrentProp = None
+        self.PickColor = [1.0, 0.0, 0.0]
+        # self.HighlightProp3D(None)
 
     def resetHighlight(self):
         if len(self.slabel.actor_manager.actors) > 0:
@@ -364,34 +400,26 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
                        camera.GetViewAngle(), camera.GetDistance()]
         self.signal_load_scene.emit(camera_data)
 
-    def cart2hom(self, pts_3d):
-        """ Input: nx3 points in Cartesian
-            Oupput: nx4 points in Homogeneous by pending 1
-        """
-        n = pts_3d.shape[0]
-        pts_3d_hom = np.hstack((pts_3d, np.ones((n, 1))))
-        return pts_3d_hom
+    # def included_angle(self, x, y):
+    #     x = np.array(x)
+    #     y = np.array(y)
 
-    def included_angle(self, x, y):
-        x = np.array(x)
-        y = np.array(y)
+    #     l_x = np.sqrt(x.dot(x))
+    #     l_y = np.sqrt(y.dot(y))
 
-        l_x = np.sqrt(x.dot(x))
-        l_y = np.sqrt(y.dot(y))
+    #     dot_product = x.dot(y)
 
-        dot_product = x.dot(y)
+    #     cos_x_y = dot_product / (l_x * l_y)
 
-        cos_x_y = dot_product / (l_x * l_y)
+    #     angle_Radian = np.arccos(cos_x_y)
+    #     included_angle = angle_Radian * 180 / np.pi
 
-        angle_Radian = np.arccos(cos_x_y)
-        included_angle = angle_Radian * 180 / np.pi
+    #     if included_angle < -180:
+    #         included_angle = included_angle + 360
 
-        if included_angle < -180:
-            included_angle = included_angle + 360
-
-        if included_angle >= 180:
-            included_angle = 360 - included_angle
-        return included_angle
+    #     if included_angle >= 180:
+    #         included_angle = 360 - included_angle
+    #     return included_angle
 
     @PyQt5.QtCore.pyqtSlot()
     def exportScenes(self):
@@ -404,12 +432,13 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         for i in range(len(self.actor_manager.actors)):
             actor = self.actor_manager.actors[i]
 
-            p = np.array([actor.actor.GetCenter()])
-            p = self.cart2hom(p)
+            # get bottom center point
+            p = np.array([actor.actor.GetPosition()])
+            p = cart2hom(p)
             x_c, y_c, z_c = camera.GetPosition()
             p_w_c = np.array([
-                [-1, 0, 0, x_c],
-                [0, 1, 0, y_c],
+                [1, 0, 0, x_c],
+                [0, -1, 0, y_c],
                 [0, 0, -1, z_c],
                 [0, 0, 0, 1],
             ])
@@ -418,22 +447,35 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             # alpha theta and r_y
             # alpha = r_y - theta
 
-            camera_optical_axis = [0, 0, -1]
-            matrix = matrix2List(actor.actor.GetMatrix())
-            model_center2bounds_center = [matrix[i * 4] for i in range(3)]
-            camera2model_center = [actor.actor.GetCenter()[i] - camera.GetPosition()[i]
-                                   for i in range(3)]
-            r_y = self.included_angle(model_center2bounds_center, [1, 0, 0])
-            theta = self.included_angle(camera_optical_axis, camera2model_center)
+            v_x_o, v_y_o, v_z_o = getActorXYZAxis(actor.actor)
+            v_x_c, v_y_c, v_z_c = np.identity(3)
+            v_y_c, v_z_c = -v_y_c, -v_z_c
+            # r_y is the angle between camera x-axis and object -y axis
+            r_y = getAngle(-v_y_o, v_x_c)
+
+            # theta is the angle between z_c and vector from camera to object
+            v_c2o = np.array(actor.actor.GetPosition()) - np.array(camera.GetPosition())
+            theta = getAngle(v_c2o, v_z_c)
             alpha = r_y - theta
+
+            # r_y = np.array([1, 0, 0]), getActorXYZAxis(actor.actor)
+            # camera_optical_axis = [0, 0, -1]
+            # matrix = matrix2List(actor.actor.GetMatrix())
+            # model_center2bounds_center = [matrix[i * 4] for i in range(3)]
+            # camera2model_center = [actor.actor.GetCenter()[i] - camera.GetPosition()[i]
+            #                        for i in range(3)]
+            # r_y = self.included_angle(model_center2bounds_center, [1, 0, 0])
+            # theta = self.included_angle(camera_optical_axis, camera2model_center)
+            # alpha = r_y - theta
 
             l, t, r, b = actor.getBBox2D()
 
             data += [[
                 "Car", 0, 0, round(alpha, 2),
-                l, t, r, b,
-                actor.size[2], actor.size[0], actor.size[1],
-                round(p_c[0, 0], 2), round(p_c[0, 1], 2), round(p_c[0, 2], 2), round(theta, 2)
+                l, t, r, b, # bounding box 2d
+                actor.size[2], actor.size[0], actor.size[1], # model height, width , length
+                round(p_c[0, 0], 2), round(p_c[0, 1], 2), round(p_c[0, 2], 2), # location (x, y, z) in camera coordinate) different camera coordinate
+                round(r_y, 2)
             ]]
 
         np.savetxt(text_file, np.array(data), delimiter=" ", fmt='%s')
@@ -450,10 +492,10 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         transform = getTransform(camera.GetModelViewTransformMatrix()).GetInverse()
         self.data["camera"]["matrix"] = matrix2List(transform.GetMatrix())
-        self.data["camera"]["position"] = transform.GetPosition()
-        self.data["camera"]["focalPoint"] = list(camera.GetFocalPoint())
+        self.data["camera"]["position"] = listRound(transform.GetPosition())
+        self.data["camera"]["focalPoint"] = listRound(camera.GetFocalPoint())
         self.data["camera"]["fov"] = camera.GetViewAngle()
-        self.data["camera"]["viewup"] = list(camera.GetViewUp())
+        self.data["camera"]["viewup"] = listRound(camera.GetViewUp())
         self.data["camera"]["distance"] = camera.GetDistance()
         if not os.path.exists(os.path.dirname(self.annotation_file)):
             os.makedirs(os.path.dirname(self.annotation_file))

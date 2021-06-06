@@ -15,6 +15,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from smodellist import SModelList
 from itertools import product
+import itertools
 
 
 class Actor:
@@ -98,40 +99,51 @@ class Actor:
         self.actor.SetUserTransform(transform)
 
     def setMatrix(self, matrix):
-        transform = getTransform(matrix)
-        self.actor.SetOrientation(transform.GetOrientation())
-        self.actor.SetPosition(transform.GetPosition())
-        self.actor.SetScale(transform.GetScale())
+        if type(self) is Actor:
+            actor = self.actor
+        else:
+            actor = self
+        setActorMatrix(actor, matrix)
+
+    @staticmethod
+    def get8Corners(prop3D):
+        return getActorRotatedBounds(prop3D)
+
 
     def getCameraMatrix(self):
         matrix = self.renderer.GetActiveCamera().GetModelViewTransformMatrix()
         return [matrix.GetElement(i, j) for i in range(4) for j in range(4)]
 
     def getBBox2D(self):
-        bbox3d = self.actor.GetBounds()  # (xmin, xmax, ymin, ymax, zmin, zmax)
-        bbox3d_points_world = [
-            [bbox3d[2 * i + j] for i, j in enumerate(p)] for p in product(set(range(2)), repeat=3)
-        ]
+        bbox3d_points_world = getActorRotatedBounds(self.actor)
+        
         bbox3d_min_x, bbox3d_min_y, bbox3d_max_x, bbox3d_max_y \
-            = worldToDisplayBBox(self.renderer, bbox3d_points_world)
+            = worldToViewBBox(self.renderer, bbox3d_points_world)
 
         image_ratio = self.interactor.parent().image_ratio
-        image_width, image_height = self.interactor.parent().image_width, self.interactor.parent().image_height
+        w, h = self.interactor.parent().image_width, self.interactor.parent().image_height
         image_points_world = [[-0.5, 0.5 / image_ratio, 0], [0.5, -0.5 / image_ratio, 0]]
-        image_min_x, image_min_y, image_max_x, image_max_y = worldToDisplayBBox(self.renderer, image_points_world)
-        p1, p2 = [image_min_x, image_min_y], [image_max_x, image_max_y]
+        image_min_x, image_min_y, image_max_x, image_max_y = worldToViewBBox(self.renderer, image_points_world)
+        w_i = image_max_x - image_min_x
+        h_i = image_max_y - image_min_y
+        p = np.dot(np.array([
+            [w/2,       0,      w/2],
+            [0,         -h/2,   h/2],
+            [0,         0,      1]
+        ]),  np.array([
+            [2/w_i,     0,      0],
+            [0,         2/h_i,  0],
+            [0,         0,      1]
+        ]))
+        l, t, _ = np.dot(p, np.array([bbox3d_min_x, bbox3d_max_y, 1]).T)
+        r, b, _ = np.dot(p, np.array([bbox3d_max_x, bbox3d_min_y, 1]).T)
 
-        w, h = (p2[0] - p1[0]) / image_width, (p2[1] - p1[1]) / image_height
-        l, t, r, b = abs((bbox3d_min_x - p1[0]) / w), abs((bbox3d_min_y - p1[1]) / h), \
-                     abs((bbox3d_max_x - p1[0]) / w), abs((bbox3d_max_y - p1[1]) / h)
-        if l > image_width:
-            l = image_width
-        if r > image_width:
-            r = image_width
-        if t > image_height:
-            t = image_height
-        if b > image_height:
-            b = image_height
+        # test the labeled images
+        # img = cv2.imread(self.interactor.parent().image_path)
+        # img = cv2.rectangle(img, (int(l), int(t)), (int(r), int(b)), [0, 0, 255], 3)
+        # cv2.imshow("rect", img)
+        # cv2.waitKey(0)
+
         return round(l, 2), round(t, 2), round(r, 2), round(b, 2)
 
     def toJson(self, scene_folder):
@@ -139,7 +151,7 @@ class Actor:
             "model_file": os.path.relpath(self.model_path, scene_folder),
             "matrix": matrix2List(self.actor.GetMatrix()),
             "class": self.type_class,
-            "size": self.size
+            "size": listRound(self.size)
         }
 
     def toKITTI(self, save_folder):
@@ -180,14 +192,13 @@ class ActorManager(QObject):
                 # newPosition = list(actor.renderer.GetActiveCamera().GetPosition())
                 # actor.actor.SetPosition(newPosition)
                 # matrix = actor.renderer.GetActiveCamera().GetModelViewTransformMatrix()
-                actor.actor.SetOrigin(actor.actor.GetCenter())
+                # actor.actor.SetOrigin(actor.actor.GetCenter())
                 matrix = vtk.vtkMatrix4x4()
                 actor.setMatrix(matrix)
 
                 # Set the initial loading position of the model
                 actor.actor.SetPosition(self.model_initial_position)
-                bounds = actor.actor.GetBounds()
-                actor.size = [bounds[2 * i + 1] - bounds[2 * i] for i in range(3)]
+                actor.size = list(getActorXYZRange(actor.actor))
         else:
             # copy the camera matrix
             matrix = vtk.vtkMatrix4x4()
