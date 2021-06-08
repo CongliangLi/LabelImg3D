@@ -2,6 +2,7 @@ import vtk
 import os
 import numpy as np
 from numpy.linalg import inv
+import cv2
 
 
 def getTransform(matrix):
@@ -64,6 +65,36 @@ def worldToView(renderer, points):
         ret.append(renderer.GetViewPoint())
     return ret
 
+def getMatrixW2I(renderer, w, h):
+    if renderer is None:
+        return
+    camera = renderer.GetActiveCamera()
+    if camera is None:
+        return
+    P_w2v = matrix2Numpy2D(
+            camera.GetCompositeProjectionTransformMatrix(
+                renderer.GetTiledAspectRatio(), 0, 1
+            )
+        )
+    r = w / h
+    # caculate the image region in the view
+    i_w = np.array([[-0.5, 0.5 / r, 0], [0.5, -0.5 / r, 0]])
+    i_v = np.dot(P_w2v, cart2hom(i_w).T).T
+    i_v = i_v / i_v[:, -1:]
+    w_i, h_i, _, _ = abs(i_v[0, :] - i_v[1, :])
+    # get the view to image matrix
+    P_v2i = np.dot(np.array([
+            [w/2,       0,      w/2],
+            [0,         -h/2,   h/2],
+            [0,         0,      1]
+        ]),  np.array([
+            [2/w_i,     0,      0],
+            [0,         2/h_i,  0],
+            [0,         0,      1]
+        ]))
+    return P_w2v, P_v2i
+
+
 def getMatrixO2W(prop3D):
     """Get the tranform matrix from the object to the world
 
@@ -111,7 +142,7 @@ def getActorRotatedBounds(prop3D):
         [np.array 8x3]: actor rotated bounds
     """
     bounds = getActorLocalBounds(prop3D)
-    points = np.array(np.meshgrid(bounds[:2], bounds[2:4], bounds[-2:], indexing="ij")).T.reshape(-1, 3)
+    points = np.array(np.meshgrid(bounds[:2], bounds[2:4], bounds[-2:])).T.reshape(-1, 3)
     return object2World(prop3D, points)
     # return np.ones((8, 3))
 
@@ -155,3 +186,46 @@ def getAngle(x, y):
         (np.dot(x, y) / (np.linalg.norm(x)*np.linalg.norm(y))).sum()
     )
 
+
+def draw_projected_box3d(image, qs, color=(0, 255, 0), thickness=2):
+    """ Draw 3d bounding box in image
+        qs: (8,3) array of vertices for the 3d box in following order:
+            1 -------- 0
+           /|         /|
+          2 -------- 3 .
+          | |        | |
+          . 5 -------- 4
+          |/         |/
+          6 -------- 7
+    """
+    if qs is None:
+        return image
+    qs = qs[[7, 5, 4, 6, 3, 1, 0, 2], :].astype(np.int32)
+    for k in range(0, 4):
+        # Ref: http://docs.enthought.com/mayavi/mayavi/auto/mlab_helper_functions.html
+        i, j = k, (k + 1) % 4
+        # use LINE_AA for opencv3
+        # cv2.line(image, (qs[i,0],qs[i,1]), (qs[j,0],qs[j,1]), color, thickness, cv2.CV_AA)
+        cv2.line(image, (qs[i, 0], qs[i, 1]), (qs[j, 0], qs[j, 1]), color, thickness)
+        i, j = k + 4, (k + 1) % 4 + 4
+        cv2.line(image, (qs[i, 0], qs[i, 1]), (qs[j, 0], qs[j, 1]), color, thickness)
+
+        i, j = k, k + 4
+        cv2.line(image, (qs[i, 0], qs[i, 1]), (qs[j, 0], qs[j, 1]), color, thickness)
+    return image
+
+def drawProjected3DBox(renderer, prop3D, img, with_clip=False):
+    h, w, _ = img.shape
+    P_w2v, P_v2i = getMatrixW2I(renderer, w, h)
+    P_w2i = np.dot(P_v2i, P_w2v[:-1, :])
+    pts_3d = getActorRotatedBounds(prop3D)
+    pts_2d = np.dot(P_w2i, cart2hom(pts_3d).T).T
+    pts_2d = (pts_2d / pts_2d[:, -1:])[:, :2]
+    # pts_2d = np.dot(P_v2i, cart2hom(pts_2d).T).T
+    # pts_2d = (pts_2d / pts_2d[:, -1:])[:, :2]
+    image = draw_projected_box3d(img.copy(), pts_2d)
+    if with_clip:
+        l, t = pts_2d.min(axis=0).astype(int).clip(0)
+        r, b = pts_2d.max(axis=0).astype(int).clip(0)
+        return image[t:b, l:r, :]
+    return image

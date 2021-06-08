@@ -41,7 +41,7 @@ class MyInteractorStyle(vtkInteractorStyleTrackballActor):
         self.super = super(MyInteractorStyle, self)
         self.InteractionPicker = vtkCellPicker()
         self.InteractionProp = None
-        
+
     def __del__(self):
         del self.InteractionPicker
 

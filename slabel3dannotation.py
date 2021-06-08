@@ -141,6 +141,14 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             self.slabel.actor_manager.actors[-1].size
         )
 
+        self.slabel.signal_update_images.emit(
+            drawProjected3DBox(
+                self.GetCurrentRenderer(),
+                self.InteractionProp,
+                self.slabel.image_data.copy(),
+                with_clip=True)
+        )
+
         self.super.OnLeftButtonUp()
 
     def OnRightButtonDown(self, obj, event):
@@ -257,6 +265,14 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation()) +
             self.slabel.actor_manager.actors[-1].size
         )
+        self.slabel.signal_update_images.emit(
+            drawProjected3DBox(
+                self.GetCurrentRenderer(),
+                self.InteractionProp,
+                self.slabel.image_data.copy(),
+                with_clip=True)
+        )
+
         self.slabel.actor_manager.ResetCameraClippingRange()
         self.GetInteractor().Render()
 
@@ -270,6 +286,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 class SLabel3DAnnotation(QtWidgets.QFrame):
     signal_on_left_button_up = pyqtSignal(list)
     signal_load_scene = pyqtSignal(list)
+    signal_update_images = pyqtSignal(np.ndarray)
 
     def __init__(self, parent):
         super().__init__(parent=parent)
@@ -303,6 +320,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         self.image_actor = None
         self.image_path = None
+        self.image_data = None
 
         self.actor_manager = ActorManager(self.renderer_window, self.interactor, self.bg_renderer)
 
@@ -333,6 +351,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.image_height, self.image_width, _ = image.shape
         self.image_scale = 1 / self.image_width
         self.image_ratio = self.image_width / self.image_height
+        self.image_data = image
 
         # Read image data
         if self.image_path.split(".")[-1] == "png":
@@ -548,6 +567,14 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
             self.style.HighlightProp3D(self.style.InteractionProp)
             self.style.GetInteractor().Render()
+
+            self.signal_update_images.emit(
+            drawProjected3DBox(
+                self.style.GetCurrentRenderer(),
+                self.style.InteractionProp,
+                self.image_data.copy(),
+                with_clip=True)
+            )
 
             if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
                 self.actor_manager.ResetCameraClippingRange()

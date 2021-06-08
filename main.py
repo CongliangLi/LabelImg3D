@@ -1,4 +1,5 @@
 import os
+from slabelimage import SLabelImage
 from sproperty import SProperty
 import vtkmodules.all as vtk_all
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
@@ -23,7 +24,7 @@ from PyQt5 import QtCore, uic, QtWidgets, QtGui
 import Ui_main
 from scene_manager import SceneManager
 from slog import SLog
-
+from slabelimage import SLabelImage
 from vtk import *
 
 
@@ -42,12 +43,15 @@ class Draw3D(QtWidgets.QMainWindow):
         self.property3d = SProperty(self, "3DProperty")
         self.widget_log = SLog(self)
         self.camera_property = LCamera_Property(self, "Camera_Property")
+        self.label_image = SLabelImage(self, "LabelImage")
+        self.label_image.showImage()
 
         self.addDockWidget(Qt.RightDockWidgetArea, self.image_list)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.model_list)
         self.addDockWidget(Qt.RightDockWidgetArea, self.property3d)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.widget_log)
         self.addDockWidget(Qt.RightDockWidgetArea, self.camera_property)
+        self.addDockWidget(Qt.RightDockWidgetArea,self.label_image)
 
         self.scene_manager = SceneManager(self, self.image_list, self.model_list, self.ui.vtk_panel)
 
@@ -71,6 +75,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.scene_manager.signal_open_files.connect(self.image_list.open_files)
         self.scene_manager.signal_open_models.connect(self.model_list.open_files)
         self.ui.vtk_panel.signal_on_left_button_up.connect(self.property3d.update_property)
+        self.ui.vtk_panel.signal_update_images.connect(self.label_image.showImage)
         self.ui.vtk_panel.signal_load_scene.connect(self.camera_property.new_camera_data)
 
     def setup(self):
@@ -86,7 +91,6 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui.vtk_panel.start()
 
     def mousePressEvent(self, ev: QtGui.QMouseEvent) -> None:
-        print("hello world")
         return self.super.mousePressEvent(ev)
 
     def init_scenes(self):
