@@ -330,6 +330,21 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         self.is_first_scene = True
 
+        # QApplication.clipboard().changed.connect(self.copy)
+        self.copy_actor = None
+
+    def copy(self):
+        if self.style.InteractionProp is None:
+            self.copy_actor = None
+            return
+        self.copy_actor = self.actor_manager.actors[-1]
+        pass
+
+    def paste(self):
+        if self.copy_actor is None:
+            return
+        self.actor_manager.newActor(self.copy_actor.model_path, self.copy_actor.type_class)
+
     def start(self):
         self.interactor.Initialize()
         self.interactor.Start()

@@ -75,6 +75,9 @@
     <addaction name="actionRoateY_M"/>
     <addaction name="actionRoateZ"/>
     <addaction name="actionRoateZ_M"/>
+    <addaction name="separator"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menuEdit"/>
@@ -182,6 +185,22 @@
    </property>
    <property name="shortcut">
     <string>D</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
    </property>
   </action>
  </widget>

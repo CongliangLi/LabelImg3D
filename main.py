@@ -68,6 +68,9 @@ class Draw3D(QtWidgets.QMainWindow):
         # rotate
         for s in ['X', 'Y', 'Z', 'X_M', 'Y_M', 'Z_M']:
             eval('self.ui.actionRoate{}.triggered.connect'.format(s))(eval('self.property3d.roate{}'.format(s)))
+        self.ui.actionCopy.triggered.connect(self.ui.vtk_panel.copy)
+        self.ui.actionPaste.triggered.connect(self.ui.vtk_panel.paste)
+
         # connect the signals and slots
         # self.image_list.signal_double_click.connect(self.ui.vtk_panel.loadImage)
         self.image_list.listWidget.doubleClicked.connect(self.scene_manager.__getitem__)
