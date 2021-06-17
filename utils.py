@@ -73,7 +73,8 @@ def getMatrixW2I(renderer, w, h):
         return
     P_w2v = matrix2Numpy2D(
             camera.GetCompositeProjectionTransformMatrix(
-                renderer.GetTiledAspectRatio(), 0, 1
+                renderer.GetTiledAspectRatio(),
+                0, 1
             )
         )
     r = w / h
@@ -81,17 +82,29 @@ def getMatrixW2I(renderer, w, h):
     i_w = np.array([[-0.5, 0.5 / r, 0], [0.5, -0.5 / r, 0]])
     i_v = np.dot(P_w2v, cart2hom(i_w).T).T
     i_v = i_v / i_v[:, -1:]
+    # i_v = i_v / i_v[:, -2:-1]
     w_i, h_i, _, _ = abs(i_v[0, :] - i_v[1, :])
     # get the view to image matrix
-    P_v2i = np.dot(np.array([
-            [w/2,       0,      w/2],
-            [0,         -h/2,   h/2],
-            [0,         0,      1]
-        ]),  np.array([
-            [2/w_i,     0,      0],
-            [0,         2/h_i,  0],
-            [0,         0,      1]
-        ]))
+    # P_w2v = np.array([
+    #         [2/w_i,     0,      0],
+    #         [0,         2/h_i,  0],
+    #         [0,         0,      1]
+    # ])
+    P_v2i = np.array([
+            [w/w_i*0.85,         0,          w/2],
+            [0,             -h/h_i*0.85,     h/2],
+            [0,             0,          1]
+    ])
+
+    # P_w2i = np.dot(P_v2i, P_w2v[:3, :])
+    # test_points = np.array([
+    #     [0.5, 0, 0], [0, 0.5 / r, 0],
+    #     [-0.5, 0, 0], [0, -0.5 / r, 0],
+    #     [0.5/2, 0, 0], [0, 0.5 / r / 2, 0],
+    #     [-0.5/2, 0, 0], [0, -0.5 / r / 2, 0],
+    # ])
+    # test_points = np.dot(P_w2i, cart2hom(test_points).T).T
+    # print(test_points)
     return P_w2v, P_v2i
 
 
@@ -217,15 +230,33 @@ def draw_projected_box3d(image, qs, color=(0, 255, 0), thickness=2):
 def drawProjected3DBox(renderer, prop3D, img, with_clip=False):
     h, w, _ = img.shape
     P_w2v, P_v2i = getMatrixW2I(renderer, w, h)
-    P_w2i = np.dot(P_v2i, P_w2v[:-1, :])
     pts_3d = getActorRotatedBounds(prop3D)
-    pts_2d = np.dot(P_w2i, cart2hom(pts_3d).T).T
-    pts_2d = (pts_2d / pts_2d[:, -1:])[:, :2]
-    # pts_2d = np.dot(P_v2i, cart2hom(pts_2d).T).T
+    # pts_3d = np.array([
+    #     [0.5, 0, 0], [0, 0.5 / r, 0],
+    #     [-0.5, 0, 0], [0, -0.5 / r, 0],
+    #     [0.5/2, 0, 0], [0, 0.5 / r / 2, 0],
+    #     [-0.5/2, 0, 0], [0, -0.5 / r / 2, 0],
+    # ])
+    p_v = np.dot(P_w2v, cart2hom(pts_3d).T).T
+    p_v = (p_v / p_v[:, -1:])[:, :3]
+    # p_v = p_v * 1 / P_w2v[-1, -1] / p_v[:, -1:]
+    p_i = np.dot(P_v2i, p_v.T).T
+    p_i = (p_i / p_i[:, -1:])
+    # p_v = np.dot(P_w2v, cart2hom(pts_3d).T).T
+    # p_i = np.dot(P_v2i, cart2hom(p_v[:, :-2]).T).T
+    # pts_2d = (pts_2d / pts_2d[:, -1:])[:, :3]
+    # pts_2d = (np.dot(P_v2i, pts_2d.T).T)
     # pts_2d = (pts_2d / pts_2d[:, -1:])[:, :2]
-    image = draw_projected_box3d(img.copy(), pts_2d)
-    if with_clip:
-        l, t = pts_2d.min(axis=0).astype(int).clip(0)
-        r, b = pts_2d.max(axis=0).astype(int).clip(0)
-        return image[t:b, l:r, :]
+    # pts_2d = (pts_2d / pts_2d[:, -1:])[:, :3]
+    # pts_2d = np.dot(P_v2i, pts_2d.T).T
+    # pts_2d = (pts_2d / pts_2d[:, -1:])[:, :2]
+    # P_w2i = np.dot(P_v2i, P_w2v[:-1, :])
+    # pts_3d = getActorRotatedBounds(prop3D)
+    # pts_2d = np.dot(P_w2i, cart2hom(pts_3d).T).T
+    # pts_2d = (pts_2d / pts_2d[:, -1:])[:, :2]
+    image = draw_projected_box3d(img.copy(), p_i[:, :2])
+    # if with_clip:
+    #     l, t = pts_2d.min(axis=0).astype(int).clip(0)
+    #     r, b = pts_2d.max(axis=0).astype(int).clip(0)
+    #     return image[t:b, l:r, :]
     return image
