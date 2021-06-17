@@ -200,7 +200,8 @@ def getAngle(x, y):
     )
 
 
-def draw_projected_box3d(image, qs, color=(0, 255, 0), thickness=2):
+def draw_projected_box3d(image, qs, color=[(255, 0, 0), (0, 0, 255), (0, 255, 0)],
+                         thickness=2):
     """ Draw 3d bounding box in image
         qs: (8,3) array of vertices for the 3d box in following order:
             1 -------- 0
@@ -219,12 +220,12 @@ def draw_projected_box3d(image, qs, color=(0, 255, 0), thickness=2):
         i, j = k, (k + 1) % 4
         # use LINE_AA for opencv3
         # cv2.line(image, (qs[i,0],qs[i,1]), (qs[j,0],qs[j,1]), color, thickness, cv2.CV_AA)
-        cv2.line(image, (qs[i, 0], qs[i, 1]), (qs[j, 0], qs[j, 1]), color, thickness)
+        cv2.line(image, (qs[i, 0], qs[i, 1]), (qs[j, 0], qs[j, 1]), color[0], thickness)
         i, j = k + 4, (k + 1) % 4 + 4
-        cv2.line(image, (qs[i, 0], qs[i, 1]), (qs[j, 0], qs[j, 1]), color, thickness)
+        cv2.line(image, (qs[i, 0], qs[i, 1]), (qs[j, 0], qs[j, 1]), color[1], thickness)
 
         i, j = k, k + 4
-        cv2.line(image, (qs[i, 0], qs[i, 1]), (qs[j, 0], qs[j, 1]), color, thickness)
+        cv2.line(image, (qs[i, 0], qs[i, 1]), (qs[j, 0], qs[j, 1]), color[2], max(1, thickness//2))
     return image
 
 def drawProjected3DBox(renderer, prop3D, img, with_clip=False):
@@ -241,7 +242,7 @@ def drawProjected3DBox(renderer, prop3D, img, with_clip=False):
     p_v = (p_v / p_v[:, -1:])[:, :3]
     # p_v = p_v * 1 / P_w2v[-1, -1] / p_v[:, -1:]
     p_i = np.dot(P_v2i, p_v.T).T
-    p_i = (p_i / p_i[:, -1:])
+    p_i = (p_i / p_i[:, -1:])[:, :2]
     # p_v = np.dot(P_w2v, cart2hom(pts_3d).T).T
     # p_i = np.dot(P_v2i, cart2hom(p_v[:, :-2]).T).T
     # pts_2d = (pts_2d / pts_2d[:, -1:])[:, :3]
@@ -255,8 +256,8 @@ def drawProjected3DBox(renderer, prop3D, img, with_clip=False):
     # pts_2d = np.dot(P_w2i, cart2hom(pts_3d).T).T
     # pts_2d = (pts_2d / pts_2d[:, -1:])[:, :2]
     image = draw_projected_box3d(img.copy(), p_i[:, :2])
-    # if with_clip:
-    #     l, t = pts_2d.min(axis=0).astype(int).clip(0)
-    #     r, b = pts_2d.max(axis=0).astype(int).clip(0)
-    #     return image[t:b, l:r, :]
+    if with_clip:
+        l, t = p_i.min(axis=0).astype(int).clip(0)
+        r, b = p_i.max(axis=0).astype(int).clip(0)
+        return image[t:b, l:r, :]
     return image
