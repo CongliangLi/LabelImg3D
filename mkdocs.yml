@@ -4,6 +4,8 @@ site_dir: public
 repo_url: http://git.chd.gold:3000/shijie/LabelImg3D/
 nav:
     - Home: index.md
+    - Usage: usage.md
+    - Proofs: proofs.md
     - About: about.md
 theme: readthedocs
 markdown_extensions:
