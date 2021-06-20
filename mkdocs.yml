@@ -1,0 +1,15 @@
+site_name: mkdocs-template
+site_url: http://shijie.chd.gold:2999/mkdocs
+site_dir: public
+repo_url: http://git.chd.gold:3000/shijie/mkdocs/
+nav:
+    - Home: index.md
+    - About: about.md
+theme: readthedocs
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+extra_javascript:
+  - javascripts/config.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
