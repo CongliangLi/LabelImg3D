@@ -5,12 +5,12 @@ repo_url: http://git.chd.gold:3000/shijie/LabelImg3D/
 nav:
     - index.md
     - Introduction:
-      - introduction.md
-      - installation.md
+      - instroduction/introduction.md
+      - instroduction/installation.md
     - Usage:
-      - usage.md
+      - usage/usage.md
     - Proof:
-      - proofs.md
+      - proof/proofs.md
     - about.md
 # theme: readthedocs
 theme: material
