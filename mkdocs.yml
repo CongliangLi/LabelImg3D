@@ -7,7 +7,8 @@ nav:
     - Usage: usage.md
     - Proofs: proofs.md
     - About: about.md
-theme: readthedocs
+# theme: readthedocs
+theme: material
 markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
