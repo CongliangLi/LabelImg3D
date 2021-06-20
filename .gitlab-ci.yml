@@ -1,5 +1,10 @@
 image: python:3.8-buster
 
+# if threre are a long backlog, then use the depth for optimizaiton
+variables:
+  GIT_DEPTH: 10
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_CONCURRENT_ID/$CI_PROJECT_NAME
+
 
 before_script:
   - pip3 install -r requirements.txt
