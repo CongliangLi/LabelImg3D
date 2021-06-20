@@ -1,3 +1,3 @@
-#LabelImg3D
+# LabelImg3D
 
 > refer to mkdocs repository
