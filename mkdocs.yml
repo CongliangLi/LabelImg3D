@@ -1,7 +1,7 @@
-site_name: mkdocs-template
-site_url: http://shijie.chd.gold:2999/mkdocs
+site_name: LabelImg3D
+site_url: http://shijie.chd.gold:2999/LabelImg3D
 site_dir: public
-repo_url: http://git.chd.gold:3000/shijie/mkdocs/
+repo_url: http://git.chd.gold:3000/shijie/LabelImg3D/
 nav:
     - Home: index.md
     - About: about.md
