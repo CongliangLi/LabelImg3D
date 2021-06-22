@@ -1,10 +1,11 @@
 # Installation
 ## Install from pip
 
-> try to support the installation from the pip
-
+```sh
+pip install git+git://github.com/shijieS/labelimg3D.git
+```
 
 ## Install by the installer
-Only for windows user.
+Download the installer from the release page of github [labelimg3D](http://github.com/shijieS/labelimg3D.git).
 
-You can download the installer from `todo`
+> This only for windows

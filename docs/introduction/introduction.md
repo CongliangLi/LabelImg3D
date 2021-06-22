@@ -1,8 +1,10 @@
 # Introduction
 
-The LabelImg3D is a first of its kind label tools for building the extrinsic parameter estimation dataset. You can easily use multiple 3D models (such as, vehicle, truck, bus, etc.) to label the 2D bounding boxes, 3D bounding boxes in both image space and 3D space, 3D model in one app.
+LabelImg3D is the first-of-its-kind tool to annotate images with 3D models, which allows you to reconstruct 3D scenes from images. It provides visual annotation operations. You can easily build a 3D dataset from 2D one like MOT15-20, UA-detrac, etc. just to find some corresponding 3D models (like pedestrians, vehicles, trucks, etc.) to perform 3D object detection, 3D object tracking and 3D object reconstruction.
 
-So how to use the app, there are four steps:
+![](../imgs/demo.gif)
+
+How to use the app, there are four steps:
 
 1. collect your image dataset (i.e. UA-DETRAC, MOT)
 
