@@ -269,6 +269,8 @@ class ActorManager(QObject):
             camera.ApplyTransform(actor_transform)
 
     def getCurrentActiveActor(self):
+        if len(self.actors) == 0:
+            return None
         return self.actors[-1].actor
 
     def getCurrentActiveRenderer(self):
