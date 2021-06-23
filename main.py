@@ -81,6 +81,11 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui.vtk_panel.signal_update_images.connect(self.label_image.showImage)
         self.ui.vtk_panel.signal_load_scene.connect(self.camera_property.new_camera_data)
 
+        # highlist listWidget item
+        self.ui.vtk_panel.actor_manager.signal_highlight_model_list.connect(self.model_list.highlight_item)
+        self.scene_manager.signal_highlight_image_list.connect(self.image_list.highlight_item)
+        
+
     def setup(self):
         self.ui = Ui_main.Ui_MainWindow()
         self.ui.setupUi(self)

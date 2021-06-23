@@ -60,6 +60,14 @@ class SImageList(QDockWidget):
         # file list
         self.file_list = []
 
+    @PyQt5.QtCore.pyqtSlot(int)
+    def highlight_item(self, index):
+        # highlight the image list
+        if index < self.listWidget.count():
+            self.listWidget.setCurrentRow(index)
+            self.listWidget.item(index).setSelected(True)
+            self.listWidget.setFocus()
+
     @PyQt5.QtCore.pyqtSlot(list)
     def open_files(self, file_list=None):
         # if file_list is None:

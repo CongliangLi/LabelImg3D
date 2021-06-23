@@ -169,6 +169,7 @@ class Actor:
 
 class ActorManager(QObject):
     signal_active_model = pyqtSignal(list)
+    signal_highlight_model_list = pyqtSignal(str)
 
     def __init__(self, render_window, interactor, bg_renderer):
         super(ActorManager, self).__init__()
@@ -240,6 +241,8 @@ class ActorManager(QObject):
             actor = self.actors[index]
             del self.actors[index]
             self.actors.append(actor)
+            # highlight in the model list
+            self.signal_highlight_model_list.emit(actor.model_path)
 
         self.render_window.SetNumberOfLayers(len(self.actors) + 1)
 

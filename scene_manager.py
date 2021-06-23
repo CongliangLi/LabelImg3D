@@ -17,6 +17,7 @@ from slabel3dannotation import SLabel3DAnnotation
 class SceneManager(QObject):
     signal_open_files = pyqtSignal(list)
     signal_open_models = pyqtSignal(list)
+    signal_highlight_image_list = pyqtSignal(int)
 
     def __init__(self, parent, image_list_panel, model_list_panel, vtk_panel) -> None:
         super().__init__(parent=parent)
@@ -88,12 +89,8 @@ class SceneManager(QObject):
         # 1. check annotation_folder
         self.vtk_panel.loadScenes(self.scene_folder, os.path.join(self.images_folder, self.image_name_list[index]),
                                   os.path.join(self.annotations_folder, self.annotation_name_list[index]))
-
-        # highlight the image list
-        if index < self.image_list_panel.listWidget.count():
-            self.image_list_panel.listWidget.setCurrentRow(index)
-            self.image_list_panel.listWidget.item(index).setSelected(True)
-            self.image_list_panel.listWidget.setFocus()
+        
+        self.signal_highlight_image_list.emit(index)
 
         if self.current_index != index:
             self.vtk_panel.saveScenes()

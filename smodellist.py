@@ -69,6 +69,17 @@ class SModelList(QDockWidget):
         self.file_list = []
         self.model_list = {}
 
+    @PyQt5.QtCore.pyqtSlot(str)
+    def highlight_item(self, model_file):
+        try:
+            index = self.file_list.index(model_file)
+            if index < self.listWidget.count():
+                self.listWidget.setCurrentRow(index)
+                self.listWidget.item(index).setSelected(True)
+                self.listWidget.setFocus()
+        except Exception as e:
+            print(e)
+
     @PyQt5.QtCore.pyqtSlot(list)
     def open_files(self, file_list=None):
         # file_list, _ = QtWidgets.QFileDialog.getOpenFileNames(

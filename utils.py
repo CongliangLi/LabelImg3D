@@ -276,7 +276,7 @@ def drawProjected3DBox(renderer, prop3D, img, with_clip=False):
     # pts_2d = (pts_2d / pts_2d[:, -1:])[:, :2]
     image = draw_projected_box3d(img.copy(), p_i[:, :2])
     if with_clip:
-        l, t = p_i.min(axis=0).astype(int).clip(0)
-        r, b = p_i.max(axis=0).astype(int).clip(0)
+        l, t = (p_i.min(axis=0).astype(int) - 5).clip(0)
+        r, b = (p_i.max(axis=0).astype(int) + 5).clip(0)
         return image[t:b, l:r, :]
     return image
