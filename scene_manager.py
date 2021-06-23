@@ -89,6 +89,12 @@ class SceneManager(QObject):
         self.vtk_panel.loadScenes(self.scene_folder, os.path.join(self.images_folder, self.image_name_list[index]),
                                   os.path.join(self.annotations_folder, self.annotation_name_list[index]))
 
+        # highlight the image list
+        if index < self.image_list_panel.listWidget.count():
+            self.image_list_panel.listWidget.setCurrentRow(index)
+            self.image_list_panel.listWidget.item(index).setSelected(True)
+            self.image_list_panel.listWidget.setFocus()
+
         if self.current_index != index:
             self.vtk_panel.saveScenes()
             self.current_index = index
