@@ -434,83 +434,23 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
                        camera.GetViewAngle(), camera.GetDistance()]
         self.signal_load_scene.emit(camera_data)
 
-    # def included_angle(self, x, y):
-    #     x = np.array(x)
-    #     y = np.array(y)
-
-    #     l_x = np.sqrt(x.dot(x))
-    #     l_y = np.sqrt(y.dot(y))
-
-    #     dot_product = x.dot(y)
-
-    #     cos_x_y = dot_product / (l_x * l_y)
-
-    #     angle_Radian = np.arccos(cos_x_y)
-    #     included_angle = angle_Radian * 180 / np.pi
-
-    #     if included_angle < -180:
-    #         included_angle = included_angle + 360
-
-    #     if included_angle >= 180:
-    #         included_angle = 360 - included_angle
-    #     return included_angle
-
     @PyQt5.QtCore.pyqtSlot()
     def exportScenes(self):
+        if not self.parent().parent().ui.actionKITTI.isChecked():
+            return
+            
         if self.image_path is None or self.image_actor is None:
             return
-        text_file = Path(self.image_path).parent / (Path(self.image_path).stem + "_l3.txt")
+        
+        text_file = Path(self.image_path).parent.parent.parent / (Path('annotations/{}-kitti/{}.txt'.format(Path(self.image_path).parent.stem, Path(self.image_path).stem)))
+        if not os.path.exists(text_file.parent):
+            os.makedirs(text_file.parent)
 
         camera = self.bg_renderer.GetActiveCamera()
         data = []
         for i in range(len(self.actor_manager.actors)):
             actor = self.actor_manager.actors[i]
-
-            # get bottom center point
-            p = np.array([actor.actor.GetPosition()])
-            p = cart2hom(p)
-            x_c, y_c, z_c = camera.GetPosition()
-            p_w_c = np.array([
-                [1, 0, 0, x_c],
-                [0, -1, 0, y_c],
-                [0, 0, -1, z_c],
-                [0, 0, 0, 1],
-            ])
-            p_c = np.matmul(p_w_c, p.T).T  # x, y, z
-
-            # alpha theta and r_y
-            # alpha = r_y - theta
-
-            v_x_o, v_y_o, v_z_o = getActorXYZAxis(actor.actor)
-            v_x_c, v_y_c, v_z_c = np.identity(3)
-            v_y_c, v_z_c = -v_y_c, -v_z_c
-            # r_y is the angle between camera x-axis and object -y axis
-            r_y = getAngle(-v_y_o, v_x_c)
-
-            # theta is the angle between z_c and vector from camera to object
-            v_c2o = np.array(actor.actor.GetPosition()) - np.array(camera.GetPosition())
-            theta = getAngle(v_c2o, v_z_c)
-            alpha = r_y - theta
-
-            # r_y = np.array([1, 0, 0]), getActorXYZAxis(actor.actor)
-            # camera_optical_axis = [0, 0, -1]
-            # matrix = matrix2List(actor.actor.GetMatrix())
-            # model_center2bounds_center = [matrix[i * 4] for i in range(3)]
-            # camera2model_center = [actor.actor.GetCenter()[i] - camera.GetPosition()[i]
-            #                        for i in range(3)]
-            # r_y = self.included_angle(model_center2bounds_center, [1, 0, 0])
-            # theta = self.included_angle(camera_optical_axis, camera2model_center)
-            # alpha = r_y - theta
-
-            l, t, r, b = actor.getBBox2D()
-
-            data += [[
-                "Car", 0, 0, round(alpha, 2),
-                l, t, r, b, # bounding box 2d
-                actor.size[2], actor.size[0], actor.size[1], # model height, width , length
-                round(p_c[0, 0], 2), round(p_c[0, 1], 2), round(p_c[0, 2], 2), # location (x, y, z) in camera coordinate) different camera coordinate
-                round(r_y, 2)
-            ]]
+            data += [actor.toKITTI()]
 
         np.savetxt(text_file, np.array(data), delimiter=" ", fmt='%s')
 
@@ -557,12 +497,6 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
             self.style.InteractionProp.SetPosition((0, 0, 0))
 
-            # print("Rotate:", Rotate)
-            # print("data:", *data[3:])
-            # print("data[3] - Rotate[0] = ", (data[3] - Rotate[0]))
-            # print("data[4] - Rotate[1] = ", (data[4] - Rotate[1]))
-            # print("data[5] - Rotate[2] = ", data[5] - Rotate[2])
-
             if Angle_dif[0] != 0:
                 self.style.InteractionProp.RotateZ(Angle_dif[0])
             if Angle_dif[1] != 0:
@@ -574,9 +508,6 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             data = [data[i] for i in range(3)] + [Rotate[i] for i in range(3)]
 
             self.parent().parent().property3d.update_property(data)
-
-            # Rotate = [round(Ro, 2) for Ro in self.style.InteractionProp.GetOrientation()]
-            # print("present_Rotate:", Rotate, "\n")
 
             self.style.InteractionProp.SetPosition(*data[:3])
 
@@ -593,7 +524,6 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
             if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
                 self.actor_manager.ResetCameraClippingRange()
-                # self.style.GetCurrentRenderer().ResetCameraClippingRange()
 
     def resize_Angle(self, data):
         for i in range(len(data)):
@@ -601,7 +531,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
                 data[i] -= 360
             if data[i] <= -180:
                 data[i] += 360
-        return data
+        return data 
 
     # Shortcut key operation: delete selected model
     def delete_model(self):

@@ -154,17 +154,40 @@ class Actor:
             "size": listRound(self.size)
         }
 
-    def toKITTI(self, save_folder):
-        bounds = self.actor.GetBounds()
-        [
-            os.path.basename(self.model_path)[:-4],  # type
-            0,  # truncation
-            0,  # occlusion
-            -self.actor.GetOrientation()[-1] * np.pi / 180,  # alpha
-            *self.getBBox2D(),
-            *[bounds[2 * i + 1] - bounds[2 * i] for i in range(3)]
+    def toKITTI(self):
+        # get bottom center point
+        p = np.array([self.actor.GetPosition()])
+        p = cart2hom(p)
+
+        camera = self.renderer.GetActiveCamera()
+        x_c, y_c, z_c = camera.GetPosition()
+        p_w_c = np.array([
+            [1, 0, 0, x_c],
+            [0, -1, 0, y_c],
+            [0, 0, -1, z_c],
+            [0, 0, 0, 1],
+        ])
+        p_c = np.matmul(p_w_c, p.T).T  # x, y, z
+
+        v_x_o, v_y_o, v_z_o = getActorXYZAxis(self.actor)
+        v_x_c, v_y_c, v_z_c = np.identity(3)
+        v_y_c, v_z_c = -v_y_c, -v_z_c
+        # r_y is the angle between camera x-axis and object -y axis
+        r_y = getAngle(-v_y_o, v_x_c)
+
+        # theta is the angle between z_c and vector from camera to object
+        v_c2o = np.array(self.actor.GetPosition()) - np.array(camera.GetPosition())
+        theta = getAngle(v_c2o, v_z_c)
+        alpha = r_y - theta
+
+        l, t, r, b = self.getBBox2D()
+        return [
+            "Car", 0, 0, round(alpha, 2),
+            l, t, r, b, # bounding box 2d
+            self.size[2], self.size[0], self.size[1], # model height, width , length
+            round(p_c[0, 0], 2), round(p_c[0, 1], 2), round(p_c[0, 2], 2), # location (x, y, z) in camera coordinate) different camera coordinate
+            round(r_y, 2)
         ]
-        pass
 
 
 class ActorManager(QObject):

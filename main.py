@@ -15,6 +15,7 @@ from smodellist import SModelList
 from sproperty import SProperty
 from lcamera_property import LCamera_Property
 from slog import SLog
+from utils import *
 
 import os
 import vtkmodules.all as vtk_all
@@ -64,6 +65,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui.actionPrevious.triggered.connect(self.scene_manager.previous)
         self.ui.actionNext.triggered.connect(self.scene_manager.next)
         self.ui.action_Delete_Model.triggered.connect(self.ui.vtk_panel.delete_model)
+        # self.ui.actionKITTI.triggered.connect(self.exportKITTI)
 
         # rotate
         for s in ['X', 'Y', 'Z', 'X_M', 'Y_M', 'Z_M']:
@@ -103,6 +105,12 @@ class Draw3D(QtWidgets.QMainWindow):
 
     def init_scenes(self):
         self.scene_manager.init_scenes()
+
+    # def exportKITTI(self, checked):
+    #     if checked:
+    #         reconnect(self.ui.action_Save_Scenes.triggered, self.ui.vtk_panel.exportScenes, self.ui.vtk_panel.exportScenes)
+    #     else:
+    #         reconnect(self.ui.action_Save_Scenes.triggered, None, self.ui.vtk_panel.exportScenes)
 
 
 if __name__ == "__main__":

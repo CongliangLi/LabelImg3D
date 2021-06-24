@@ -280,3 +280,15 @@ def drawProjected3DBox(renderer, prop3D, img, with_clip=False):
         r, b = (p_i.max(axis=0).astype(int) + 5).clip(0)
         return image[t:b, l:r, :]
     return image
+
+def reconnect(signal, newhandler=None, oldhandler=None):        
+    try:
+        if oldhandler is not None:
+            while True:
+                signal.disconnect(oldhandler)
+        else:
+            signal.disconnect()
+    except TypeError:
+        pass
+    if newhandler is not None:
+        signal.connect(newhandler)
