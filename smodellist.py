@@ -9,11 +9,13 @@ from PyQt5.QtWidgets import *
 import typing
 from slabel3dshow import SLabel3dShow
 import vtk
+from pathlib import Path
+import json
 
 
 class SModelList(QDockWidget):
     signal_load_model = pyqtSignal(int, int)
-    signal_double_click = pyqtSignal(str, int)
+    signal_double_click = pyqtSignal(str, int, str)
     signal_model_class = pyqtSignal(list)
     obj = None
 
@@ -68,6 +70,7 @@ class SModelList(QDockWidget):
         # file list
         self.file_list = []
         self.model_list = {}
+        self.model_info = {}
 
     @PyQt5.QtCore.pyqtSlot(str)
     def highlight_item(self, model_file):
@@ -91,6 +94,18 @@ class SModelList(QDockWidget):
 
         if file_list is None or len(file_list) == 0:
             return
+
+        models_info_file = Path(file_list[0]).parent / "models.json"
+
+        # if cannot find the models.json, then generate it automatically
+        if not os.path.exists(models_info_file):
+            for i, f in enumerate(file_list):
+                self.model_info[Path(f).name] = {"class_name": Path(f).stem[:-4], "class_index": i+1}
+            with open(models_info_file, 'w+') as f:
+                json.dump(self.model_info, f, indent=4)
+        else:
+            with open(models_info_file, "r") as f:
+                self.model_info = json.load(f)
 
         self.file_list = file_list
         self.progress_bar_load.setVisible(True)
@@ -138,9 +153,10 @@ class SModelList(QDockWidget):
         actor.SetMapper(mapper)
         return actor
 
-
     def listWidgetDoubleClicked(self, index):
-        self.signal_double_click.emit(self.file_list[index.row()], index.row())
+        file_path = self.file_list[index.row()]
+        class_name, class_index = self.model_info[Path(file_path).name].values()
+        self.signal_double_click.emit(file_path, class_index, class_name)
         print(self.file_list[index.row()])
 
 

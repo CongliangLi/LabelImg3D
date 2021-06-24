@@ -343,7 +343,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
     def paste(self):
         if self.copy_actor is None:
             return
-        self.actor_manager.newActor(self.copy_actor.model_path, self.copy_actor.type_class)
+        self.actor_manager.newActor(self.copy_actor.model_path, self.copy_actor.type_class, self.copy_actor.model_name)
 
     def start(self):
         self.interactor.Initialize()
@@ -388,9 +388,9 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.bg_renderer.ResetCamera()
         self.interactor.Render()
 
-    @PyQt5.QtCore.pyqtSlot(str, int)
-    def loadModel(self, model_path, model_class):
-        self.actor_manager.newActor(model_path, model_class)
+    @PyQt5.QtCore.pyqtSlot(str, int, str)
+    def loadModel(self, model_path, model_class, model_name):
+        self.actor_manager.newActor(model_path, model_class, model_name)
 
     def switchBoxWidgets(self, actor):
         index = self.actor_manager.getIndex(actor)

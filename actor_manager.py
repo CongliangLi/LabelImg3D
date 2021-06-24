@@ -19,15 +19,16 @@ import itertools
 
 
 class Actor:
-    def __init__(self, render_window, interactor, model_path, model_class, layer_num):
+    def __init__(self, render_window, interactor, model_path, model_class, model_name, layer_num):
         self.renderer_window = render_window
         self.interactor = interactor
         self.renderer = None
         self.actor = None
         self.box_widget = None
         self.model_path = model_path
+        self.model_name = model_name
         self.createRenderer(layer_num)
-        self.loadModel(model_path)
+        self.loadModel(model_path, model_name)
         self.type_class = model_class
         self.size = []  # [w, l, h]
 
@@ -65,8 +66,9 @@ class Actor:
 
         return assembly
 
-    def loadModel(self, model_path):
+    def loadModel(self, model_path, model_name):
         self.model_path = model_path
+        self.model_name = model_name
         self.actor = SModelList.get().getActor(model_path)
         if self.actor is None:
             self.actor = self.readObj(model_path)
@@ -151,6 +153,7 @@ class Actor:
             "model_file": os.path.relpath(self.model_path, scene_folder),
             "matrix": matrix2List(self.actor.GetMatrix()),
             "class": self.type_class,
+            "class_name": self.model_name,
             "size": listRound(self.size)
         }
 
@@ -182,7 +185,7 @@ class Actor:
 
         l, t, r, b = self.getBBox2D()
         return [
-            "Car", 0, 0, round(alpha, 2),
+            self.model_name, 0, 0, round(alpha, 2),
             l, t, r, b, # bounding box 2d
             self.size[2], self.size[0], self.size[1], # model height, width , length
             round(p_c[0, 0], 2), round(p_c[0, 1], 2), round(p_c[0, 2], 2), # location (x, y, z) in camera coordinate) different camera coordinate
@@ -205,8 +208,8 @@ class ActorManager(QObject):
         self.actors = []
         self.model_initial_position = [0, 0, -20]
 
-    def newActor(self, model_path, model_class, actor_matrix=None, actor_size=[]):
-        actor = Actor(self.render_window, self.interactor, model_path, model_class, len(self.actors) + 1)
+    def newActor(self, model_path, model_class, model_name, actor_matrix=None, actor_size=[]):
+        actor = Actor(self.render_window, self.interactor, model_path, model_class, model_name, len(self.actors) + 1)
         if actor_matrix is None and actor_size == []:
             # only copy the matrix of previous actors
             if len(self.actors) > 0 and self.actors[-1].model_path == actor.model_path:
@@ -354,7 +357,9 @@ class ActorManager(QObject):
     def createActors(self, scene_folder, data):
         for i in range(data["model"]["num"]):
             model_path = os.path.join(scene_folder, data["model"][str(i)]["model_file"])
-            self.newActor(model_path, data["model"][str(i)]["class"], data["model"][str(i)]["matrix"],
+            self.newActor(model_path, data["model"][str(i)]["class"], 
+                          data["model"][str(i)]["class_name"],
+                          data["model"][str(i)]["matrix"],
                           data["model"][str(i)]["size"])
 
     def toJson(self, scene_folder):
