@@ -6,11 +6,11 @@ LabelImg3D is the first-of-its-kind tool to annotate images with 3D models, whic
 
 How to use the app, there are four steps:
 
-1. collect your image dataset (i.e. UA-DETRAC, MOT)
+- collect your image dataset (i.e. UA-DETRAC, MOT)
 
-2. collect your 3D model dataset
+- collect your 3D model dataset
 
-3. organize these dataset as the following file tree:
+- organize these dataset as the following file tree:
 
 ```
 |---Scene
@@ -28,6 +28,6 @@ How to use the app, there are four steps:
         |---...
 ```
 
-4. open the app, click the menue File-->Open
+- open the app, click the menue File-->Open
 
-5. label each image, the annotation file will automatically generated when you move to the other images
+- label each image, the annotation file will automatically generated when you move to the other images

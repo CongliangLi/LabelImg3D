@@ -4,3 +4,4 @@ The image-guided 3D reconstruction of traffic scenes is crucial for self-driving
 
 LabelImg3D is an annotation tools for labeling the 3D model in the image, in order to get the extrinsic parameters between the camera and the 3D model.
 
+![](./imgs/demo.gif)

@@ -7,8 +7,11 @@ nav:
     - Introduction:
       - introduction/introduction.md
       - introduction/installation.md
+      - introduction/format.md
     - Usage:
       - usage/usage.md
+    - Dataset:
+      - dataset/kitti.md
     - Proof:
       - proof/proofs.md
     - about.md
