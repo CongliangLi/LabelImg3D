@@ -8,6 +8,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import typing
 from slabel3dshow import SLabel3dShow
+from pathlib import Path
 
 
 class SImageList(QDockWidget):
@@ -83,12 +84,13 @@ class SImageList(QDockWidget):
         self.progress_bar_load.setVisible(True)
 
         num_model = len(file_list)
-        for i in range(num_model):
-            self.signal_load_model.emit(i, num_model)
-            self.add_item(file_list[i])
-            self.progress_bar_load.setValue((i+1)/num_model*100)
-            # event loop
-            QCoreApplication.processEvents()
+        self.listWidget.addItems([Path(f).stem for f in file_list])
+        # for i in range(num_model):
+        #     # self.signal_load_model.emit(i, num_model)
+        #     self.add_item(file_list[i])
+        #     self.progress_bar_load.setValue((i+1)/num_model*100)
+        #     # event loop
+        #     QCoreApplication.processEvents()
 
         self.progress_bar_load.setVisible(False)
             
