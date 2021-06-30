@@ -4,7 +4,7 @@ We propose a dataset, named "kitti-img3D", which is based on the kitti 3D object
 ## Model List
 We use the following models
 
-| Model Name | Class Name | Class Index | Model Size (LxWxH) | Source| Model Demo|
+| Model</br>Name | Class Name | Class</br>Index | Model Size<br>(LxWxH) | Source| Model Demo|
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | tram_001.obj| Tram | 1 | $15.21\times 2.37 \times 3.62$   | [1] | ![](../images/../imgs/kitti_tram.gif) |
 | car_001.obj| Car | 2 | $3.84\times 1.64 \times 1.50$   | [1] | ![](../images/../imgs/kitti_car.gif) | [1] | 
