@@ -15,11 +15,11 @@ about = {}
 with open(os.path.join(here, 'libs', '__init__.py')) as f:
     exec(f.read(), about)
 
-with open("README.md", "rb") as readme_file:
+with open("README.md", "rb", encoding="utf-8") as readme_file:
     readme = readme_file.read().decode("UTF-8")
 
 # historic version
-with open("HISTORY.md", "rb") as history_file:
+with open("HISTORY.md", "rb", encoding="utf-8") as history_file:
     history = history_file.read().decode("UTF-8")
 
 # OS specific settings
@@ -37,7 +37,7 @@ required_packages.append('labelImg3d')
 APP = [NAME + '.py']
 OPTIONS = {
     'argv_emulation': True,
-    'iconfile': 'resources/icons/app.icns'
+    'iconfile': 'icons/icon.ico'
 }
 
 
@@ -92,32 +92,27 @@ setup(
     author_email='congliangli@chd.edu.cn',
     url='http://git.chd.gold:3000/shijie/labelimg3d',
     python_requires=REQUIRES_PYTHON,
-    package_dir={'labelImg': '.'},
+    package_dir={'labelImg3d': '.'},
     packages=required_packages,
-    entry_points={
-        'console_scripts': [
-            'labelImg=labelImg.labelImg:main'
-        ]
-    },
+    # entry_points={
+    #     'console_scripts': [
+    #         'labelImg=labelImg.labelImg:main'
+    #     ]
+    # },
     include_package_data=True,
     install_requires=REQUIRED_DEP,
     license="MIT license",
     zip_safe=False,
-    keywords='labelImg labelTool development annotation deeplearning',
+    keywords='labelImg3d labelTool annotation deeplearning',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
-    package_data={'data/predefined_classes.txt': ['data/predefined_classes.txt']},
-    options={'py2app': OPTIONS},
+    # package_data={'data/predefined_classes.txt': ['data/predefined_classes.txt']},
+    # options={'py2app': OPTIONS},
     setup_requires=SET_REQUIRES,
     # $ setup.py publish support.
     cmdclass={
