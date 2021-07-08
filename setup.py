@@ -9,17 +9,17 @@ import os
 here = os.path.abspath(os.path.dirname(__file__))
 NAME = 'labelImg3d'
 REQUIRES_PYTHON = '>=3.0.0'
-REQUIRED_DEP = ['pyqt5', 'lxml']
+REQUIRED_DEP = ['pyqt5', 'lxml', 'vtk']
 about = {}
 
-with open(os.path.join(here, 'libs', '__init__.py')) as f:
+with open(os.path.join(here, '__init__.py')) as f:
     exec(f.read(), about)
 
-with open("README.md", "rb", encoding="utf-8") as readme_file:
+with open(os.path.join(here, "README.md"), "rb") as readme_file:
     readme = readme_file.read().decode("UTF-8")
 
 # historic version
-with open("HISTORY.md", "rb", encoding="utf-8") as history_file:
+with open(os.path.join(here, "HISTORY.md"), "rb") as history_file:
     history = history_file.read().decode("UTF-8")
 
 # OS specific settings
@@ -33,6 +33,8 @@ elif _platform == "darwin":
 
 required_packages = find_packages()
 required_packages.append('labelImg3d')
+required_packages.append('labelImg3d.libs')
+required_packages.append('labelImg3d.libs.pyqtconfig')
 
 APP = [NAME + '.py']
 OPTIONS = {
@@ -85,7 +87,7 @@ class UploadCommand(Command):
 setup(
     app=APP,
     name=NAME,
-    version=about['__version__'],
+    version="1.0",
     description="LabelImg3d is a 3D graphical image annotation tool and label object 3D bounding boxes in images",
     long_description=readme + '\n\n' + history,
     author="Shijie Sun & Congliang Li",
@@ -94,13 +96,14 @@ setup(
     python_requires=REQUIRES_PYTHON,
     package_dir={'labelImg3d': '.'},
     packages=required_packages,
-    # entry_points={
-    #     'console_scripts': [
-    #         'labelImg=labelImg.labelImg:main'
-    #     ]
-    # },
+    entry_points={
+        'console_scripts': [
+            'labelImg3d=labelImg3d.labelImg3d:main'
+        ]
+    },
     include_package_data=True,
     install_requires=REQUIRED_DEP,
+    # data_file=["libs/main.ui"],
     license="MIT license",
     zip_safe=False,
     keywords='labelImg3d labelTool annotation deeplearning',
@@ -111,7 +114,7 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.8',
     ],
-    # package_data={'data/predefined_classes.txt': ['data/predefined_classes.txt']},
+    package_data={'': ['libs/*.ui', 'libs/icons/*']},
     # options={'py2app': OPTIONS},
     setup_requires=SET_REQUIRES,
     # $ setup.py publish support.

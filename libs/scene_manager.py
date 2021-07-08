@@ -8,10 +8,8 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import QSize, pyqtSignal, QCoreApplication, QObject
 import typing
 import math
-from utils import *
-from actor_manager import ActorManager
-from simagelist import SImageList
-from slabel3dannotation import SLabel3DAnnotation
+from .utils import *
+
 
 
 class SceneManager(QObject):

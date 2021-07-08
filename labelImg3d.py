@@ -1,6 +1,6 @@
 import os
-from slabelimage import SLabelImage
-from sproperty import SProperty
+from libs.slabelimage import SLabelImage
+from libs.sproperty import SProperty
 import vtkmodules.all as vtk_all
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 import PyQt5
@@ -8,24 +8,22 @@ from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-import Ui_main
-from scene_manager import SceneManager
-from simagelist import SImageList
-from smodellist import SModelList
-from sproperty import SProperty
-from lcamera_property import LCamera_Property
-from slog import SLog
-from utils import *
+import libs.Ui_main as Ui_main
+from libs.scene_manager import SceneManager
+from libs.simagelist import SImageList
+from libs.smodellist import SModelList
+from libs.sproperty import SProperty
+from libs.lcamera_property import LCamera_Property
+from libs.slog import SLog
+from libs.utils import *
 
 import os
 import vtkmodules.all as vtk_all
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from PyQt5 import QtCore, uic, QtWidgets, QtGui
-# from label3d import QDraw3DViewer
-import Ui_main
-from scene_manager import SceneManager
-from slog import SLog
-from slabelimage import SLabelImage
+from libs.scene_manager import SceneManager
+from libs.slog import SLog
+from libs.slabelimage import SLabelImage
 from vtk import *
 
 
@@ -37,7 +35,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.vtk_widget = None
         self.ui = None
         self.setup()
-        self.setWindowIcon(QIcon('icons/icon.ico'))
+        self.setWindowIcon(QIcon('libs/icons/icon.ico'))
 
         self.image_list = SImageList(self, "Images")
         self.model_list = SModelList.create(self, "Models")
@@ -112,11 +110,11 @@ class Draw3D(QtWidgets.QMainWindow):
     #         reconnect(self.ui.action_Save_Scenes.triggered, None, self.ui.vtk_panel.exportScenes)
 
 
-if __name__ == "__main__":
+def main():
     os.chdir(os.path.dirname(__file__))
     # Recompile ui
-    with open("main.ui") as ui_file:
-        with open("Ui_main.py", "w") as py_ui_file:
+    with open("libs/main.ui") as ui_file:
+        with open("libs/Ui_main.py", "w") as py_ui_file:
             uic.compileUi(ui_file, py_ui_file)
 
     app = QtWidgets.QApplication([])
@@ -126,3 +124,7 @@ if __name__ == "__main__":
     main_window.show()
     main_window.initialize()
     app.exec_()
+
+
+if __name__ == "__main__":
+    main()

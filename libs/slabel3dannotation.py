@@ -9,10 +9,10 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 import typing
 import math
 from vtk import *
-from utils import *
+from libs.utils import *
 import pandas as pd
-from actor_manager import Actor, ActorManager
-from sproperty import *
+from libs.actor_manager import Actor, ActorManager
+from libs.sproperty import *
 # import tqdm
 import numpy as np
 from pathlib import Path

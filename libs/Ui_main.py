@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'main.ui'
+# Form implementation generated from reading ui file 'libs/main.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -149,4 +149,4 @@ class Ui_MainWindow(object):
         self.actionPaste.setShortcut(_translate("MainWindow", "Ctrl+V"))
         self.actionLabelImg3D.setText(_translate("MainWindow", "LabelImg3D"))
         self.actionKITTI.setText(_translate("MainWindow", "KITTI"))
-from slabel3dannotation import SLabel3DAnnotation
+from libs.slabel3dannotation import SLabel3DAnnotation

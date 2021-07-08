@@ -20,227 +20,120 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="281adeae-4f3e-4c63-bf3f-64f087aa968f" name="默认更改列表" comment="">
-      <change afterPath="$PROJECT_DIR$/LICENSE.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MANIFEST.in" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/LabelImg3D.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/LabelImg3D.spec" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/Ui_main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/Ui_test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/actor_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/common.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/dataset.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/docs/KITTI/KITTI in LabelImg3D.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/docs/REAME.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/docs/label3D.drawio" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/docs/label3D.pptx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/docs/secene1.blend" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/icons/icon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/icons/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/lcamera_property.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/main.ui" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/pyqtconfig/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/pyqtconfig/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/pyqtconfig/demo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/pyqtconfig/qt.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/qjsonmodel.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/requirement.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scene_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000025.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000039.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000063.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000067.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000098.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000159.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000173.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000176.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000179.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000211.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000025.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000039.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000063.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000067.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000098.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000159.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000173.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000176.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000179.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000211.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000025.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000039.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000063.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000067.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000098.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000159.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000173.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000176.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000179.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000211.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/SUV_001.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/SUV_001.obj.mtl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/bus_001.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/bus_001.obj.mtl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/car_001.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/car_001.obj.mtl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/models.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/truck_001.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/truck_001.obj.mtl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/van_001.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/van_001.obj.mtl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00001.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00002.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00003.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00004.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00005.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00006.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00007.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00008.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00009.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00010.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00001.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00002.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00003.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00004.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00005.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00006.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00007.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00008.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00009.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00010.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/models/SUV_001.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/models/SUV_001.obj.mtl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/models/bus_001.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/models/bus_001.obj.mtl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/models/car_001.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/models/car_001.obj.mtl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/models/truck_001.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/models/truck_001.obj.mtl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/models/van_001.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/scenes/test/models/van_001.obj.mtl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/sconfig.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/simagelist.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/slabel3dannotation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/slabel3dshow.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/slabelimage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/slog.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/smodellist.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/sproperty.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/test.ui" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/test1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/test_pyqtconfig.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/labelimg3d/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LabelImg3D.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LabelImg3D.spec" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ui_main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ui_test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/actor_manager.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/KITTI/KITTI in LabelImg3D.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/REAME.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/label3D.drawio" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/label3D.pptx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/secene1.blend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/icons/icon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/icons/icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lcamera_property.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.ui" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyqtconfig/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyqtconfig/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyqtconfig/demo.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyqtconfig/qt.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/qjsonmodel.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirement.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scene_manager.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000025.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000039.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000063.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000067.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000098.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000159.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000173.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000176.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000179.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000211.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000025.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000039.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000063.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000067.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000098.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000159.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000173.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000176.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000179.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000211.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000025.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000039.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000063.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000067.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000098.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000159.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000173.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000176.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000179.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000211.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/SUV_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/SUV_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/bus_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/bus_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/car_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/car_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/models.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/truck_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/truck_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/van_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/van_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00001.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00002.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00003.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00004.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00005.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00006.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00007.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00008.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00009.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00010.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/images/scene1/img00001.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/images/scene1/img00002.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/images/scene1/img00003.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/images/scene1/img00004.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/images/scene1/img00005.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/images/scene1/img00006.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/images/scene1/img00007.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/images/scene1/img00008.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/images/scene1/img00009.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/images/scene1/img00010.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/models/SUV_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/models/SUV_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/models/bus_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/models/bus_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/models/car_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/models/car_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/models/truck_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/models/truck_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/models/van_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/test/models/van_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sconfig.py" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/libs/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000025.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000063.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/libs/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/LabelImg3D.csv" beforeDir="false" afterPath="$PROJECT_DIR$/libs/LabelImg3D.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/LabelImg3D.spec" beforeDir="false" afterPath="$PROJECT_DIR$/libs/LabelImg3D.spec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/Ui_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/Ui_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/Ui_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/Ui_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/actor_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/actor_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/docs/KITTI/KITTI in LabelImg3D.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/libs/docs/KITTI/KITTI in LabelImg3D.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/docs/REAME.md" beforeDir="false" afterPath="$PROJECT_DIR$/libs/docs/REAME.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/docs/label3D.drawio" beforeDir="false" afterPath="$PROJECT_DIR$/libs/docs/label3D.drawio" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/docs/label3D.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/libs/docs/label3D.pptx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/docs/secene1.blend" beforeDir="false" afterPath="$PROJECT_DIR$/libs/docs/secene1.blend" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/icons/icon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/libs/icons/icon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/icons/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/libs/icons/icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/lcamera_property.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/lcamera_property.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/labelImg3d.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/main.ui" beforeDir="false" afterPath="$PROJECT_DIR$/libs/main.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/pyqtconfig/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/pyqtconfig/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/pyqtconfig/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/pyqtconfig/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/pyqtconfig/demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/pyqtconfig/demo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/pyqtconfig/qt.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/pyqtconfig/qt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/qjsonmodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/qjsonmodel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/requirement.txt" beforeDir="false" afterPath="$PROJECT_DIR$/libs/requirement.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scene_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/scene_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000025.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000039.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000039.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000063.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000067.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000067.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000098.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000098.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000159.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000159.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000173.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000173.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000176.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000176.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000179.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000179.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1-kitti/000211.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000211.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000025.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000025.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000039.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000039.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000063.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000063.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000067.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000067.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000098.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000098.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000159.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000159.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000173.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000173.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000176.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000176.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000179.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000179.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/annotations/scene1/000211.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000211.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000025.png" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000025.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000039.png" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000039.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000063.png" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000063.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000067.png" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000067.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000098.png" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000098.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000159.png" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000159.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000173.png" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000173.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000176.png" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000176.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000179.png" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000179.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/images/scene1/000211.png" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/images/scene1/000211.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/SUV_001.obj" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/SUV_001.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/SUV_001.obj.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/SUV_001.obj.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/bus_001.obj" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/bus_001.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/bus_001.obj.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/bus_001.obj.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/car_001.obj" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/car_001.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/car_001.obj.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/car_001.obj.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/models.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/models.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/truck_001.obj" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/truck_001.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/truck_001.obj.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/truck_001.obj.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/van_001.obj" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/van_001.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/KITTI/models/van_001.obj.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/van_001.obj.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00001.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00001.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00002.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00002.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00003.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00003.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00004.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00004.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00005.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00005.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00006.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00006.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00007.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00007.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00008.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00008.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00009.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00009.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/annotations/scene1/img00010.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/annotations/scene1/img00010.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00001.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/images/scene1/img00001.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00002.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/images/scene1/img00002.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00003.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/images/scene1/img00003.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00004.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/images/scene1/img00004.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00005.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/images/scene1/img00005.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00006.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/images/scene1/img00006.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00007.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/images/scene1/img00007.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00008.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/images/scene1/img00008.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00009.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/images/scene1/img00009.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/images/scene1/img00010.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/images/scene1/img00010.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/models/SUV_001.obj" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/models/SUV_001.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/models/SUV_001.obj.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/models/SUV_001.obj.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/models/bus_001.obj" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/models/bus_001.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/models/bus_001.obj.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/models/bus_001.obj.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/models/car_001.obj" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/models/car_001.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/models/car_001.obj.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/models/car_001.obj.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/models/truck_001.obj" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/models/truck_001.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/models/truck_001.obj.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/models/truck_001.obj.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/models/van_001.obj" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/models/van_001.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/scenes/test/models/van_001.obj.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/test/models/van_001.obj.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/sconfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/sconfig.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/simagelist.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/simagelist.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/slabel3dannotation.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/slabel3dannotation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/slabel3dshow.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/slabel3dshow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/slabelimage.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/slabelimage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/slog.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/slog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/smodellist.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/smodellist.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/sproperty.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/sproperty.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/test.ui" beforeDir="false" afterPath="$PROJECT_DIR$/libs/test.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/test1.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/test1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/test_pyqtconfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/test_pyqtconfig.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelimg3d/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simagelist.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/slabel3dannotation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/slabel3dshow.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/slabelimage.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/slog.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smodellist.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sproperty.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.ui" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_pyqtconfig.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -261,10 +154,13 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../labelImg" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
-  <component name="RunManager">
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.labelimg3d">
+    <configuration name="labelimg3d" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="labelimg3d" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -276,7 +172,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/labelimg3d.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -285,8 +181,34 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="labelimg3d" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/labelimg3d" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/labelimg3d/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.labelimg3d" />
+      <item itemvalue="Python.main" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.labelimg3d" />
         <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
@@ -316,43 +238,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state width="1899" height="348" key="GridCell.Tab.0.bottom" timestamp="1625138290854">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="348" key="GridCell.Tab.0.bottom/1920.344.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1625138290854" />
-    <state width="1899" height="348" key="GridCell.Tab.0.center" timestamp="1625138290854">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="348" key="GridCell.Tab.0.center/1920.344.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1625138290854" />
-    <state width="1899" height="348" key="GridCell.Tab.0.left" timestamp="1625138290854">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="348" key="GridCell.Tab.0.left/1920.344.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1625138290854" />
-    <state width="1899" height="348" key="GridCell.Tab.0.right" timestamp="1625138290854">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="348" key="GridCell.Tab.0.right/1920.344.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1625138290854" />
-    <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1625138290855">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="348" key="GridCell.Tab.1.bottom/1920.344.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1625138290855" />
-    <state width="1899" height="348" key="GridCell.Tab.1.center" timestamp="1625138290855">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="348" key="GridCell.Tab.1.center/1920.344.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1625138290855" />
-    <state width="1899" height="348" key="GridCell.Tab.1.left" timestamp="1625138290855">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="348" key="GridCell.Tab.1.left/1920.344.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1625138290855" />
-    <state width="1899" height="348" key="GridCell.Tab.1.right" timestamp="1625138290855">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="348" key="GridCell.Tab.1.right/1920.344.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1625138290855" />
-    <state x="461" y="164" key="SettingsEditor" timestamp="1625226037110">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="461" y="164" key="SettingsEditor/1920.344.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1625226037110" />
   </component>
 </project>
