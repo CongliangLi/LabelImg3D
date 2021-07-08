@@ -7,7 +7,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import typing
-from slabel3dshow import SLabel3dShow
+from .slabel3dshow import SLabel3dShow
 import vtk
 from pathlib import Path
 import json

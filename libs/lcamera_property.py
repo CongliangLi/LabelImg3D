@@ -4,9 +4,9 @@ import PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from pyqtconfig.config import ConfigManager
+from .pyqtconfig.config import ConfigManager
 
-from pyqtconfig.qt import (QComboBox, QCheckBox, QSpinBox, QDoubleSpinBox, QMainWindow,
+from .pyqtconfig.qt import (QComboBox, QCheckBox, QSpinBox, QDoubleSpinBox, QMainWindow,
                            QLineEdit, QApplication, QTextEdit,
                            QGridLayout, QWidget, QDockWidget)
 

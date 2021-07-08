@@ -238,7 +238,7 @@
   <customwidget>
    <class>SLabel3DAnnotation</class>
    <extends>QFrame</extends>
-   <header location="global">slabel3dannotation</header>
+   <header location="global">libs.slabel3dannotation</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

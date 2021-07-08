@@ -8,12 +8,12 @@ import PyQt5
 from PyQt5 import QtCore, QtWidgets, QtGui
 import typing
 import math
-from utils import *
+from libs.utils import *
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.Qt import QObject
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from smodellist import SModelList
+from libs.smodellist import SModelList
 from itertools import product
 import itertools
 
