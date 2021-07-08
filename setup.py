@@ -90,8 +90,8 @@ setup(
     version="1.0",
     description="LabelImg3d is a 3D graphical image annotation tool and label object 3D bounding boxes in images",
     long_description=readme + '\n\n' + history,
-    author="Shijie Sun & Congliang Li",
-    author_email='congliangli@chd.edu.cn',
+    author="Congliang Li & Shijie Sun ",
+    author_email='congliangli@chd.edu.cn & shijieSun@chd.edu.cn',
     url='http://git.chd.gold:3000/shijie/labelimg3d',
     python_requires=REQUIRES_PYTHON,
     package_dir={'labelImg3d': '.'},
@@ -104,7 +104,7 @@ setup(
     include_package_data=True,
     install_requires=REQUIRED_DEP,
     # data_file=["libs/main.ui"],
-    license="MIT license",
+    # license="MIT license",
     zip_safe=False,
     keywords='labelImg3d labelTool annotation deeplearning',
     classifiers=[
@@ -114,7 +114,7 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.8',
     ],
-    package_data={'': ['libs/*.ui', 'libs/icons/*']},
+    package_data={'': ['libs/*.ui', 'libs/icons/*', 'LICENSE', '*.md']},
     # options={'py2app': OPTIONS},
     setup_requires=SET_REQUIRES,
     # $ setup.py publish support.
