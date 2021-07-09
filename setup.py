@@ -114,7 +114,7 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.8',
     ],
-    package_data={'': ['libs/*.ui', 'libs/icons/*', 'LICENSE', '*.md']},
+    package_data={'': ['libs/*.ui', 'libs/icons/*', 'LICENSE', '*.md', 'scenes/*/*/*/*.*', 'scenes/*/*/*.*']},
     # options={'py2app': OPTIONS},
     setup_requires=SET_REQUIRES,
     # $ setup.py publish support.
