@@ -40,6 +40,7 @@ def matrixMultiple(matrix_a, matrix_b):
 def matrix2List(matrix, pre=4):
     return [round(matrix.GetElement(i, j), pre) for i in range(4) for j in range(4)]
 
+
 def matrix2Numpy2D(matrix):
     return np.array([[matrix.GetElement(i, j) for i in range(4)] for j in range(4)])
 
@@ -64,6 +65,7 @@ def worldToView(renderer, points):
         renderer.WorldToView()
         ret.append(renderer.GetViewPoint())
     return ret
+
 
 def getMatrixW2I(renderer, w, h):
     if renderer is None:
@@ -104,9 +106,9 @@ def getMatrixW2I(renderer, w, h):
     #         [0,         0,      1]
     # ])
     P_v2i = np.array([
-            [w/w_i,         0,          w/2],
-            [0,             -h/h_i,     h/2],
-            [0,             0,          1]
+        [w / w_i, 0, w / 2],
+        [0, -h / h_i, h / 2],
+        [0, 0, 1]
     ])
     # P_r2i = np.array([
     #         [w/(r-l),       0,          -w*l/(r-l)],
@@ -137,10 +139,12 @@ def getMatrixO2W(prop3D):
     """
     return matrix2Numpy2D(prop3D.GetMatrix()).T
 
+
 def object2World(prop3D, points):
     mat = getMatrixO2W(prop3D)
     points = cart2hom(points)
     return hom2cart(np.matmul(mat, points.T).T)
+
 
 def setActorMatrix(prop3D, matrix):
     """Set the vtk actor matrix
@@ -155,6 +159,7 @@ def setActorMatrix(prop3D, matrix):
     prop3D.SetScale(transform.GetScale())
     prop3D.Modified()
 
+
 def getActorLocalBounds(prop3D):
     mat = vtk.vtkMatrix4x4()
     mat.DeepCopy(prop3D.GetMatrix())
@@ -162,6 +167,7 @@ def getActorLocalBounds(prop3D):
     bounds = prop3D.GetBounds()
     setActorMatrix(prop3D, mat)
     return bounds
+
 
 def getActorRotatedBounds(prop3D):
     """Get the rotated bounds of an actor descriped by 8 points
@@ -177,14 +183,17 @@ def getActorRotatedBounds(prop3D):
     return object2World(prop3D, points)
     # return np.ones((8, 3))
 
+
 def getActorXYZRange(prop3D):
     bounds = getActorLocalBounds(prop3D)
-    return (bounds[2*i+1] - bounds[2*i] for i in range(3))
+    return (bounds[2 * i + 1] - bounds[2 * i] for i in range(3))
+
 
 def getActorXYZAxis(prop3D):
     points = np.vstack((np.identity(3), [0, 0, 0]))
     points = object2World(prop3D, points)
     return points[:3, :] - points[-1, :]
+
 
 def worldToViewBBox(renderer, points):
     display_points = worldToView(renderer, points)
@@ -192,6 +201,7 @@ def worldToViewBBox(renderer, points):
     min_x, min_y, _ = tuple(display_points.min(axis=0))
     max_x, max_y, _ = tuple(display_points.max(axis=0))
     return min_x, min_y, max_x, max_y
+
 
 def listRound(arr, pre=4):
     return [round(d, pre) for d in arr]
@@ -206,6 +216,7 @@ def cart2hom(pts_3d):
     pts_3d_hom = np.hstack((pts_3d, np.ones((n, 1))))
     return pts_3d_hom
 
+
 def hom2cart(pts_3d):
     assert len(pts_3d.shape) == 2
     return pts_3d[:, :-1]
@@ -213,8 +224,8 @@ def hom2cart(pts_3d):
 
 def getAngle(x, y):
     return np.arctan2(
-        (np.cross(x, y) / (np.linalg.norm(x)*np.linalg.norm(y))).sum(),
-        (np.dot(x, y) / (np.linalg.norm(x)*np.linalg.norm(y))).sum()
+        (np.cross(x, y) / (np.linalg.norm(x) * np.linalg.norm(y))).sum(),
+        (np.dot(x, y) / (np.linalg.norm(x) * np.linalg.norm(y))).sum()
     )
 
 
@@ -243,8 +254,9 @@ def draw_projected_box3d(image, qs, color=[(255, 0, 0), (0, 0, 255), (0, 255, 0)
         cv2.line(image, (qs[i, 0], qs[i, 1]), (qs[j, 0], qs[j, 1]), color[1], thickness)
 
         i, j = k, k + 4
-        cv2.line(image, (qs[i, 0], qs[i, 1]), (qs[j, 0], qs[j, 1]), color[2], max(1, thickness//2))
+        cv2.line(image, (qs[i, 0], qs[i, 1]), (qs[j, 0], qs[j, 1]), color[2], max(1, thickness // 2))
     return image
+
 
 def drawProjected3DBox(renderer, prop3D, img, with_clip=False):
     h, w, _ = img.shape
@@ -281,7 +293,8 @@ def drawProjected3DBox(renderer, prop3D, img, with_clip=False):
         return image[t:b, l:r, :]
     return image
 
-def reconnect(signal, newhandler=None, oldhandler=None):        
+
+def reconnect(signal, newhandler=None, oldhandler=None):
     try:
         if oldhandler is not None:
             while True:
@@ -292,3 +305,24 @@ def reconnect(signal, newhandler=None, oldhandler=None):
         pass
     if newhandler is not None:
         signal.connect(newhandler)
+
+
+def rotx(t):
+    """ 3D Rotation about the x-axis. """
+    c = np.cos(t)
+    s = np.sin(t)
+    return np.array([[1, 0, 0], [0, c, -s], [0, s, c]])
+
+
+def roty(t):
+    """ Rotation about the y-axis. """
+    c = np.cos(t)
+    s = np.sin(t)
+    return np.array([[c, 0, s], [0, 1, 0], [-s, 0, c]])
+
+
+def rotz(t):
+    """ Rotation about the z-axis. """
+    c = np.cos(t)
+    s = np.sin(t)
+    return np.array([[c, -s, 0], [s, c, 0], [0, 0, 1]])

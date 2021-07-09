@@ -111,14 +111,13 @@ class Actor:
     def get8Corners(prop3D):
         return getActorRotatedBounds(prop3D)
 
-
     def getCameraMatrix(self):
         matrix = self.renderer.GetActiveCamera().GetModelViewTransformMatrix()
         return [matrix.GetElement(i, j) for i in range(4) for j in range(4)]
 
     def getBBox2D(self):
         bbox3d_points_world = getActorRotatedBounds(self.actor)
-        
+
         bbox3d_min_x, bbox3d_min_y, bbox3d_max_x, bbox3d_max_y \
             = worldToViewBBox(self.renderer, bbox3d_points_world)
 
@@ -129,13 +128,13 @@ class Actor:
         w_i = image_max_x - image_min_x
         h_i = image_max_y - image_min_y
         p = np.dot(np.array([
-            [w/2,       0,      w/2],
-            [0,         -h/2,   h/2],
-            [0,         0,      1]
-        ]),  np.array([
-            [2/w_i,     0,      0],
-            [0,         2/h_i,  0],
-            [0,         0,      1]
+            [w / 2, 0, w / 2],
+            [0, -h / 2, h / 2],
+            [0, 0, 1]
+        ]), np.array([
+            [2 / w_i, 0, 0],
+            [0, 2 / h_i, 0],
+            [0, 0, 1]
         ]))
         l, t, _ = np.dot(p, np.array([bbox3d_min_x, bbox3d_max_y, 1]).T)
         r, b, _ = np.dot(p, np.array([bbox3d_max_x, bbox3d_min_y, 1]).T)
@@ -186,9 +185,10 @@ class Actor:
         l, t, r, b = self.getBBox2D()
         return [
             self.model_name, 0, 0, round(alpha, 2),
-            l, t, r, b, # bounding box 2d
-            self.size[2], self.size[0], self.size[1], # model height, width , length
-            round(p_c[0, 0], 2), round(p_c[0, 1], 2), round(p_c[0, 2], 2), # location (x, y, z) in camera coordinate) different camera coordinate
+            l, t, r, b,  # bounding box 2d
+            self.size[2], self.size[0], self.size[1],  # model height, width , length
+            round(p_c[0, 0], 2), round(p_c[0, 1], 2), round(p_c[0, 2], 2),
+            # location (x, y, z) in camera coordinate) different camera coordinate
             round(r_y, 2)
         ]
 
@@ -357,7 +357,7 @@ class ActorManager(QObject):
     def createActors(self, scene_folder, data):
         for i in range(data["model"]["num"]):
             model_path = os.path.join(scene_folder, data["model"][str(i)]["model_file"])
-            self.newActor(model_path, data["model"][str(i)]["class"], 
+            self.newActor(model_path, data["model"][str(i)]["class"],
                           data["model"][str(i)]["class_name"],
                           data["model"][str(i)]["matrix"],
                           data["model"][str(i)]["size"])
