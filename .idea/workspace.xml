@@ -20,11 +20,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="281adeae-4f3e-4c63-bf3f-64f087aa968f" name="默认更改列表" comment="">
-      <change afterPath="$PROJECT_DIR$/libs/lKITTI_2_LabelImg3d.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/labelImg3d.py" beforeDir="false" afterPath="$PROJECT_DIR$/labelImg3d.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/actor_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/actor_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI/calib/000000.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI/calib/000001.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI/calib/000002.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI/image_2/000000.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI/image_2/000001.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI/image_2/000002.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI/label_2/000000.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI/label_2/000001.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI/label_2/000002.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI/velodyne/000000.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI/velodyne/000001.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI/velodyne/000002.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/lKITTI_2_LabelImg3d.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/lKITTI_2_LabelImg3d.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000025.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000025.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000025.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000025.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/SUV_001.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/SUV_001.obj.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/bus_001.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/models.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/models.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,11 +68,11 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../kitti_object_vis" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
-  <component name="RunManager" selected="Python.lKITTI_2_LabelImg3d">
+  <component name="RunManager" selected="Python.labelimg3d">
     <configuration name="lKITTI_2_LabelImg3d" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="labelimg3d" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -128,8 +143,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.lKITTI_2_LabelImg3d" />
         <item itemvalue="Python.labelimg3d" />
+        <item itemvalue="Python.lKITTI_2_LabelImg3d" />
         <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
@@ -159,16 +174,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/libs/lKITTI_2_LabelImg3d.py</url>
-          <line>8</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

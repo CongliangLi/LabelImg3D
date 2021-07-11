@@ -1,18 +1,26 @@
 {
-    "bus_001.obj":{
-        "class_name": "Bus",
+    "tram_001.obj":{
+        "class_name": "Tram",
         "class_index": 1
     },
     "car_001.obj":{
         "class_name": "Car",
         "class_index": 2
     },
-    "SUV_001.obj":{
-        "class_name": "SUV",
+    "truck_001.obj":{
+        "class_name": "Track",
         "class_index": 3
     },
     "van_001.obj":{
         "class_name": "Van",
         "class_index": 4
+    },
+    "pedestrian_001.obj":{
+        "class_name": "Pedestrian",
+        "class_index": 5
+    },
+    "pedestrian_002.obj":{
+        "class_name": "Pedestrian",
+        "class_index": 6
     }
 }
