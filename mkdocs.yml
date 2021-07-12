@@ -13,7 +13,8 @@ nav:
     - Dataset:
       - dataset/kitti.md
     - Proof:
-      - proof/proofs.md
+      - proof/KITTI_to_LabelImg3D.md
+      - proof/LabelImg3D_to_KITTI.md
     - about.md
 # theme: readthedocs
 theme: material
