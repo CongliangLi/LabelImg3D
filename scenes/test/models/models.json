@@ -1,0 +1,22 @@
+{
+    "bus_001.obj": {
+        "class_name": "bus",
+        "class_index": 1
+    },
+    "car_001.obj": {
+        "class_name": "car",
+        "class_index": 2
+    },
+    "SUV_001.obj": {
+        "class_name": "SUV",
+        "class_index": 3
+    },
+    "truck_001.obj": {
+        "class_name": "truck",
+        "class_index": 4
+    },
+    "van_001.obj": {
+        "class_name": "van",
+        "class_index": 5
+    }
+}

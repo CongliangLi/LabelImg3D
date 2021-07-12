@@ -155,7 +155,7 @@ class SModelList(QDockWidget):
 
     def listWidgetDoubleClicked(self, index):
         file_path = self.file_list[index.row()]
-        class_name, class_index = self.model_info[Path(file_path).name].values()
+        class_name, class_index = list(self.model_info[Path(file_path).name].values())[0:2]
         self.signal_double_click.emit(file_path, class_index, class_name)
         print(self.file_list[index.row()])
 

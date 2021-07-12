@@ -20,10 +20,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="281adeae-4f3e-4c63-bf3f-64f087aa968f" name="默认更改列表" comment="">
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/libs/lKITTI_2_LabelImg3d.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/lKITTI_2_LabelImg3d.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/smodellist.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/smodellist.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/000025.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000025.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000025.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000025.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000025.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/models.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/models.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/models/SUV_001.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/models/SUV_001.obj.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/models/bus_001.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/models/bus_001.obj.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/models/car_001.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/models/car_001.obj.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/models/models.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/models/truck_001.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/models/truck_001.obj.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/models/van_001.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/models/van_001.obj.mtl" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +54,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1uf8ZBIu50RICtQP6ev7tUd9HgG" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -121,9 +144,9 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.lKITTI_2_LabelImg3d" />
       <item itemvalue="Python.labelimg3d" />
       <item itemvalue="Python.main" />
+      <item itemvalue="Python.lKITTI_2_LabelImg3d" />
     </list>
     <recent_temporary>
       <list>
