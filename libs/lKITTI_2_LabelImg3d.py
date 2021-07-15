@@ -5,11 +5,10 @@ import pandas as pd
 import json
 
 
-def KITTI_2_LabelImg3D(img_path, label_path, model_path, annotation_path, c_distance):
-    a = pd.read_table(label_path, sep=' ', header=None)
+def KITTI_2_LabelImg3D(img_path, label_path, model_path, annotation_path, calib_path, c_distance):
     with open(model_path + "/models.json", 'r') as load_f:
         model_json_data = json.load(load_f)
-    model_data = {"Tram": {}, "Car": {}, "Track": {}, "Van": {}, "Pedestrian": {}}
+    model_data = {"Tram": {}, "Car": {}, "Truck": {}, "Van": {}, "Pedestrian": {}}
     for d in model_data:
         for j_d in model_json_data:
             if model_json_data[j_d]["class_name"] == d:
@@ -19,27 +18,46 @@ def KITTI_2_LabelImg3D(img_path, label_path, model_path, annotation_path, c_dist
                 break
     data = {}
 
-    data["image_file"] = "//".join(img_path.split("\\")[len(img_path.split("\\")) - 3:len(img_path.split("\\"))])
+    data["image_file"] = "\\".join(img_path.split("\\")[len(img_path.split("\\")) - 3:])
 
     data["model"] = {}
     data["model"]["num"] = 0
     num = 0
+
+    calib = pd.read_table(calib_path, sep=' ', header=None)
+    calib_velo2c0 = [[calib[4 * i + n][5] for n in range(1, 5)] for i in range(0, 3)]
+    calib_velo2c0 = np.row_stack([calib_velo2c0, np.array([0, 0, 0, 1])])
+
+    calib_R0rect = [[calib[3 * i + n][4] for n in range(1, 4)] for i in range(0, 3)]
+    calib_R0rect = np.column_stack([calib_R0rect, np.array([0, 0, 0])])
+    calib_R0rect = np.row_stack([calib_R0rect, np.array([0, 0, 0, 1])])
+
+    calib_velo2c = np.dot(calib_R0rect, calib_velo2c0)
+
+    R_velo2c = [[calib_velo2c[i][n] for n in range(0, 3)] for i in range(0, 3)]
+    T_velo2c = [calib_velo2c[i][3] for i in range(0, 3)]
+
+    a = pd.read_table(label_path, sep=' ', header=None)
     for i in range(0, len(a)):
         obj_class = a[0][i]
 
         if obj_class == "Cyclist" or obj_class == "DontCare" or obj_class == "Misc":
             continue
 
-        obj_position_c = [a[j][i] for j in range(11, 14)]
+        obj_position_c0 = [a[j][i] for j in range(11, 14)]
+
+        obj_position_c = [obj_position_c0[0]-0.06, obj_position_c0[1], obj_position_c0[2]]
         obj_position_w = np.array([obj_position_c[0], -obj_position_c[1], -(obj_position_c[2] - c_distance)])
 
         obj_alpha = a[3][i]
-        R_oL2oK = [[0, -1, 0],  # Rotate 90 degrees clockwise around the X axis
+        R_oK2oL = [[0, -1, 0],
                    [1, 0, 0],
                    [0, 0, 1]]
 
         obj_r_y = a[14][i]
-        R_oK2c = roty(obj_r_y)
+        R_oK2velo = roty(3.14 - obj_r_y)
+        R_oK2c = np.dot(R_oK2velo, R_velo2c)
+
         R_c2w_1 = [[0, -1, 0],
                    [1, 0, 0],
                    [0, 0, 1]]
@@ -47,8 +65,8 @@ def KITTI_2_LabelImg3D(img_path, label_path, model_path, annotation_path, c_dist
                    [0, -1, 0],
                    [0, 0, -1]]
         R_c2w = np.dot(R_c2w_1, R_c2w_2)
-        R_oL2w = np.dot(np.dot(R_oL2oK, R_oK2c), R_c2w)
-
+        # R_oL2w = np.dot(np.dot(R_oL2oK, R_oK2c), R_c2w)
+        R_oL2w = np.dot(np.dot(R_oK2c, R_c2w), R_oK2oL)
         oL_2_w = np.column_stack([R_oL2w, obj_position_w])
         oL_2_w = np.row_stack([oL_2_w, np.array([0, 0, 0, 1])])
 
@@ -87,14 +105,18 @@ if __name__ == '__main__':
     img_path = "F:\\my_desktop\\PycharmFiles\\3D_detection\\labelimg3d\\KITTI_test\\images\\scene1"
     label_path = 'F:\\my_desktop\\PycharmFiles\\3D_detection\\labelimg3d\\KITTI_test\\label\\scene1'
     model_path = "F:\\my_desktop\\PycharmFiles\\3D_detection\\labelimg3d\\KITTI_test\\models"
+    calib_path = "F:\\my_desktop\\PycharmFiles\\3D_detection\\labelimg3d\\KITTI_test\\calib"
     distance = 0.52
 
     annotation_path = "\\".join(model_path.split("\\")[:-1]) + "\\annotations\\" + img_path.split("\\")[-1] + "\\"
     img_path = get_all_path(img_path)
     label_path = get_all_path(label_path)
+    calib_path = get_all_path(calib_path)
 
     for i in range(0, len(img_path)):
         img = img_path[i]
         label = label_path[i]
-        if img.split("\\")[-1].split(".")[0] == label.split("\\")[-1].split(".")[0]:
-            KITTI_2_LabelImg3D(img, label, model_path, annotation_path, distance)
+        calib = calib_path[i]
+        if img.split("\\")[-1].split(".")[0] == label.split("\\")[-1].split(".")[0] == calib.split("\\")[-1].split(".")[
+            0]:
+            KITTI_2_LabelImg3D(img, label, model_path, annotation_path, calib, distance)

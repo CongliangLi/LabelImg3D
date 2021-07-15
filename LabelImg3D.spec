@@ -4,10 +4,10 @@
 block_cipher = None
 
 
-a = Analysis(['main.py'],
+a = Analysis(['labelImg3d.py'],
              pathex=[''],
              binaries=[],
-             datas=[("main.ui", "."), ("icons/*.ico", "icons")],
+             datas=[("libs/main.ui", "."), ("libs/icons/*.ico", "libs/icons")],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -31,4 +31,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False , icon='.\\icons\\icon.ico')
+          console=False , icon='.\\libs\\icons\\icon.ico')

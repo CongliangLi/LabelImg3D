@@ -21,24 +21,30 @@
   <component name="ChangeListManager">
     <list default="true" id="281adeae-4f3e-4c63-bf3f-64f087aa968f" name="默认更改列表" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000025.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000039.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000063.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000067.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000098.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000159.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000173.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000176.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000179.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000025.json" beforeDir="false" afterPath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000025.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000039.json" beforeDir="false" afterPath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000039.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000063.json" beforeDir="false" afterPath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000063.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000067.json" beforeDir="false" afterPath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000067.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000098.json" beforeDir="false" afterPath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000098.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000159.json" beforeDir="false" afterPath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000159.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000173.json" beforeDir="false" afterPath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000173.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000176.json" beforeDir="false" afterPath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000176.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000179.json" beforeDir="false" afterPath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000179.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000211.json" beforeDir="false" afterPath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000211.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/label/scene1/000025.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/label/scene1/000069.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KITTI_test/models/models.json" beforeDir="false" afterPath="$PROJECT_DIR$/KITTI_test/models/models.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/LabelImg3D.spec" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/libs/lKITTI_2_LabelImg3d.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/lKITTI_2_LabelImg3d.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/smodellist.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/smodellist.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/000025.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000025.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000025.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000025.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000025.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/models/models.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/models/models.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/models/SUV_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/models/SUV_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/models/bus_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/models/bus_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/models/car_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/models/car_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/models/models.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/models/truck_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/models/truck_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/models/van_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/models/van_001.obj.mtl" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +81,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../kitti_object_vis" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
@@ -144,9 +150,9 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.lKITTI_2_LabelImg3d" />
       <item itemvalue="Python.labelimg3d" />
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.lKITTI_2_LabelImg3d" />
     </list>
     <recent_temporary>
       <list>
