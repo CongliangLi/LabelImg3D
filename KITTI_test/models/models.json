@@ -7,7 +7,7 @@
     "car_001.obj":{
         "class_name": "Car",
         "class_index": 2,
-        "size": [1.65,3.91,1.60]
+        "size": [1.8,4.4,1.60]
     },
     "truck_001.obj":{
         "class_name": "Truck",
