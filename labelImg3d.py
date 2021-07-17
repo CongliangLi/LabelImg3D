@@ -1,30 +1,16 @@
-import os
-from libs.slabelimage import SLabelImage
-from libs.sproperty import SProperty
-import vtkmodules.all as vtk_all
-from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
-import PyQt5
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 import libs.Ui_main as Ui_main
-from libs.scene_manager import SceneManager
 from libs.simagelist import SImageList
 from libs.smodellist import SModelList
 from libs.sproperty import SProperty
 from libs.lcamera_property import LCamera_Property
-from libs.slog import SLog
-from libs.utils import *
 
 import os
-import vtkmodules.all as vtk_all
-from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from PyQt5 import QtCore, uic, QtWidgets, QtGui
 from libs.scene_manager import SceneManager
 from libs.slog import SLog
 from libs.slabelimage import SLabelImage
-from vtk import *
 
 
 class Draw3D(QtWidgets.QMainWindow):

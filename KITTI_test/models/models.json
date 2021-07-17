@@ -1,0 +1,32 @@
+{
+    "tram_001.obj":{
+        "class_name": "Tram",
+        "class_index": 1,
+        "size": [2.62,16.80,3.62]
+    },
+    "car_001.obj":{
+        "class_name": "Car",
+        "class_index": 2,
+        "size": [1.8,4.4,1.60]
+    },
+    "truck_001.obj":{
+        "class_name": "Truck",
+        "class_index": 3,
+        "size": [2.55,5.70,3.91]
+    },
+    "van_001.obj":{
+        "class_name": "Van",
+        "class_index": 4,
+        "size": [1.86,4.98,2.16]
+    },
+    "pedestrian_001.obj":{
+        "class_name": "Pedestrian",
+        "class_index": 5,
+        "size": [0.91,0.33,1.77]
+    },
+    "pedestrian_002.obj":{
+        "class_name": "Pedestrian",
+        "class_index": 6,
+        "size": [0.46,0.43,1.44]
+    }
+}
