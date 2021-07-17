@@ -21,85 +21,11 @@
   <component name="ChangeListManager">
     <list default="true" id="281adeae-4f3e-4c63-bf3f-64f087aa968f" name="默认更改列表" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000025.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000039.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000063.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000067.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000098.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000159.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000173.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000176.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000179.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1-kitti/000211.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000025.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000039.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000063.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000067.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000098.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000159.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000173.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000176.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000179.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/annotations/scene1/000211.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/calib/scene1/000025.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/calib/scene1/000039.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/calib/scene1/000063.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/calib/scene1/000067.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/calib/scene1/000098.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/calib/scene1/000159.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/calib/scene1/000173.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/calib/scene1/000176.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/calib/scene1/000179.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/calib/scene1/000211.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/images/scene1/000025.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/images/scene1/000039.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/images/scene1/000063.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/images/scene1/000067.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/images/scene1/000098.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/images/scene1/000159.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/images/scene1/000173.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/images/scene1/000176.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/images/scene1/000179.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/images/scene1/000211.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/label/scene1/000025.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/label/scene1/000039.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/label/scene1/000063.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/label/scene1/000067.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/label/scene1/000098.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/label/scene1/000159.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/label/scene1/000173.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/label/scene1/000176.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/label/scene1/000179.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/label/scene1/000211.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/SUV_001/Disk_.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/SUV_001/Gitter.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/SUV_001/Headlight_M_Class.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/SUV_001/M_Class_Blueprints.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/SUV_001/Spring.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/SUV_001/Taillight_M_Class.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/SUV_001/Tyre_Profile.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/SUV_001/Tyre_Side.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/SUV_001/Uboden.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/bus_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/bus_001/Metal_Corrogated_Shiny.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/bus_001/naam1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/bus_001/nummer1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/car_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/car_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/child.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/child/body1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/models.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/pedestrian_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/pedestrian_002.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/sketchup/01.skp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/sketchup/child.skp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/tram_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/truck_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/truck_001.obj.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/truck_001/fh16_amarillo_vo1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/van_001.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KITTI_test/models/van_001.obj.mtl" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/labelImg3d.spec" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/KITTI_test/annotations/scene1-kitti/000025.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI_test/annotations/scene1-kitti/000025.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/KITTI_test/annotations/scene1-kitti/000067.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI_test/annotations/scene1-kitti/000067.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/KITTI_test/annotations/scene1/000025.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI_test/annotations/scene1/000025.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,7 +71,7 @@
       <recent name="F:\my_desktop\PycharmFiles\3D_detection\labelimg3d\libs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.labelimg3d">
+  <component name="RunManager" selected="Python.labelImg3d">
     <configuration name="lKITTI_2_LabelImg3d" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="labelimg3d" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -159,6 +85,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/libs/lKITTI_2_LabelImg3d.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="labelImg3d" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="labelimg3d" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/labelImg3d.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -209,13 +156,38 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="slabel3dannotation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="labelimg3d" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/libs" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/libs/slabel3dannotation.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.lKITTI_2_LabelImg3d" />
       <item itemvalue="Python.labelimg3d" />
       <item itemvalue="Python.main" />
+      <item itemvalue="Python.labelImg3d" />
+      <item itemvalue="Python.slabel3dannotation" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.labelImg3d" />
+        <item itemvalue="Python.slabel3dannotation" />
         <item itemvalue="Python.labelimg3d" />
         <item itemvalue="Python.main" />
       </list>
