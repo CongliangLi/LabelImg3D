@@ -97,6 +97,7 @@ class Draw3D(QtWidgets.QMainWindow):
     #         reconnect(self.ui.action_Save_Scenes.triggered, None, self.ui.vtk_panel.exportScenes)
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        self.ui.vtk_panel.saveScenes()
         self.ui.vtk_panel.interactor.Finalize()
         self.ui.vtk_panel.renderer_window.Finalize()
 
