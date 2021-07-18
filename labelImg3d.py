@@ -11,6 +11,7 @@ from PyQt5 import QtCore, uic, QtWidgets, QtGui
 from libs.scene_manager import SceneManager
 from libs.slog import SLog
 from libs.slabelimage import SLabelImage
+import vtk as vtk
 
 
 class Draw3D(QtWidgets.QMainWindow):
@@ -95,8 +96,13 @@ class Draw3D(QtWidgets.QMainWindow):
     #     else:
     #         reconnect(self.ui.action_Save_Scenes.triggered, None, self.ui.vtk_panel.exportScenes)
 
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        self.ui.vtk_panel.interactor.Finalize()
+        self.ui.vtk_panel.renderer_window.Finalize()
+
 
 def main():
+    vtk.vtkOutputWindow.SetGlobalWarningDisplay(0)
     os.chdir(os.path.dirname(__file__))
     # Recompile ui
     with open("libs/main.ui") as ui_file:

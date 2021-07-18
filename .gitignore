@@ -4,3 +4,4 @@ __pycache__/
 build/
 dist/
 scenes/KITTI/images/scene1/*.txt
+labelImg3d.exe
