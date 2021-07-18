@@ -196,6 +196,7 @@ class Actor:
 class ActorManager(QObject):
     signal_active_model = pyqtSignal(list)
     signal_highlight_model_list = pyqtSignal(str)
+    signal_update_property_enter_scene = pyqtSignal(list)
 
     def __init__(self, render_window, interactor, bg_renderer):
         super(ActorManager, self).__init__()
@@ -243,6 +244,9 @@ class ActorManager(QObject):
 
         self.actors.append(actor)
         self.setActiveActor(-1)
+        # list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation()) +
+        # self.slabel.actor_manager.actors[-1].size
+        # self.getCurrentActiveActor().Get
 
         if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
             self.ResetCameraClippingRange()
@@ -361,6 +365,12 @@ class ActorManager(QObject):
                           data["model"][str(i)]["class_name"],
                           data["model"][str(i)]["matrix"],
                           data["model"][str(i)]["size"])
+
+            # updata property when enter a scene
+            self.signal_update_property_enter_scene.emit(
+                list(self.getCurrentActiveActor().GetPosition() + self.getCurrentActiveActor().GetOrientation()) +
+                     self.actors[-1].size
+                )
 
     def toJson(self, scene_folder):
         # self.reformat()

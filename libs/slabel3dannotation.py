@@ -534,5 +534,6 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         return data 
 
     # Shortcut key operation: delete selected model
+
     def delete_model(self):
         self.actor_manager.delete_actor()

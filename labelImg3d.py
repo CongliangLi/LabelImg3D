@@ -72,6 +72,9 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui.vtk_panel.actor_manager.signal_highlight_model_list.connect(self.model_list.highlight_item)
         self.scene_manager.signal_highlight_image_list.connect(self.image_list.highlight_item)
 
+        # update property when enter a scene
+        self.ui.vtk_panel.actor_manager.signal_update_property_enter_scene.connect(self.property3d.update_property)
+
     def setup(self):
         self.ui = Ui_main.Ui_MainWindow()
         self.ui.setupUi(self)
