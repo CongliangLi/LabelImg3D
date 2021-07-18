@@ -21,10 +21,6 @@
   <component name="ChangeListManager">
     <list default="true" id="281adeae-4f3e-4c63-bf3f-64f087aa968f" name="默认更改列表" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/labelImg3d.py" beforeDir="false" afterPath="$PROJECT_DIR$/labelImg3d.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000025.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1-kitti/000025.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000025.json" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/KITTI/annotations/scene1/000025.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
