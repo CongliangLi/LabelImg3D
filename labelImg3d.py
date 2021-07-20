@@ -34,7 +34,6 @@ class Draw3D(QtWidgets.QMainWindow):
         self.label_image.showImage()
         self.kitti_2_labelimg3d = Kitti2LabelImg3D(self)
 
-
         self.addDockWidget(Qt.RightDockWidgetArea, self.image_list)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.model_list)
         self.addDockWidget(Qt.RightDockWidgetArea, self.property3d)
