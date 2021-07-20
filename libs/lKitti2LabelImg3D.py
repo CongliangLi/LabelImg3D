@@ -35,6 +35,7 @@ class Kitti2LabelImg3D(QObject):
         # progressBar status
         self.ui.progressBar.setValue(0)
 
+
     def openFolder(self):
         """load the scenes, the folder structure should be as follows:
 
@@ -106,6 +107,8 @@ class Kitti2LabelImg3D(QObject):
             QCoreApplication.processEvents()
 
     def show(self):
+        self.ui.lineEdit_Edt.setText(" ")
+        self.ui.progressBar.setValue(0)
         self.window.show()
 
     def KITTI_2_LabelImg3D(self, img_path, label_path, model_path, annotation_path, calib_path, c_distance):
