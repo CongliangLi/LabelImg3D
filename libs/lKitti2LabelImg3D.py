@@ -1,6 +1,6 @@
 from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5 import QtCore, uic, QtWidgets, QtGui
+from PyQt5.QtWidgets import QMessageBox
+from PyQt5 import QtWidgets
 from libs.Ui_kitti_2_labelimg3d import Ui_FormKitti2LabelImg3D
 import os
 import json
@@ -71,9 +71,12 @@ class Kitti2LabelImg3D(QObject):
         distance = 0.52
         if not os.path.exists(self.scene_folder) or not os.path.exists(self.images_folder) or not os.path.exists(
                 self.label_folder) or not os.path.exists(self.models_folder) or not os.path.exists(self.calib_folder):
-            exit("The file path does not exist")
-
-        self.ui.lineEdit_Edt.setText(self.scene_folder)
+            QMessageBox.critical(self.window, "Error", "File structure error!",
+                                 QMessageBox.Yes | QMessageBox.No,
+                                 QMessageBox.Yes)
+            return
+        else:
+            self.ui.lineEdit_Edt.setText(self.scene_folder)
 
     def run(self):
         self.ui.progressBar.setValue(0)
@@ -82,7 +85,10 @@ class Kitti2LabelImg3D(QObject):
         calib_path = get_all_path(self.calib_folder)
 
         if len(img_path) != len(label_path) or len(img_path) != len(calib_path):
-            exit("The number of pictures, labels and calibration files does not match!")
+            QMessageBox.critical(self.window, "Error",
+                                 "The number of images, labels and calibration files does not match!",
+                                 QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+            return
 
         for i in range(0, len(img_path)):
             img = img_path[i]
