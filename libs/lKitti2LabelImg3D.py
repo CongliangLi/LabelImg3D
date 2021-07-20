@@ -105,6 +105,7 @@ class Kitti2LabelImg3D(QObject):
             current_speed_of_progress = (i + 1) / len(img_path) * 100
             if current_speed_of_progress != self.speed_of_progress:
                 self.ui.progressBar.setValue(current_speed_of_progress)
+            QCoreApplication.processEvents()
 
     def show(self):
         self.window.show()
