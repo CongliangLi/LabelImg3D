@@ -41,6 +41,6 @@ class Ui_FormKitti2LabelImg3D(object):
 
     def retranslateUi(self, FormKitti2LabelImg3D):
         _translate = QtCore.QCoreApplication.translate
-        FormKitti2LabelImg3D.setWindowTitle(_translate("FormKitti2LabelImg3D", "Form"))
+        FormKitti2LabelImg3D.setWindowTitle(_translate("FormKitti2LabelImg3D", "Kitti_2_LabelImg3d"))
         self.openFolder_Btn.setText(_translate("FormKitti2LabelImg3D", "OpenFolder"))
         self.btn_Run.setText(_translate("FormKitti2LabelImg3D", "Run"))
