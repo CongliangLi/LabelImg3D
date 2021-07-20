@@ -68,7 +68,6 @@ class Kitti2LabelImg3D(QObject):
         self.label_folder = os.path.join(scene_folder, 'label')
         self.models_folder = os.path.join(scene_folder, 'models')
         self.calib_folder = os.path.join(scene_folder, 'calib')
-        distance = 0.52
         if not os.path.exists(self.scene_folder) or not os.path.exists(self.images_folder) or not os.path.exists(
                 self.label_folder) or not os.path.exists(self.models_folder) or not os.path.exists(self.calib_folder):
             QMessageBox.critical(self.window, "Error", "File structure error!",
@@ -98,8 +97,7 @@ class Kitti2LabelImg3D(QObject):
                                       img.split("\\")[-2] + "\\"
 
             if img.split("\\")[-1].split(".")[0] == label.split("\\")[-1].split(".")[0] == \
-                    calib.split("\\")[-1].split(".")[
-                        0]:
+                    calib.split("\\")[-1].split(".")[0]:
                 self.KITTI_2_LabelImg3D(img, label, self.models_folder, self.annotations_folder, calib, self.c_distance)
 
             current_speed_of_progress = (i + 1) / len(img_path) * 100
@@ -151,7 +149,7 @@ class Kitti2LabelImg3D(QObject):
         for i in range(0, len(a)):
             obj_class = a[0][i]
 
-            if obj_class == "Cyclist" or obj_class == "DontCare" or obj_class == "Misc":
+            if obj_class == "Cyclist" or obj_class == "DontCare" or obj_class == "Misc" or obj_class == "Person_sitting":
                 continue
 
             obj_position_c0 = np.array([[a[j][i] for j in range(11, 14)]])
@@ -181,17 +179,14 @@ class Kitti2LabelImg3D(QObject):
             # R_oL2w = np.dot(R_oK2c, R_c2w)
             oL_2_w = np.column_stack([R_oL2w, obj_position_w])
             oL_2_w = np.row_stack([oL_2_w, np.array([0, 0, 0, 1])])
+            data["model"]["{}".format(num)] = {
+                "model_file": model_data[obj_class]["path"],
+                "matrix": oL_2_w.reshape(1, 16).tolist()[0],
+                "class": model_data[obj_class]["index"],
+                "class_name": obj_class,
+                "size": model_data[obj_class]["size"]
+            }
 
-            for m_d in model_data:
-                if m_d == obj_class:
-                    data["model"]["{}".format(num)] = {
-                        "model_file": model_data[m_d]["path"],
-                        "matrix": oL_2_w.reshape(1, 16).tolist()[0],
-                        "class": model_data[m_d]["index"],
-                        "class_name": m_d,
-                        "size": model_data[m_d]["size"]
-                    }
-                    break
             num += 1
         data["model"]["num"] = num
         data["camera"] = {}
