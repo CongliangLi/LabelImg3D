@@ -9,6 +9,7 @@ from PyQt5.QtCore import QSize, pyqtSignal, QCoreApplication, QObject
 import typing
 import math
 from .utils import *
+from PyQt5.QtWidgets import QMessageBox
 
 
 class SceneManager(QObject):
@@ -18,6 +19,7 @@ class SceneManager(QObject):
 
     def __init__(self, parent, image_list_panel, model_list_panel, vtk_panel) -> None:
         super().__init__(parent=parent)
+        self.window = QtWidgets.QWidget()
         self.image_list_panel = image_list_panel
         self.model_list_panel = model_list_panel
         self.vtk_panel = vtk_panel
@@ -50,6 +52,9 @@ class SceneManager(QObject):
         """
         scene_folder = QtWidgets.QFileDialog.getExistingDirectory(None, "Choose Scene Folder")
         if scene_folder == '':
+            QMessageBox.critical(self.window, "Error", "No files selected!",
+                                 QMessageBox.Yes | QMessageBox.No,
+                                 QMessageBox.Yes)
             return
 
         self.scene_folder = scene_folder
@@ -74,6 +79,10 @@ class SceneManager(QObject):
             self.signal_open_models.emit([os.path.join(self.models_folder, i) for i in self.model_name_list])
             self.signal_open_files.emit([os.path.join(self.images_folder, i) for i in self.image_name_list])
             self[0]
+        else:
+            QMessageBox.critical(self.window, "Error", "File structure error!",
+                                 QMessageBox.Yes | QMessageBox.No,
+                                 QMessageBox.Yes)
 
     def __len__(self):
         return len(self.image_name_list)
