@@ -11,7 +11,6 @@ import math
 from .utils import *
 
 
-
 class SceneManager(QObject):
     signal_open_files = pyqtSignal(list)
     signal_open_models = pyqtSignal(list)
@@ -87,7 +86,7 @@ class SceneManager(QObject):
         # 1. check annotation_folder
         self.vtk_panel.loadScenes(self.scene_folder, os.path.join(self.images_folder, self.image_name_list[index]),
                                   os.path.join(self.annotations_folder, self.annotation_name_list[index]))
-        
+
         self.signal_highlight_image_list.emit(index)
 
         if self.current_index != index:

@@ -5,6 +5,7 @@ import pandas as pd
 import json
 from kitti_util import Calibration
 
+
 def KITTI_2_LabelImg3D(img_path, label_path, model_path, annotation_path, calib_path, c_distance):
     with open(model_path + "/models.json", 'r') as load_f:
         model_json_data = json.load(load_f)
@@ -114,11 +115,16 @@ def KITTI_2_LabelImg3D(img_path, label_path, model_path, annotation_path, calib_
 
 if __name__ == '__main__':
 
-    img_path = "F:\\my_desktop\\PycharmFiles\\3D_detection\\labelimg3d\\KITTI_test\\images\\scene1"
-    label_path = 'F:\\my_desktop\\PycharmFiles\\3D_detection\\labelimg3d\\KITTI_test\\label\\scene1'
-    model_path = "F:\\my_desktop\\PycharmFiles\\3D_detection\\labelimg3d\\KITTI_test\\models"
-    calib_path = "F:\\my_desktop\\PycharmFiles\\3D_detection\\labelimg3d\\KITTI_test\\calib"
+    scene_folder = "F:\\my_desktop\\PycharmFiles\\3D_detection\\labelimg3d\\KITTI_test"
+    img_path = os.path.join(scene_folder, 'images')
+    label_path = os.path.join(scene_folder, 'label')
+    model_path = os.path.join(scene_folder, 'models')
+    calib_path = os.path.join(scene_folder, 'calib')
     distance = 0.52
+    if not os.path.exists(scene_folder) or not os.path.exists(img_path) or not os.path.exists(
+            label_path) or not os.path.exists(model_path) or not os.path.exists(model_path) or not os.path.exists(
+            calib_path):
+        exit("The file path does not exist")
 
     annotation_path = "\\".join(model_path.split("\\")[:-1]) + "\\annotations\\" + img_path.split("\\")[-1] + "\\"
     img_path = get_all_path(img_path)
