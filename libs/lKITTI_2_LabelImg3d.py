@@ -122,8 +122,7 @@ if __name__ == '__main__':
     calib_path = os.path.join(scene_folder, 'calib')
     distance = 0.52
     if not os.path.exists(scene_folder) or not os.path.exists(img_path) or not os.path.exists(
-            label_path) or not os.path.exists(model_path) or not os.path.exists(model_path) or not os.path.exists(
-            calib_path):
+            label_path) or not os.path.exists(model_path) or not os.path.exists(calib_path):
         exit("The file path does not exist")
 
     annotation_path = "\\".join(model_path.split("\\")[:-1]) + "\\annotations\\" + img_path.split("\\")[-1] + "\\"

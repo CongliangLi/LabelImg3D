@@ -11,7 +11,7 @@ from PyQt5 import QtCore, uic, QtWidgets, QtGui
 from libs.scene_manager import SceneManager
 from libs.slog import SLog
 from libs.slabelimage import SLabelImage
-from libs.LKitti2LabelImg3D import Kitti2LabelImg3D
+from libs.lKitti2LabelImg3D import Kitti2LabelImg3D
 import vtk as vtk
 
 

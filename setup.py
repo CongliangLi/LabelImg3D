@@ -9,7 +9,7 @@ import os
 here = os.path.abspath(os.path.dirname(__file__))
 NAME = 'labelImg3d'
 REQUIRES_PYTHON = '>=3.0.0'
-REQUIRED_DEP = ['pyqt5', 'lxml', 'vtk']
+REQUIRED_DEP = ['pyqt5', 'lxml', 'vtk', 'opencv']
 about = {}
 
 with open(os.path.join(here, '__init__.py')) as f:
