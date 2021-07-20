@@ -87,7 +87,7 @@ class UploadCommand(Command):
 setup(
     app=APP,
     name=NAME,
-    version="1.0",
+    version="1.2",
     description="LabelImg3d is a 3D graphical image annotation tool and label object 3D bounding boxes in images",
     long_description=readme + '\n\n' + history,
     author="Congliang Li & Shijie Sun ",

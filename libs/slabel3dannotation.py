@@ -362,7 +362,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             self.image_actor = None
 
         # get image width and height
-        image = cv2.imread(image_path)
+        image = cv_imread(image_path)
         self.image_height, self.image_width, _ = image.shape
         self.image_scale = 1 / self.image_width
         self.image_ratio = self.image_width / self.image_height

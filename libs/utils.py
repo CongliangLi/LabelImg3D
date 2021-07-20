@@ -339,3 +339,10 @@ def get_all_path(open_file_path):
         if os.path.isdir(com_path):
             path_list.extend(get_all_path(com_path))
     return path_list
+
+
+# Solve the problem that opencv can't read Chinese path
+def cv_imread(filepath):
+    # 使用imdecode函数进行读取
+    img = cv2.imdecode(np.fromfile(filepath, dtype=np.uint8), -1)
+    return img
