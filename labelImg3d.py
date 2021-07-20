@@ -11,6 +11,7 @@ from PyQt5 import QtCore, uic, QtWidgets, QtGui
 from libs.scene_manager import SceneManager
 from libs.slog import SLog
 from libs.slabelimage import SLabelImage
+from libs.LKitti2LabelImg3D import Kitti2LabelImg3D
 import vtk as vtk
 
 
@@ -31,6 +32,8 @@ class Draw3D(QtWidgets.QMainWindow):
         self.camera_property = LCamera_Property(self, "Camera_Property")
         self.label_image = SLabelImage(self, "LabelImage")
         self.label_image.showImage()
+        self.kitti_2_labelimg3d = Kitti2LabelImg3D(self)
+
 
         self.addDockWidget(Qt.RightDockWidgetArea, self.image_list)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.model_list)
@@ -50,6 +53,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui.actionPrevious.triggered.connect(self.scene_manager.previous)
         self.ui.actionNext.triggered.connect(self.scene_manager.next)
         self.ui.action_Delete_Model.triggered.connect(self.ui.vtk_panel.delete_model)
+        self.ui.actionkitti_2_labelimg3D.triggered.connect(self.kitti_2_labelimg3d.show)
         # self.ui.actionKITTI.triggered.connect(self.exportKITTI)
 
         # rotate

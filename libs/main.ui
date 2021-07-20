@@ -87,8 +87,15 @@
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
    </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionkitti_2_labelimg3D"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuTools"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Load_Scenes">
@@ -231,6 +238,11 @@
    </property>
    <property name="text">
     <string>KITTI</string>
+   </property>
+  </action>
+  <action name="actionkitti_2_labelimg3D">
+   <property name="text">
+    <string>kitti-&gt;labelimg3D</string>
    </property>
   </action>
  </widget>
