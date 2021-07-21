@@ -152,7 +152,7 @@ class Kitti2LabelImg3D(QObject):
         for i in reversed(range(0, len(a))):
             obj_class = a[0][i]
 
-            if obj_class == "Cyclist" or obj_class == "DontCare" or obj_class == "Misc" or obj_class == "Person_sitting":
+            if obj_class == "DontCare" or obj_class == "Misc" or obj_class == "Person_sitting":
                 continue
 
             obj_position_c0 = np.array([[a[j][i] for j in range(11, 14)]])
@@ -182,6 +182,9 @@ class Kitti2LabelImg3D(QObject):
             # R_oL2w = np.dot(R_oK2c, R_c2w)
             oL_2_w = np.column_stack([R_oL2w, obj_position_w])
             oL_2_w = np.row_stack([oL_2_w, np.array([0, 0, 0, 1])])
+
+            if obj_class == "Cyclist":
+                obj_class = "Pedestrian"
             data["model"]["{}".format(num)] = {
                 "model_file": model_data[obj_class]["path"],
                 "matrix": oL_2_w.reshape(1, 16).tolist()[0],
