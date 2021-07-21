@@ -149,7 +149,7 @@ class Kitti2LabelImg3D(QObject):
                            [0.004570332, 0.003389843, 0.9999838]])
 
         a = pd.read_table(label_path, sep=' ', header=None)
-        for i in range(0, len(a)):
+        for i in reversed(range(0, len(a))):
             obj_class = a[0][i]
 
             if obj_class == "Cyclist" or obj_class == "DontCare" or obj_class == "Misc" or obj_class == "Person_sitting":
