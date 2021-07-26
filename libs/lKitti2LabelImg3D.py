@@ -35,7 +35,6 @@ class Kitti2LabelImg3D(QObject):
         # progressBar status
         self.ui.progressBar.setValue(0)
 
-
     def openFolder(self):
         """load the scenes, the folder structure should be as follows:
 
