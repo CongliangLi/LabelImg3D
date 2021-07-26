@@ -9,7 +9,7 @@ import os
 here = os.path.abspath(os.path.dirname(__file__))
 NAME = 'labelImg3d'
 REQUIRES_PYTHON = '>=3.0.0'
-REQUIRED_DEP = ['pyqt5', 'lxml', 'vtk', 'opencv']
+REQUIRED_DEP = ['pyqt5', 'vtk', 'pandas', 'pillow','numpy']
 about = {}
 
 with open(os.path.join(here, '__init__.py')) as f:
@@ -92,7 +92,7 @@ setup(
     long_description=readme + '\n\n' + history,
     author="Congliang Li & Shijie Sun ",
     author_email='congliangli@chd.edu.cn & shijieSun@chd.edu.cn',
-    url='http://git.chd.gold:3000/shijie/labelimg3d',
+    url='https://github.com/CongliangLi/LabelImg3D',
     python_requires=REQUIRES_PYTHON,
     package_dir={'labelImg3d': '.'},
     packages=required_packages,
