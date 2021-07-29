@@ -49,7 +49,7 @@
      <x>0</x>
      <y>0</y>
      <width>1535</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -93,8 +93,15 @@
     </property>
     <addaction name="actionkitti_2_labelimg3D"/>
    </widget>
+   <widget class="QMenu" name="menuConfig">
+    <property name="title">
+     <string>Config</string>
+    </property>
+    <addaction name="actionSystem_Config"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuConfig"/>
    <addaction name="menuTools"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -243,6 +250,11 @@
   <action name="actionkitti_2_labelimg3D">
    <property name="text">
     <string>kitti-&gt;labelimg3D</string>
+   </property>
+  </action>
+  <action name="actionSystem_Config">
+   <property name="text">
+    <string>System Config</string>
    </property>
   </action>
  </widget>

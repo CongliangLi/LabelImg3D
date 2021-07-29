@@ -3,6 +3,7 @@ import os
 import numpy as np
 from numpy.linalg import inv
 import cv2
+from math import atan, radians, degrees, cos, sin
 
 
 def getTransform(matrix):
@@ -324,3 +325,19 @@ def get_all_path(open_file_path):
 def cv_imread(filepath):
     img = cv2.imdecode(np.fromfile(filepath, dtype=np.uint8), -1)
     return img
+
+
+# get cot of angle system
+def cot(angle):
+    angle = degrees(angle)
+    return cos(angle) / sin(angle)
+
+
+# Calculating distance from fov(angle value)
+def get_distance(fov):
+    return round(1 / 2 * cot(fov / 2), 2)
+
+
+# Calculating fov(angle value) from distance
+def get_fov(distance):
+    return round(2 * atan(1 / (2 * distance)), 2)

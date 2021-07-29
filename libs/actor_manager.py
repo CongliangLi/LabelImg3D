@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import *
 from libs.smodellist import SModelList
 from itertools import product
 import itertools
-
+from libs.lsystem_config import SystemConfig
 
 class Actor:
     def __init__(self, render_window, interactor, model_path, model_class, model_name, layer_num):
@@ -208,12 +208,6 @@ class ActorManager(QObject):
         # self.bg_renderer.GetActiveCamera().SetClippingRange(0.00001, 1000000)
         self.actors = []
 
-        # load config
-        with open("libs/config.json", 'r') as load_f:
-            config_data = json.load(load_f)
-        self.model_initial_position = [0, 0, config_data["model"]["initial_position"]]
-        self.camera_data = config_data["camera"]
-
     def newActor(self, model_path, model_class, model_name, actor_matrix=None, actor_size=[]):
         actor = Actor(self.render_window, self.interactor, model_path, model_class, model_name, len(self.actors) + 1)
         if actor_matrix is None and actor_size == []:
@@ -230,7 +224,7 @@ class ActorManager(QObject):
                 actor.setMatrix(matrix)
 
                 # Set the initial loading position of the model
-                actor.actor.SetPosition(self.model_initial_position)
+                actor.actor.SetPosition([0, 0, float(SystemConfig.config_data["model"]["initial_position"])])
                 actor.size = list(getActorXYZRange(actor.actor))
         else:
             # copy the camera matrix
@@ -411,12 +405,12 @@ class ActorManager(QObject):
             "image_file": image_file,
             "model": {"num": 0},
             "camera": {
-                "matrix": self.camera_data["matrix"],
-                "position": self.camera_data["position"],
-                "focalPoint": self.camera_data["focalPoint"],
-                "fov": self.camera_data["fov"],
-                "viewup": self.camera_data["viewup"],
-                "distance": self.camera_data["distance"]
+                "matrix": SystemConfig.config_data["camera"]["matrix"],
+                "position": SystemConfig.config_data["camera"]["position"],
+                "focalPoint": SystemConfig.config_data["camera"]["focalPoint"],
+                "fov": SystemConfig.config_data["camera"]["fov"],
+                "viewup": SystemConfig.config_data["camera"]["viewup"],
+                "distance": SystemConfig.config_data["camera"]["distance"]
             }
         }
 

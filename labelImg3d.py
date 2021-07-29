@@ -12,6 +12,7 @@ from libs.scene_manager import SceneManager
 from libs.slog import SLog
 from libs.slabelimage import SLabelImage
 from libs.lKitti2LabelImg3D import Kitti2LabelImg3D
+from libs.lsystem_config import SystemConfig
 import vtk as vtk
 
 
@@ -20,6 +21,8 @@ class Draw3D(QtWidgets.QMainWindow):
         # Parent constructor
         self.super = super(Draw3D, self)
         self.super.__init__()
+
+        self.system_config = SystemConfig(self)
         self.vtk_widget = None
         self.ui = None
         self.setup()
@@ -33,6 +36,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.label_image = SLabelImage(self, "LabelImage")
         self.label_image.showImage()
         self.kitti_2_labelimg3d = Kitti2LabelImg3D(self)
+
 
         self.addDockWidget(Qt.RightDockWidgetArea, self.image_list)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.model_list)
@@ -53,6 +57,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui.actionNext.triggered.connect(self.scene_manager.next)
         self.ui.action_Delete_Model.triggered.connect(self.ui.vtk_panel.delete_model)
         self.ui.actionkitti_2_labelimg3D.triggered.connect(self.kitti_2_labelimg3d.show)
+        self.ui.actionSystem_Config.triggered.connect(self.system_config.show)
         # self.ui.actionKITTI.triggered.connect(self.exportKITTI)
 
         # rotate
@@ -77,6 +82,9 @@ class Draw3D(QtWidgets.QMainWindow):
 
         # update property when enter a scene
         self.ui.vtk_panel.actor_manager.signal_update_property_enter_scene.connect(self.property3d.update_property)
+
+        # update camera property when change the config
+        # self.system_config.signal_update_camera_property.connect(self.camera_property.update_camera_data)
 
     def setup(self):
         self.ui = Ui_main.Ui_MainWindow()

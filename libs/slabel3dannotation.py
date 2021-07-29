@@ -16,7 +16,7 @@ from libs.sproperty import *
 # import tqdm
 import numpy as np
 from pathlib import Path
-
+from libs.lsystem_config import SystemConfig
 
 # from PIL import Image
 
@@ -34,11 +34,6 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.AddObserver('CharEvent', self.RemoveKeyR, -1)
         self.super = super(MouseInteractorHighLightActor, self)
         self.reset()
-
-        # load config
-        with open("libs/config.json", 'r') as load_f:
-            config_data = json.load(load_f)
-        self.scaling_factor = config_data["model"]["scaling_factor"]
 
     def RemoveKeyR(self, obj, event):
         key = self.GetInteractor().GetKeySym()
@@ -260,7 +255,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         # Right mouse button movement operation
         if self.isPressedRight and not self.GetInteractor().GetShiftKey():
             self.FindPokedRenderer(x, y)
-            self.UniformScale(self.scaling_factor)
+            self.UniformScale(float(SystemConfig.config_data["model"]["scaling_factor"]))
             self.InvokeEvent(vtkCommand.InteractionEvent, None)
         else:
             self.super.OnMouseMove()
