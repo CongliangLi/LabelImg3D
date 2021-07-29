@@ -316,7 +316,9 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         transform = vtk.vtkTransform()
         transform.Translate(0, 0, 0.01)
         axes.SetUserTransform(transform)
-        self.bg_renderer.AddActor(axes)
+
+        # show axes
+        # self.bg_renderer.AddActor(axes)
 
         self.image_actor = None
         self.image_path = None
@@ -488,7 +490,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
             data = [self.parent().parent().property3d.config.get(p)
                     for p in ["x", "y", "z", "rz", "rx", "ry"]]
-            data = [round(Ro, 2) for Ro in data]
+            # data = [round(Ro, 2) for Ro in data]
             data = self.resize_Angle(data)
 
             Rotate = self.style.InteractionProp.GetOrientation()  # Z, X, Y

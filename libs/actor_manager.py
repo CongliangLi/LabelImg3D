@@ -207,7 +207,7 @@ class ActorManager(QObject):
         self.interactor.GetInteractorStyle().SetAutoAdjustCameraClippingRange(False)
         # self.bg_renderer.GetActiveCamera().SetClippingRange(0.00001, 1000000)
         self.actors = []
-        self.model_initial_position = [0, 0, -20]
+        self.model_initial_position = [0, 0, -3]
 
     def newActor(self, model_path, model_class, model_name, actor_matrix=None, actor_size=[]):
         actor = Actor(self.render_window, self.interactor, model_path, model_class, model_name, len(self.actors) + 1)

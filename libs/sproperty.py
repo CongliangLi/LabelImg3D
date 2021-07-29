@@ -38,6 +38,7 @@ class SProperty(QDockWidget):
             width_spin = QDoubleSpinBox()
             width_spin.setMaximum(50000)
             width_spin.setMinimum(-50000)
+            width_spin.setDecimals(5)
             self.add(width_spin, x, 1 if x == 's' else 0, i + 1, 1)
 
             width_spin.valueChanged.connect(lambda: self.parent(
@@ -82,7 +83,7 @@ class SProperty(QDockWidget):
     def update_property(self, data):
         # for i in range(len(data)):
         #     print(data[i])
-        if data[2] > 0.:
+        if data[2] > 1.:
             self.config.set(
                 "x", self.parent().ui.vtk_panel.actor_manager.model_initial_position[0])
             self.config.set(
