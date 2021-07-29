@@ -58,10 +58,22 @@ class SystemConfig(QObject):
     def apply(self):
         # camera config
         if self.ui.Camera_parameter.currentText() == "fov":
-            self.camera_fov = float(self.ui.Camera_parameter_value.text())
+            try:
+                self.camera_fov = float(self.ui.Camera_parameter_value.text())
+            except ValueError:
+                QMessageBox.critical(self.window, "Error",
+                                     "Invalid input data {}!".format(self.ui.Camera_parameter_value.text()),
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+                return
             self.camera_distance = get_distance(self.camera_fov)
         else:
-            self.camera_distance = float(self.ui.Camera_parameter_value.text())
+            try:
+                self.camera_distance = float(self.ui.Camera_parameter_value.text())
+            except ValueError:
+                QMessageBox.critical(self.window, "Error",
+                                     "Invalid input data {}!".format(self.ui.Camera_parameter_value.text()),
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+                return
             self.camera_fov = get_fov(self.camera_distance)
 
         self.camera_position = [0, 0, self.camera_distance]
@@ -70,13 +82,25 @@ class SystemConfig(QObject):
                               0.0, 0.0, 1.0, self.camera_distance,
                               0.0, 0.0, 0.0, 1.0]
         # model config
-        self.initial_position = float(self.ui.lineEdit_initial_position.text())
-        self.max_position = float(self.ui.lineEdit_max_position.text())
-        self.position_accuracy = int(self.ui.lineEdit_position_accuracy.text())
-        self.size_accuracy = int(self.ui.lineEdit_size_accuracy.text())
-        self.scaling_factor = float(self.ui.lineEdit_scaling_factor.text())
+        try:
+            self.initial_position = float(self.ui.lineEdit_initial_position.text())
+            self.max_position = float(self.ui.lineEdit_max_position.text())
+            self.position_accuracy = int(self.ui.lineEdit_position_accuracy.text())
+            self.size_accuracy = int(self.ui.lineEdit_size_accuracy.text())
+            self.scaling_factor = float(self.ui.lineEdit_scaling_factor.text())
+        except ValueError:
+            QMessageBox.critical(self.window, "Error", "Invalid input data!",
+                                 QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
 
-        # update SystemConfig.config_data
+            self.initial_position = SystemConfig.config_data["model"]["initial_position"]
+            self.max_position = SystemConfig.config_data["model"]["max_position"]
+            self.position_accuracy = SystemConfig.config_data["model"]["position_accuracy"]
+            self.size_accuracy = SystemConfig.config_data["model"]["size_accuracy"]
+            self.scaling_factor = SystemConfig.config_data["model"]["scaling_factor"]
+
+            return
+
+            # update SystemConfig.config_data
         SystemConfig.config_data["camera"]["matrix"] = self.camera_matrix
         SystemConfig.config_data["camera"]["position"] = self.camera_position
         SystemConfig.config_data["camera"]["focalPoint"] = self.camera_focalPoint
