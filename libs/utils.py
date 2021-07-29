@@ -329,7 +329,7 @@ def cv_imread(filepath):
 
 # get cot of angle system
 def cot(angle):
-    angle = degrees(angle)
+    angle = radians(angle)
     return cos(angle) / sin(angle)
 
 

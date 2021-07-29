@@ -165,6 +165,15 @@ class LCamera_Property(QDockWidget):
 
         self.is_change = True
 
+    # update camera data when changing system config
+    @PyQt5.QtCore.pyqtSlot(list)
+    def update_camera(self, camera_data):
+        self.config.set("x", camera_data[0])
+        self.config.set("y", camera_data[1])
+        self.config.set("z", camera_data[2])
+        self.config.set("fov", camera_data[3])
+        self.config.set("distance", camera_data[4])
+
 
 if __name__ == '__main__':
     class MainWindow(QMainWindow):

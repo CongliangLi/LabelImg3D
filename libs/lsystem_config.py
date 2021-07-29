@@ -7,7 +7,7 @@ from libs.utils import get_distance, get_fov
 
 
 class SystemConfig(QObject):
-    with open("libs/config.json", 'r') as load_f:
+    with open("libs/system_config.json", 'r') as load_f:
         config_data = json.load(load_f)
     signal_update_camera_property = pyqtSignal(list)
 
@@ -70,11 +70,11 @@ class SystemConfig(QObject):
                               0.0, 0.0, 1.0, self.camera_distance,
                               0.0, 0.0, 0.0, 1.0]
         # model config
-        self.initial_position = self.ui.lineEdit_initial_position.text()
-        self.max_position = self.ui.lineEdit_max_position.text()
-        self.position_accuracy = self.ui.lineEdit_position_accuracy.text()
-        self.size_accuracy = self.ui.lineEdit_size_accuracy.text()
-        self.scaling_factor = self.ui.lineEdit_scaling_factor.text()
+        self.initial_position = float(self.ui.lineEdit_initial_position.text())
+        self.max_position = float(self.ui.lineEdit_max_position.text())
+        self.position_accuracy = int(self.ui.lineEdit_position_accuracy.text())
+        self.size_accuracy = int(self.ui.lineEdit_size_accuracy.text())
+        self.scaling_factor = float(self.ui.lineEdit_scaling_factor.text())
 
         # update SystemConfig.config_data
         SystemConfig.config_data["camera"]["matrix"] = self.camera_matrix
@@ -91,10 +91,8 @@ class SystemConfig(QObject):
         SystemConfig.config_data["model"]["scaling_factor"] = self.scaling_factor
 
         # Save to local file(.json)
-        with open("libs/config.json", 'w+') as f:
+        with open("libs/system_config.json", 'w+') as f:
             json.dump(SystemConfig.config_data, f, indent=4)
 
         # update scene
-
-
-
+        self.signal_update_camera_property.emit(self.camera_position + [self.camera_fov, self.camera_distance])

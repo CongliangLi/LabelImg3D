@@ -84,7 +84,7 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui.vtk_panel.actor_manager.signal_update_property_enter_scene.connect(self.property3d.update_property)
 
         # update camera property when change the config
-        # self.system_config.signal_update_camera_property.connect(self.camera_property.update_camera_data)
+        self.system_config.signal_update_camera_property.connect(self.camera_property.update_camera)
 
     def setup(self):
         self.ui = Ui_main.Ui_MainWindow()
