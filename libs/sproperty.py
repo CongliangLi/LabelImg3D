@@ -7,10 +7,11 @@ from PyQt5.QtWidgets import *
 from .pyqtconfig.config import ConfigManager
 
 from .pyqtconfig.qt import (QComboBox, QCheckBox, QSpinBox, QDoubleSpinBox, QMainWindow,
-                           QLineEdit, QApplication, QTextEdit,
-                           QGridLayout, QWidget, QDockWidget)
+                            QLineEdit, QApplication, QTextEdit,
+                            QGridLayout, QWidget, QDockWidget)
 
 from vtk import *
+import json
 
 
 class SProperty(QDockWidget):
@@ -29,16 +30,26 @@ class SProperty(QDockWidget):
 
         self.setWindowTitle(title)
         self.grid_layout = QGridLayout()
-        # self.layout().addChildLayout(self.grid_layout)
         self.config_edit = QTextEdit()
         self.config = ConfigManager()
         self.is_changed = True
+
+        # Load config
+        with open("libs/config.json", 'r') as load_f:
+            config_data = json.load(load_f)
+        self.max_position = config_data["model"]["max_position"]
+        self.position_accuracy = config_data["model"]["position_accuracy"]
+        self.size_accuracy = config_data["model"]["size_accuracy"]
 
         for i, x in enumerate(['x', 'y', 'z', 'rx', 'ry', 'rz', 'w', 'l', 'h', 's']):
             width_spin = QDoubleSpinBox()
             width_spin.setMaximum(50000)
             width_spin.setMinimum(-50000)
-            width_spin.setDecimals(5)
+            if x == "x" or x == "y" or x == "z":
+                width_spin.setDecimals(self.position_accuracy)
+            if x == "w" or x == "l" or x == "h":
+                width_spin.setDecimals(self.size_accuracy)
+
             self.add(width_spin, x, 1 if x == 's' else 0, i + 1, 1)
 
             width_spin.valueChanged.connect(lambda: self.parent(
@@ -83,7 +94,7 @@ class SProperty(QDockWidget):
     def update_property(self, data):
         # for i in range(len(data)):
         #     print(data[i])
-        if data[2] > 1.:
+        if data[2] > self.max_position:
             self.config.set(
                 "x", self.parent().ui.vtk_panel.actor_manager.model_initial_position[0])
             self.config.set(
@@ -148,6 +159,7 @@ if __name__ == '__main__':
         @staticmethod
         def update(sender):
             print(sender)
+
 
     app = QApplication(sys.argv)
     demo = MainWindow()
