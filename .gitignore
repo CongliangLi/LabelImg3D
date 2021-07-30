@@ -6,3 +6,4 @@ scenes/KITTI/images/scene1/*.txt
 labelImg3d.exe
 .idea/
 .idea/workspace.xml
+system_config.json

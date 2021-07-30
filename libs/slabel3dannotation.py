@@ -16,7 +16,7 @@ from libs.sproperty import *
 # import tqdm
 import numpy as np
 from pathlib import Path
-
+from libs.lsystem_config import SystemConfig
 
 # from PIL import Image
 
@@ -204,7 +204,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         del oldMatrix
         del newTransform
 
-    def UniformScale(self):
+    def UniformScale(self, Scaling_factor):
         if self.GetCurrentRenderer() is None or self.InteractionProp is None:
             return
         rwi = self.GetInteractor()
@@ -225,7 +225,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
         # yf = dy / center[1] *  10.0
         # scaleFactor = 0.1 * (1.1 ** yf)
-        motion_vector = [-0.1 * d * dy for d in direction]
+        motion_vector = [-Scaling_factor * d * dy for d in direction]
         if self.InteractionProp.GetUserMatrix() is not None:
             t = vtkTransform()
             t.PostMultiply()
@@ -255,7 +255,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         # Right mouse button movement operation
         if self.isPressedRight and not self.GetInteractor().GetShiftKey():
             self.FindPokedRenderer(x, y)
-            self.UniformScale()
+            self.UniformScale(float(SystemConfig.config_data["model"]["scaling_factor"]))
             self.InvokeEvent(vtkCommand.InteractionEvent, None)
         else:
             self.super.OnMouseMove()
@@ -440,11 +440,12 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
     def exportScenes(self):
         if not self.parent().parent().ui.actionKITTI.isChecked():
             return
-            
+
         if self.image_path is None or self.image_actor is None:
             return
-        
-        text_file = Path(self.image_path).parent.parent.parent / (Path('annotations/{}-kitti/{}.txt'.format(Path(self.image_path).parent.stem, Path(self.image_path).stem)))
+
+        text_file = Path(self.image_path).parent.parent.parent / (
+            Path('annotations/{}-kitti/{}.txt'.format(Path(self.image_path).parent.stem, Path(self.image_path).stem)))
         if not os.path.exists(text_file.parent):
             os.makedirs(text_file.parent)
 
@@ -517,11 +518,11 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             self.style.GetInteractor().Render()
 
             self.signal_update_images.emit(
-            drawProjected3DBox(
-                self.style.GetCurrentRenderer(),
-                self.style.InteractionProp,
-                self.image_data.copy(),
-                with_clip=True)
+                drawProjected3DBox(
+                    self.style.GetCurrentRenderer(),
+                    self.style.InteractionProp,
+                    self.image_data.copy(),
+                    with_clip=True)
             )
 
             if self.interactor.GetInteractorStyle().GetAutoAdjustCameraClippingRange():
@@ -533,9 +534,9 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
                 data[i] -= 360
             if data[i] <= -180:
                 data[i] += 360
-        return data 
+        return data
 
-    # Shortcut key operation: delete selected model
+        # Shortcut key operation: delete selected model
 
     def delete_model(self):
         self.actor_manager.delete_actor()

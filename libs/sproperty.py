@@ -7,10 +7,12 @@ from PyQt5.QtWidgets import *
 from .pyqtconfig.config import ConfigManager
 
 from .pyqtconfig.qt import (QComboBox, QCheckBox, QSpinBox, QDoubleSpinBox, QMainWindow,
-                           QLineEdit, QApplication, QTextEdit,
-                           QGridLayout, QWidget, QDockWidget)
+                            QLineEdit, QApplication, QTextEdit,
+                            QGridLayout, QWidget, QDockWidget)
 
 from vtk import *
+import json
+from libs.lsystem_config import SystemConfig
 
 
 class SProperty(QDockWidget):
@@ -29,7 +31,6 @@ class SProperty(QDockWidget):
 
         self.setWindowTitle(title)
         self.grid_layout = QGridLayout()
-        # self.layout().addChildLayout(self.grid_layout)
         self.config_edit = QTextEdit()
         self.config = ConfigManager()
         self.is_changed = True
@@ -38,7 +39,11 @@ class SProperty(QDockWidget):
             width_spin = QDoubleSpinBox()
             width_spin.setMaximum(50000)
             width_spin.setMinimum(-50000)
-            width_spin.setDecimals(5)
+            if x == "x" or x == "y" or x == "z":
+                width_spin.setDecimals(float(SystemConfig.config_data["model"]["position_accuracy"]))
+            if x == "w" or x == "l" or x == "h":
+                width_spin.setDecimals(float(SystemConfig.config_data["model"]["size_accuracy"]))
+
             self.add(width_spin, x, 1 if x == 's' else 0, i + 1, 1)
 
             width_spin.valueChanged.connect(lambda: self.parent(
@@ -83,13 +88,10 @@ class SProperty(QDockWidget):
     def update_property(self, data):
         # for i in range(len(data)):
         #     print(data[i])
-        if data[2] > 1.:
-            self.config.set(
-                "x", self.parent().ui.vtk_panel.actor_manager.model_initial_position[0])
-            self.config.set(
-                "y", self.parent().ui.vtk_panel.actor_manager.model_initial_position[1])
-            self.config.set(
-                "z", self.parent().ui.vtk_panel.actor_manager.model_initial_position[2])
+        if data[2] > float(SystemConfig.config_data["model"]["max_position"]):
+            self.config.set("x", 0)
+            self.config.set("y", 0)
+            self.config.set("z", float(SystemConfig.config_data["model"]["initial_position"]))
 
         self.is_changed = False
         [self.config.set(s, d) for s, d in zip(
@@ -148,6 +150,7 @@ if __name__ == '__main__':
         @staticmethod
         def update(sender):
             print(sender)
+
 
     app = QApplication(sys.argv)
     demo = MainWindow()

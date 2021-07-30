@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import *
 from libs.smodellist import SModelList
 from itertools import product
 import itertools
-
+from libs.lsystem_config import SystemConfig
 
 class Actor:
     def __init__(self, render_window, interactor, model_path, model_class, model_name, layer_num):
@@ -207,7 +207,6 @@ class ActorManager(QObject):
         self.interactor.GetInteractorStyle().SetAutoAdjustCameraClippingRange(False)
         # self.bg_renderer.GetActiveCamera().SetClippingRange(0.00001, 1000000)
         self.actors = []
-        self.model_initial_position = [0, 0, -3]
 
     def newActor(self, model_path, model_class, model_name, actor_matrix=None, actor_size=[]):
         actor = Actor(self.render_window, self.interactor, model_path, model_class, model_name, len(self.actors) + 1)
@@ -225,7 +224,7 @@ class ActorManager(QObject):
                 actor.setMatrix(matrix)
 
                 # Set the initial loading position of the model
-                actor.actor.SetPosition(self.model_initial_position)
+                actor.actor.SetPosition([0, 0, float(SystemConfig.config_data["model"]["initial_position"])])
                 actor.size = list(getActorXYZRange(actor.actor))
         else:
             # copy the camera matrix
@@ -369,8 +368,8 @@ class ActorManager(QObject):
             # updata property when enter a scene
             self.signal_update_property_enter_scene.emit(
                 list(self.getCurrentActiveActor().GetPosition() + self.getCurrentActiveActor().GetOrientation()) +
-                     self.actors[-1].size
-                )
+                self.actors[-1].size
+            )
 
     def toJson(self, scene_folder):
         # self.reformat()
@@ -406,12 +405,12 @@ class ActorManager(QObject):
             "image_file": image_file,
             "model": {"num": 0},
             "camera": {
-                "matrix": [1, 0, 0, 1, 0.0, 1, 0, 0.0, 0, 0, 1, 0.52, 0.0, 0.0, 0.0, 1.0],
-                "position": [0, 0.0, 0.52],
-                "focalPoint": [0, 0, 0],
-                "fov": 88.0,
-                "viewup": [0, 1, 0],
-                "distance": 0.52
+                "matrix": SystemConfig.config_data["camera"]["matrix"],
+                "position": SystemConfig.config_data["camera"]["position"],
+                "focalPoint": SystemConfig.config_data["camera"]["focalPoint"],
+                "fov": SystemConfig.config_data["camera"]["fov"],
+                "viewup": SystemConfig.config_data["camera"]["viewup"],
+                "distance": SystemConfig.config_data["camera"]["distance"]
             }
         }
 
