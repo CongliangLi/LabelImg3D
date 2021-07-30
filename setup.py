@@ -35,6 +35,7 @@ required_packages = find_packages()
 required_packages.append('labelImg3d')
 required_packages.append('labelImg3d.libs')
 required_packages.append('labelImg3d.libs.pyqtconfig')
+required_packages.append('labelImg3d.libs.hooks')
 
 APP = [NAME + '.py']
 OPTIONS = {
