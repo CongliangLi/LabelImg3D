@@ -6,11 +6,16 @@ import json
 from libs.utils import get_distance, get_fov
 import os
 from pathlib import Path
+import sys
 
 
 class SystemConfig(QObject):
-    with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'system_config.json'), 'r') as load_f:
-        config_data = json.load(load_f)
+    if Path(sys.argv[0]).parent.joinpath('system_config.json').is_file():
+        with open(Path(sys.argv[0]).parent.joinpath('system_config.json'), 'r') as load_f:
+            config_data = json.load(load_f)
+    else:
+        with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'system_config.json'), 'r') as load_f:
+            config_data = json.load(load_f)
     signal_update_camera_property = pyqtSignal(list)
 
     def __init__(self, parent):
@@ -117,7 +122,9 @@ class SystemConfig(QObject):
         SystemConfig.config_data["model"]["scaling_factor"] = self.scaling_factor
 
         # Save to local file(.json)
-        with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'system_config.json'), 'w+') as f:
+        # if not Path(sys.argv[0]).parent.joinpath('system_config.json').is_file():
+
+        with open(Path(sys.argv[0]).parent.joinpath('system_config.json'), 'w+') as f:
             json.dump(SystemConfig.config_data, f, indent=4)
 
         # update scene
