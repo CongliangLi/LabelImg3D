@@ -1,0 +1,1 @@
+datas = [('constants.json', 'constants.json')]

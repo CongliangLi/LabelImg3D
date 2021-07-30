@@ -9,7 +9,7 @@ import os
 here = os.path.abspath(os.path.dirname(__file__))
 NAME = 'labelImg3d'
 REQUIRES_PYTHON = '>=3.0.0'
-REQUIRED_DEP = ['pyqt5', 'vtk', 'pandas', 'pillow','numpy']
+REQUIRED_DEP = ['pyqt5', 'vtk', 'pandas', 'pillow', 'numpy']
 about = {}
 
 with open(os.path.join(here, '__init__.py')) as f:
@@ -87,7 +87,7 @@ class UploadCommand(Command):
 setup(
     app=APP,
     name=NAME,
-    version="1.2",
+    version="1.3",
     description="LabelImg3d is a 3D graphical image annotation tool and label object 3D bounding boxes in images",
     long_description=readme + '\n\n' + history,
     author="Congliang Li & Shijie Sun ",
@@ -114,7 +114,8 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.8',
     ],
-    package_data={'': ['libs/*.ui', 'libs/icons/*', 'LICENSE', '*.md', 'scenes/*/*/*/*.*', 'scenes/*/*/*.*']},
+    package_data={'': ['libs/*.ui', 'libs/icons/*', 'LICENSE', '*.md', 'scenes/*/*/*/*.*', 'scenes/*/*/*.*',
+                       "libs/system_config.json"]},
     # options={'py2app': OPTIONS},
     setup_requires=SET_REQUIRES,
     # $ setup.py publish support.

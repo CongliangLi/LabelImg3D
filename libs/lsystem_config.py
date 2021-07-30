@@ -4,10 +4,12 @@ from PyQt5 import QtWidgets
 from libs.Ui_system_config import Ui_System_config
 import json
 from libs.utils import get_distance, get_fov
+import os
+from pathlib import Path
 
 
 class SystemConfig(QObject):
-    with open("libs/system_config.json", 'r') as load_f:
+    with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'system_config.json'), 'r') as load_f:
         config_data = json.load(load_f)
     signal_update_camera_property = pyqtSignal(list)
 
@@ -115,7 +117,7 @@ class SystemConfig(QObject):
         SystemConfig.config_data["model"]["scaling_factor"] = self.scaling_factor
 
         # Save to local file(.json)
-        with open("libs/system_config.json", 'w+') as f:
+        with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'system_config.json'), 'w+') as f:
             json.dump(SystemConfig.config_data, f, indent=4)
 
         # update scene
