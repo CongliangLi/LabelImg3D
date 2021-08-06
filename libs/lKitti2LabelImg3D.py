@@ -4,8 +4,8 @@ from PyQt5 import QtWidgets
 from libs.Ui_kitti_2_labelimg3d import Ui_FormKitti2LabelImg3D
 import os
 import json
-from libs.kitti_util import Calibration, roty
-from libs.utils import get_all_path
+from libs.utils.kitti_util import Calibration, roty
+from libs.utils.utils import get_all_path
 import numpy as np
 import pandas as pd
 

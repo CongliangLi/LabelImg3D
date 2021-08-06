@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMessageBox
 from PyQt5 import QtWidgets
 from libs.Ui_system_config import Ui_System_config
 import json
-from libs.utils import get_distance, get_fov
+from libs.utils.utils import get_distance, get_fov
 import os
 from pathlib import Path
 import sys

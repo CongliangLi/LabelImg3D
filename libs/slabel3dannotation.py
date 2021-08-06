@@ -9,7 +9,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 import typing
 import math
 from vtk import *
-from libs.utils import *
+from libs.utils.utils import *
 import pandas as pd
 from libs.actor_manager import Actor, ActorManager
 from libs.sproperty import *
