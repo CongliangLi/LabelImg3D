@@ -66,6 +66,10 @@ def img_trans(li3d_scene_path, ep_path):
         gt_yml = {}
         num = 0
 
+        cam_R_m2c = [1, 0, 0,
+                     0, 1, 0,
+                     0, 0, 1]
+
         for annotation in annotations:
             with open(annotation, 'r') as load_f:
                 annotation_data = json.load(load_f)
@@ -75,9 +79,7 @@ def img_trans(li3d_scene_path, ep_path):
                     continue
 
                 ep_data_path + "/" + "%02d" % annotation_data["model"][str(i)]["class"]
-                gt_yml[num] = {"cam_R_m2c": [1, 0, 0,
-                                             0, 1, 0,
-                                             0, 0, 1],
+                gt_yml[num] = {"cam_R_m2c": cam_R_m2c,
                                "cam_t_m2c": [0, 0, annotation_data["camera"]["distance"]],
                                "obj_bb": "",
                                "obj_id": annotation_data["model"][str(i)]["class"]}
