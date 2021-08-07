@@ -4,6 +4,7 @@ import numpy as np
 from numpy.linalg import inv
 import cv2
 from math import atan, radians, degrees, cos, sin
+import yaml
 
 
 def getTransform(matrix):
@@ -341,3 +342,24 @@ def get_distance(fov):
 # Calculating fov(angle value) from distance
 def get_fov(distance):
     return round(2 * atan(1 / (2 * distance)), 2)
+
+
+# parse yaml to dict
+def parse_yaml(yaml_path):
+    """
+   Reads a yaml file
+    Args:
+        yaml_path: Path to the yaml file
+    Returns:
+        yaml_dic: Dictionary containing the yaml file content
+
+    """
+
+    if not os.path.isfile(yaml_path):
+        print("Error: file {} does not exist!".format(yaml_path))
+        return None
+
+    with open(yaml_path) as fid:
+        yaml_dic = yaml.safe_load(fid)
+
+    return yaml_dic
