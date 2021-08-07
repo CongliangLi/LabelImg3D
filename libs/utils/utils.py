@@ -322,6 +322,25 @@ def get_all_path(open_file_path):
     return path_list
 
 
+def get_dirname(path):
+    """
+
+    Args:
+        path: dir path
+
+    Returns:
+        dir_name: all dir names in the file path
+
+    """
+    dir_path = []
+    for lists in os.listdir(path):
+        sub_path = os.path.join(path, lists)
+        if os.path.isdir(sub_path):
+            dir_path.append(sub_path)
+
+    return dir_path
+
+
 # Solve the problem that opencv can't read Chinese path
 def cv_imread(filepath):
     img = cv2.imdecode(np.fromfile(filepath, dtype=np.uint8), -1)
@@ -363,3 +382,29 @@ def parse_yaml(yaml_path):
         yaml_dic = yaml.safe_load(fid)
 
     return yaml_dic
+
+
+# Calculating camera intrinsics from fov and image size
+def get_camera_intrinsics(fov_h, img_size):
+    """
+
+    Args:
+        fov_h: horizontal fov of camera
+        img_size: image_size [w,h]
+
+    Returns:
+        camera intrinsics matrix（3*3）
+
+    """
+    w, h = img_size
+    f = round(w / 2 * cot(fov_h / 2), 2)
+    fov_v = 2 * atan(h / (2 * f))
+
+    cx = w / 2
+    cy = h / 2
+
+    camera_intrinsics = [f, 0, cx,
+                         0, f, cy,
+                         0, 0, 1]
+
+    return camera_intrinsics

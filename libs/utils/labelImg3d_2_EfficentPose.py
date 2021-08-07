@@ -1,13 +1,23 @@
 import json
-import yaml
-import os, sys, shutil
+import os
+import shutil
 from math import pow, sqrt
-from libs.utils.utils import parse_yaml, get_all_path
+from PIL import Image
+import yaml
+
+from libs.utils.utils import get_all_path, get_camera_intrinsics, get_dirname, parse_yaml
 
 
 # Convert labelimg3d model.json to EfficentPose models_info.yml
-def model_trans(models_path_input, model_path_output):
-    with open(models_path_input + "/models.json", 'r') as load_f:
+def model_trans(li3d_scene_path, ep_path):
+    li3d_models_path = li3d_scene_path + "/models"
+    li3d_annotation_path = li3d_scene_path + "/annotations"
+    li3d_img_path = li3d_scene_path + "/images"
+
+    ep_models_path = ep_path + "/models"
+    ep_data_path = ep_path + "/data"
+
+    with open(li3d_models_path + "/models.json", 'r') as load_f:
         model_json_data = json.load(load_f)
 
     model_data = {1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {}}
@@ -27,9 +37,9 @@ def model_trans(models_path_input, model_path_output):
                 model_data[d]["size_z"] = model_json_data[j_d]["size"][2]
                 break
 
-    if not os.path.exists(os.path.dirname(model_path_output + "/models_info.yml")):
-        os.makedirs(os.path.dirname(model_path_output + "/models_info.yml"))
-    with open(model_path_output + "/models_info.yml", "w", encoding="utf-8") as f:
+    if not os.path.exists(os.path.dirname(ep_models_path + "/models_info.yml")):
+        os.makedirs(os.path.dirname(ep_models_path + "/models_info.yml"))
+    with open(ep_models_path + "/models_info.yml", "w", encoding="utf-8") as f:
         yaml.dump(model_data, f, allow_unicode=True)
 
     # yaml_file = parse_yaml(model_path_output + "/models_info.yml")
@@ -77,7 +87,7 @@ def img_trans(li3d_scene_path, ep_path):
                     ep_data_path + "/{}/rgb".format("%02d" % annotation_data["model"][str(i)]["class"]),
                     "{}.png".format("%04d" % num))
                 shutil.copyfile(this_img_path, copy_img_path)
-                print(num)
+                # print(num)
                 num += 1
 
         with open(ep_data_path + "/{}/gt.yml".format("%02d" % class_num), "w",
@@ -86,20 +96,48 @@ def img_trans(li3d_scene_path, ep_path):
 
 
 # Convert labelimg3d json to EfficentPose info.yml
-def camera_trans():
-    pass
+def camera_trans(li3d_scene_path, ep_path):
+    li3d_models_path = li3d_scene_path + "/models"
+    li3d_annotation_path = li3d_scene_path + "/annotations"
+    li3d_img_path = li3d_scene_path + "/images"
+
+    ep_models_path = ep_path + "/models"
+    ep_data_path = ep_path + "/data"
+
+    annotations = get_all_path(li3d_annotation_path)
+    with open(annotations[0], 'r') as load_f:
+        annotation_data = json.load(load_f)
+
+    fov = annotation_data["camera"]["fov"]
+
+    images = get_all_path(li3d_img_path)
+
+    img_size = Image.open(images[0]).size
+
+    cam_K = get_camera_intrinsics(fov, img_size)
+
+    depth_scale = 1.0
+
+    for path in get_dirname(ep_data_path):
+        file_path = os.path.join(path, "rgb")
+        info_yml = {}
+        for i in range(len(get_all_path(file_path))):
+            info_yml[i] = {"cam_K": cam_K,
+                           "depth_scale": depth_scale}
+
+        with open(os.path.join(path, "info.yml"), "w", encoding="utf-8") as f:
+            yaml.dump(info_yml, f, allow_unicode=True)
+        # yaml_file = parse_yaml(os.path.join(path, "info.yml"))
+
+
+def li3d_2_efficentpose(input_path, output_path):
+    model_trans(input_path, output_path)
+    img_trans(input_path, output_path)
+    camera_trans(input_path, output_path)
 
 
 if __name__ == '__main__':
     scene_path = "F:/my_desktop/kitti"
-    models_path = scene_path + "/models"
-    annotation_path = scene_path + "/annotations"
-    img_path = scene_path + "/images"
 
     efficentPose_path = "F:/my_desktop/PycharmFiles/3D_detection/EfficientPose/kitti"
-    efficentPose_models_path = efficentPose_path + "/models"
-    efficentPose_data_path = efficentPose_path + "/data"
-
-    # model_trans(models_path, efficentPose_models_path)
-
-    # img_trans(scene_path, efficentPose_path)
+    li3d_2_efficentpose(scene_path, efficentPose_path)
