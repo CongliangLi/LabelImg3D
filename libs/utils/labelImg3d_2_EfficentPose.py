@@ -72,6 +72,7 @@ def img_trans(li3d_scene_path, ep_path):
 
         for annotation in annotations:
             with open(annotation, 'r') as load_f:
+                # print(annotation)
                 annotation_data = json.load(load_f)
 
             for i in range(0, annotation_data["model"]["num"]):
@@ -81,7 +82,7 @@ def img_trans(li3d_scene_path, ep_path):
                 ep_data_path + "/" + "%02d" % annotation_data["model"][str(i)]["class"]
                 gt_yml[num] = {"cam_R_m2c": cam_R_m2c,
                                "cam_t_m2c": [0, 0, annotation_data["camera"]["distance"]],
-                               "obj_bb": "",
+                               "obj_bb": annotation_data["model"][str(i)]["2d_bbox"],
                                "obj_id": annotation_data["model"][str(i)]["class"]}
 
                 this_img_path = os.path.join(li3d_scene_path, annotation_data["image_file"])
@@ -133,6 +134,8 @@ def camera_trans(li3d_scene_path, ep_path):
 
 
 def li3d_2_efficentpose(input_path, output_path):
+    if not os.path.exists(os.path.dirname(output_path)):
+        os.makedirs(os.path.dirname(output_path))
     model_trans(input_path, output_path)
     img_trans(input_path, output_path)
     camera_trans(input_path, output_path)
