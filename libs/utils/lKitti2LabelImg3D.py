@@ -1,7 +1,7 @@
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5 import QtWidgets
-from libs.Ui_kitti_2_labelimg3d import Ui_FormKitti2LabelImg3D
+from libs.utils.Ui_kitti_2_labelimg3d import Ui_FormKitti2LabelImg3D
 import os
 import json
 from libs.utils.kitti_util import Calibration, roty
