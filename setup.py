@@ -34,6 +34,7 @@ elif _platform == "darwin":
 required_packages = find_packages()
 required_packages.append('labelImg3d')
 required_packages.append('labelImg3d.libs')
+required_packages.append('labelImg3d.libs.utils')
 required_packages.append('labelImg3d.libs.pyqtconfig')
 required_packages.append('labelImg3d.libs.hooks')
 
@@ -115,8 +116,9 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.8',
     ],
-    package_data={'': ['libs/*.ui', 'libs/icons/*', 'LICENSE', '*.md', 'scenes/*/*/*/*.*', 'scenes/*/*/*.*',
-                       "libs/system_config.json"]},
+    package_data={
+        '': ['libs/*.ui', "libs/utils/*.ui", 'libs/icons/*', 'LICENSE', '*.md', 'scenes/*/*/*/*.*', 'scenes/*/*/*.*',
+             "libs/system_config.json"]},
     # options={'py2app': OPTIONS},
     setup_requires=SET_REQUIRES,
     # $ setup.py publish support.

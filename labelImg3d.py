@@ -7,11 +7,11 @@ from libs.sproperty import SProperty
 from libs.lcamera_property import LCamera_Property
 
 import os
-from PyQt5 import QtCore, uic, QtWidgets, QtGui
+from PyQt5 import uic, QtWidgets, QtGui
 from libs.scene_manager import SceneManager
 from libs.slog import SLog
 from libs.slabelimage import SLabelImage
-from libs.lKitti2LabelImg3D import Kitti2LabelImg3D
+from libs.utils.lKitti2LabelImg3D import Kitti2LabelImg3D
 from libs.lsystem_config import SystemConfig
 import vtk as vtk
 
