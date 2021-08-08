@@ -132,10 +132,35 @@ def camera_trans(li3d_scene_path, ep_path):
         # yaml_file = parse_yaml(os.path.join(path, "info.yml"))
 
 
+def train_test(ep_path):
+    ep_data_path = ep_path + "/data"
+    for path in get_dirname(ep_data_path):
+        rgb_path = os.path.join(path, "rgb")
+        img_path = get_all_path(rgb_path)
+        train_txt = []
+        test_txt = []
+        for i in range(0, len(img_path)):
+            if i < len(img_path) / 2:
+                train_txt.append(img_path[i].split("\\")[-1].split(".")[0])
+            else:
+                test_txt.append(img_path[i].split("\\")[-1].split(".")[0])
+        with open(os.path.join(path, "train.txt"), 'w') as f:
+            for txt in train_txt:
+                f.write(txt + '\n')
+
+        with open(os.path.join(path, "test.txt"), 'w') as f:
+            for txt in train_txt:
+                f.write(txt + '\n')
+
+
 def li3d_2_efficentpose(input_path, output_path):
+    if not os.path.exists(os.path.dirname(output_path)):
+        os.makedirs(os.path.dirname(output_path))
+
     model_trans(input_path, output_path)
     img_trans(input_path, output_path)
     camera_trans(input_path, output_path)
+    train_test(output_path)
 
 
 if __name__ == '__main__':
