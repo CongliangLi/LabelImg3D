@@ -17,6 +17,8 @@ from libs.smodellist import SModelList
 from itertools import product
 import itertools
 from libs.lsystem_config import SystemConfig
+from PIL import Image
+
 
 class Actor:
     def __init__(self, render_window, interactor, model_path, model_class, model_name, layer_num):
@@ -147,13 +149,38 @@ class Actor:
 
         return round(l, 2), round(t, 2), round(r, 2), round(b, 2)
 
+    def getBBox3D(self):
+        """
+        Returns:
+            (8,2) array of vertices for the 3d box in following order:
+            1 -------- 0
+           /|         /|
+          2 -------- 3 .
+          | |        | |
+          . 5 -------- 4
+          |/         |/
+          6 -------- 7
+
+        """
+        renderer = self.renderer
+        w, h = Image.open(self.interactor.parent().parent().parent().image_list.file_list[0]).size
+
+        P_v2i = getMatrixW2I(renderer, w, h)
+        pts_3d = getActorRotatedBounds(self.actor)
+
+        p_v = np.array(worldToView(renderer, pts_3d))
+        p_i = np.dot(P_v2i, cart2hom(p_v[:, :2]).T).T[:, :2]
+        return [[int(p_i[i][0]), int(p_i[i][1])] for i in range(0, 8)]
+
     def toJson(self, scene_folder):
         return {
             "model_file": os.path.relpath(self.model_path, scene_folder),
             "matrix": matrix2List(self.actor.GetMatrix()),
             "class": self.type_class,
             "class_name": self.model_name,
-            "size": listRound(self.size)
+            "size": listRound(self.size),
+            "2d_bbox": self.getBBox2D(),
+            "3d_bbox": self.getBBox3D()
         }
 
     def toKITTI(self):

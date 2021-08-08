@@ -8,7 +8,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import QSize, pyqtSignal, QCoreApplication, QObject
 import typing
 import math
-from .utils import *
+from libs.utils.utils import *
 from PyQt5.QtWidgets import QMessageBox
 
 
