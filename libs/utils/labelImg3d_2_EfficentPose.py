@@ -66,9 +66,9 @@ def img_trans(li3d_scene_path, ep_path):
         gt_yml = {}
         num = 0
 
-        cam_R_m2c = [1, 0, 0,
-                     0, 1, 0,
-                     0, 0, 1]
+        cam_R_m2c = [1., 0., 0.,
+                     0., 1., 0.,
+                     0., 0., 1.]
 
         for annotation in annotations:
             with open(annotation, 'r') as load_f:
@@ -80,10 +80,10 @@ def img_trans(li3d_scene_path, ep_path):
                     continue
 
                 ep_data_path + "/" + "%02d" % annotation_data["model"][str(i)]["class"]
-                gt_yml[num] = {"cam_R_m2c": cam_R_m2c,
-                               "cam_t_m2c": [0, 0, annotation_data["camera"]["distance"]],
-                               "obj_bb": annotation_data["model"][str(i)]["2d_bbox"],
-                               "obj_id": annotation_data["model"][str(i)]["class"]}
+                gt_yml[num] = [{"cam_R_m2c": cam_R_m2c,
+                                "cam_t_m2c": [0, 0, annotation_data["camera"]["distance"]],
+                                "obj_bb": annotation_data["model"][str(i)]["2d_bbox"],
+                                "obj_id": annotation_data["model"][str(i)]["class"]}]
 
                 this_img_path = os.path.join(li3d_scene_path, annotation_data["image_file"])
                 copy_img_path = os.path.join(
@@ -95,7 +95,7 @@ def img_trans(li3d_scene_path, ep_path):
 
         with open(ep_data_path + "/{}/gt.yml".format("%02d" % class_num), "w",
                   encoding="utf-8") as f:
-            yaml.dump(gt_yml, f, allow_unicode=True)
+            yaml.dump(gt_yml, f, default_flow_style=False)
 
 
 # Convert labelimg3d json to EfficentPose info.yml
@@ -117,7 +117,7 @@ def camera_trans(li3d_scene_path, ep_path):
 
     img_size = Image.open(images[0]).size
 
-    cam_K = get_camera_intrinsics(fov, img_size)
+    cam_K = [get_camera_intrinsics(fov, img_size)]
 
     depth_scale = 1.0
 
