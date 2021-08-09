@@ -26,15 +26,15 @@ def model_trans(li3d_scene_path, ep_path):
             if model_json_data[j_d]["class_index"] == int(d):
                 model_data[d]["diameter"] = sqrt(pow(model_json_data[j_d]["size"][0], 2) +
                                                  pow(model_json_data[j_d]["size"][1], 2) +
-                                                 pow(model_json_data[j_d]["size"][2], 2))
+                                                 pow(model_json_data[j_d]["size"][2], 2)) * 1000
 
-                model_data[d]["min_x"] = -model_json_data[j_d]["size"][0] / 2
-                model_data[d]["min_y"] = -model_json_data[j_d]["size"][1] / 2
-                model_data[d]["min_z"] = -model_json_data[j_d]["size"][2] / 2
+                model_data[d]["min_x"] = -model_json_data[j_d]["size"][0] / 2 * 1000
+                model_data[d]["min_y"] = -model_json_data[j_d]["size"][1] / 2 * 1000
+                model_data[d]["min_z"] = -model_json_data[j_d]["size"][2] / 2 * 1000
 
-                model_data[d]["size_x"] = model_json_data[j_d]["size"][0]
-                model_data[d]["size_y"] = model_json_data[j_d]["size"][1]
-                model_data[d]["size_z"] = model_json_data[j_d]["size"][2]
+                model_data[d]["size_x"] = model_json_data[j_d]["size"][0] * 1000
+                model_data[d]["size_y"] = model_json_data[j_d]["size"][1] * 1000
+                model_data[d]["size_z"] = model_json_data[j_d]["size"][2] * 1000
                 break
 
     if not os.path.exists(os.path.dirname(ep_models_path + "/models_info.yml")):
@@ -81,7 +81,7 @@ def img_trans(li3d_scene_path, ep_path):
 
                 ep_data_path + "/" + "%02d" % annotation_data["model"][str(i)]["class"]
                 gt_yml[num] = {"cam_R_m2c": cam_R_m2c,
-                               "cam_t_m2c": [0, 0, annotation_data["camera"]["distance"]],
+                               "cam_t_m2c": [0, 0, annotation_data["camera"]["distance"] * 1000],
                                "obj_bb": annotation_data["model"][str(i)]["2d_bbox"],
                                "obj_id": annotation_data["model"][str(i)]["class"]}
 
