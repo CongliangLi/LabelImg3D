@@ -4,8 +4,9 @@ import shutil
 from math import pow, sqrt
 from PIL import Image
 import yaml
-
-from libs.utils.utils import get_all_path, get_camera_intrinsics, get_dirname, parse_yaml
+from cv2 import imread, line, imshow, waitKey, imwrite
+from libs.utils.utils import get_all_path, get_camera_intrinsics, get_dirname, parse_yaml, draw_projected_box3d
+import numpy as np
 
 
 # Convert labelimg3d model.json to EfficentPose models_info.yml
@@ -63,6 +64,12 @@ def img_trans(li3d_scene_path, ep_path):
         if not os.path.exists(os.path.dirname(ep_data_path + "/{}/rgb/".format("%02d" % class_num))):
             os.makedirs(os.path.dirname(ep_data_path + "/{}/rgb/".format("%02d" % class_num)))
 
+        if not os.path.exists(os.path.dirname(ep_data_path + "/{}/truth_2d/".format("%02d" % class_num))):
+            os.makedirs(os.path.dirname(ep_data_path + "/{}/truth_2d/".format("%02d" % class_num)))
+
+        if not os.path.exists(os.path.dirname(ep_data_path + "/{}/truth_3d/".format("%02d" % class_num))):
+            os.makedirs(os.path.dirname(ep_data_path + "/{}/truth_3d/".format("%02d" % class_num)))
+
         gt_yml = {}
         num = 0
 
@@ -91,7 +98,30 @@ def img_trans(li3d_scene_path, ep_path):
                     ep_data_path + "/{}/rgb".format("%02d" % annotation_data["model"][str(i)]["class"]),
                     "{}.png".format("%04d" % num))
                 shutil.copyfile(this_img_path, copy_img_path)
-                # print(num)
+
+                # truth 2d bbox
+                truth2d_img_path = os.path.join(
+                    ep_data_path + "/{}/truth_2d".format("%02d" % annotation_data["model"][str(i)]["class"]),
+                    "{}.png".format("%04d" % num))
+                # shutil.copyfile(this_img_path, copy_img_path)
+                img = imread(this_img_path)
+                a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
+                a, b, c, d = int(a), int(b), int(c), int(d)
+                line(img, (a, b), (c, b), (0, 255, 0), 2)
+                line(img, (a, b), (a, d), (0, 255, 0), 2)
+                line(img, (c, d), (c, b), (0, 255, 0), 2)
+                line(img, (c, d), (a, d), (0, 255, 0), 2)
+                imwrite(truth2d_img_path, img)
+
+                # truth 3d bbox
+                truth3d_img_path = os.path.join(
+                    ep_data_path + "/{}/truth_3d".format("%02d" % annotation_data["model"][str(i)]["class"]),
+                    "{}.png".format("%04d" % num))
+
+                img = imread(this_img_path)
+                img = draw_projected_box3d(img.copy(), np.array(annotation_data["model"][str(i)]["3d_bbox"])[:, :2])
+                imwrite(truth3d_img_path, img)
+
                 num += 1
 
         with open(ep_data_path + "/{}/gt.yml".format("%02d" % class_num), "w",
