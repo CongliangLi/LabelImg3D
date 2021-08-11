@@ -73,9 +73,9 @@ def img_trans(li3d_scene_path, ep_path):
         gt_yml = {}
         num = 0
 
-        cam_R_m2c = [1., 0., 0.,
-                     0., 1., 0.,
-                     0., 0., 1.]
+        cam_R_m2c = np.dot(np.array([[1., 0., 0.], [0., -1., 0.], [0., 0., -1.]]),
+                           np.array([[0., 1., 0.], [-1., 0., 0.], [0., 0., 1.]]))
+        cam_R_m2c = cam_R_m2c.reshape(1, 9).tolist()
 
         for annotation in annotations:
             with open(annotation, 'r') as load_f:
@@ -90,7 +90,7 @@ def img_trans(li3d_scene_path, ep_path):
 
                 gt_yml[num] = [{"cam_R_m2c": cam_R_m2c,
                                 "cam_t_m2c": [0, 0, annotation_data["camera"]["distance"] * 1000],
-                                "obj_bb": annotation_data["model"][str(i)]["2d_bbox"],
+                                "obj_bb": [int(bb) for bb in annotation_data["model"][str(i)]["2d_bbox"]],
                                 "obj_id": annotation_data["model"][str(i)]["class"]}]
 
                 this_img_path = os.path.join(li3d_scene_path, annotation_data["image_file"])
@@ -100,27 +100,27 @@ def img_trans(li3d_scene_path, ep_path):
                 shutil.copyfile(this_img_path, copy_img_path)
 
                 # truth 2d bbox
-                truth2d_img_path = os.path.join(
-                    ep_data_path + "/{}/truth_2d".format("%02d" % annotation_data["model"][str(i)]["class"]),
-                    "{}.png".format("%04d" % num))
-                # shutil.copyfile(this_img_path, copy_img_path)
-                img = imread(this_img_path)
-                a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
-                a, b, c, d = int(a), int(b), int(c), int(d)
-                line(img, (a, b), (c, b), (0, 255, 0), 2)
-                line(img, (a, b), (a, d), (0, 255, 0), 2)
-                line(img, (c, d), (c, b), (0, 255, 0), 2)
-                line(img, (c, d), (a, d), (0, 255, 0), 2)
-                imwrite(truth2d_img_path, img)
-
-                # truth 3d bbox
-                truth3d_img_path = os.path.join(
-                    ep_data_path + "/{}/truth_3d".format("%02d" % annotation_data["model"][str(i)]["class"]),
-                    "{}.png".format("%04d" % num))
-
-                img = imread(this_img_path)
-                img = draw_projected_box3d(img.copy(), np.array(annotation_data["model"][str(i)]["3d_bbox"])[:, :2])
-                imwrite(truth3d_img_path, img)
+                # truth2d_img_path = os.path.join(
+                #     ep_data_path + "/{}/truth_2d".format("%02d" % annotation_data["model"][str(i)]["class"]),
+                #     "{}.png".format("%04d" % num))
+                # # shutil.copyfile(this_img_path, copy_img_path)
+                # img = imread(this_img_path)
+                # a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
+                # a, b, c, d = int(a), int(b), int(c), int(d)
+                # line(img, (a, b), (c, b), (0, 255, 0), 2)
+                # line(img, (a, b), (a, d), (0, 255, 0), 2)
+                # line(img, (c, d), (c, b), (0, 255, 0), 2)
+                # line(img, (c, d), (a, d), (0, 255, 0), 2)
+                # imwrite(truth2d_img_path, img)
+                #
+                # # truth 3d bbox
+                # truth3d_img_path = os.path.join(
+                #     ep_data_path + "/{}/truth_3d".format("%02d" % annotation_data["model"][str(i)]["class"]),
+                #     "{}.png".format("%04d" % num))
+                #
+                # img = imread(this_img_path)
+                # img = draw_projected_box3d(img.copy(), np.array(annotation_data["model"][str(i)]["3d_bbox"])[:, :2])
+                # imwrite(truth3d_img_path, img)
 
                 num += 1
 
