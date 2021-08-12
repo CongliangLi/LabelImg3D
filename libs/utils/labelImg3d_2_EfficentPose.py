@@ -5,7 +5,8 @@ from math import pow, sqrt
 from PIL import Image
 import yaml
 from cv2 import imread, line, imshow, waitKey, imwrite
-from libs.utils.utils import get_all_path, get_camera_intrinsics, get_dirname, parse_yaml, draw_projected_box3d
+from libs.utils.utils import get_all_path, get_camera_intrinsics, get_dirname, parse_yaml, draw_projected_box3d, \
+    get_R_obj2c, get_T_obj2c
 import numpy as np
 
 
@@ -73,10 +74,6 @@ def img_trans(li3d_scene_path, ep_path):
         gt_yml = {}
         num = 0
 
-        cam_R_m2c = np.dot(np.array([[1., 0., 0.], [0., -1., 0.], [0., 0., -1.]]),
-                           np.array([[0., 1., 0.], [-1., 0., 0.], [0., 0., 1.]]))
-        cam_R_m2c = cam_R_m2c.reshape(1, 9).tolist()
-
         for annotation in annotations:
             with open(annotation, 'r') as load_f:
                 # print(annotation)
@@ -86,11 +83,21 @@ def img_trans(li3d_scene_path, ep_path):
                 if annotation_data["model"][str(i)]["class"] is not class_num:
                     continue
 
+                R_obj2c = get_R_obj2c(np.array(annotation_data["model"][str(i)]["matrix"]))
+                cam_R_m2c = R_obj2c.reshape(1, 9).tolist()[0]
+
+                T_obj2c = get_T_obj2c(np.array(annotation_data["model"][str(i)]["matrix"]),
+                                      annotation_data["camera"]["fov"])
+                cam_t_m2c = T_obj2c.reshape(1, 3).tolist()[0]
+
                 ep_data_path + "/" + "%02d" % annotation_data["model"][str(i)]["class"]
+                a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
+                rmin, rmax, cmin, cmax = int(b), int(d), int(a), int(c)
+                obj_bb = [rmin, rmax, cmin, cmax]
 
                 gt_yml[num] = [{"cam_R_m2c": cam_R_m2c,
-                                "cam_t_m2c": [0, 0, annotation_data["camera"]["distance"] * 1000],
-                                "obj_bb": [int(bb) for bb in annotation_data["model"][str(i)]["2d_bbox"]],
+                                "cam_t_m2c": [-cam_t_m2c[i] * 1000 for i in range(0, 3)],
+                                "obj_bb": obj_bb,
                                 "obj_id": annotation_data["model"][str(i)]["class"]}]
 
                 this_img_path = os.path.join(li3d_scene_path, annotation_data["image_file"])
@@ -100,18 +107,20 @@ def img_trans(li3d_scene_path, ep_path):
                 shutil.copyfile(this_img_path, copy_img_path)
 
                 # truth 2d bbox
-                # truth2d_img_path = os.path.join(
-                #     ep_data_path + "/{}/truth_2d".format("%02d" % annotation_data["model"][str(i)]["class"]),
-                #     "{}.png".format("%04d" % num))
+                truth2d_img_path = os.path.join(
+                    ep_data_path + "/{}/truth_2d".format("%02d" % annotation_data["model"][str(i)]["class"]),
+                    "{}.png".format("%04d" % num))
                 # # shutil.copyfile(this_img_path, copy_img_path)
-                # img = imread(this_img_path)
+
+                img = imread(this_img_path)
                 # a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
-                # a, b, c, d = int(a), int(b), int(c), int(d)
-                # line(img, (a, b), (c, b), (0, 255, 0), 2)
-                # line(img, (a, b), (a, d), (0, 255, 0), 2)
-                # line(img, (c, d), (c, b), (0, 255, 0), 2)
-                # line(img, (c, d), (a, d), (0, 255, 0), 2)
-                # imwrite(truth2d_img_path, img)
+                # rmin, rmax, cmin, cmax = int(b), int(d), int(a), int(c)
+                line(img, (cmin, rmin), (cmin, rmax), (0, 255, 0), 1)
+                line(img, (cmin, rmin), (cmax, rmin), (0, 255, 0), 1)
+                line(img, (cmin, rmax), (cmax, rmax), (0, 255, 0), 1)
+                line(img, (cmax, rmin), (cmax, rmax), (0, 255, 0), 1)
+
+                imwrite(truth2d_img_path, img)
                 #
                 # # truth 3d bbox
                 # truth3d_img_path = os.path.join(
@@ -197,6 +206,5 @@ def li3d_2_efficentpose(input_path, output_path):
 
 if __name__ == '__main__':
     scene_path = "F:/my_desktop/kitti"
-
     efficentPose_path = "F:/my_desktop/PycharmFiles/3D_detection/EfficientPose/kitti"
     li3d_2_efficentpose(scene_path, efficentPose_path)

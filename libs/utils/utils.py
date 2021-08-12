@@ -408,3 +408,80 @@ def get_camera_intrinsics(fov_h, img_size):
                          0, 0, 1]
 
     return camera_intrinsics
+
+
+def get_R_obj2w(model_matrix):
+    """
+
+    Args:
+        model_matrix: model matrix of annotations  shape:(16,) or (4,4)
+
+    Returns: Rotation matrix for object to world  (3,3)
+
+    """
+    if model_matrix.shape == (16,):
+        model_matrix = model_matrix.reshape(4, 4)
+
+    return model_matrix[:3, :3]
+
+
+def get_R_w2c():
+    """
+
+    Returns: Rotation matrix for world to camera (3,3)
+
+    """
+    return np.dot(np.array([[1., 0., 0.], [0., -1., 0.], [0., 0., -1.]]),
+                  np.array([[0., 1., 0.], [-1., 0., 0.], [0., 0., 1.]]))
+
+
+def get_R_obj2c(model_matrix):
+    """
+
+    Args:
+        model_matrix: model matrix of annotations  shape:(16,) or (4,4)
+
+    Returns: Rotation matrix for object to camera  (3,3)
+
+    """
+    return np.dot(get_R_obj2w(model_matrix), get_R_w2c())
+
+
+def get_T_obj2w(model_matrix):
+    """
+
+    Args:
+        model_matrix: model matrix of annotations  shape:(16,) or (4,4)
+
+    Returns: Rotation matrix for object to world  (shape:(1,3) unit:meter)
+
+    """
+    if model_matrix.shape == (16,):
+        model_matrix = model_matrix.reshape(4, 4)
+
+    return np.array([- model_matrix[:3, 3:].reshape(1, 3)[0][i] for i in range(0, 3)])
+
+
+def get_T_w2c(fov):
+    """
+
+    Args:
+        fov: camera fov (angle value)
+
+    Returns: Translocation matrix of world to camera   (shape:(1,3) unit:meter)
+
+    """
+    return np.array([0, 0, -get_distance(fov)])
+
+
+def get_T_obj2c(model_matrix, fov):
+    """
+
+    Args:
+        model_matrix: model matrix of annotations  shape:(16,) or (4,4)
+        fov: camera fov (angle value)
+
+    Returns: Translocation matrix of world to camera (shape:(1,3) unit:meter)
+
+    """
+    return get_T_obj2w(model_matrix) + get_T_w2c(fov)
