@@ -406,7 +406,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             self.is_first_scene = False
         else:
             self.saveScenes()
-            self.exportScenes()
+            # self.exportScenes()
 
         # clear all the actors
         self.scene_folder, self.image_file, self.annotation_file = scene_folder, image_file, annotation_file
@@ -506,6 +506,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
                 self.style.InteractionProp.RotateX(Angle_dif[1])
             if Angle_dif[2] != 0:
                 self.style.InteractionProp.RotateY(Angle_dif[2])
+            # self.style.InteractionProp.SetOrientation([data[i + 3] for i in range(3)])
 
             Rotate = [round(Ro, 2) for Ro in self.style.InteractionProp.GetOrientation()]
             data = [data[i] for i in range(3)] + [Rotate[i] for i in range(3)]

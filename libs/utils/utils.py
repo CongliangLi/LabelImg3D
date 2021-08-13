@@ -5,6 +5,7 @@ from numpy.linalg import inv
 import cv2
 from math import atan, radians, degrees, cos, sin
 import yaml
+from plyfile import PlyData
 
 
 def getTransform(matrix):
@@ -422,7 +423,8 @@ def get_R_obj2w(model_matrix):
     if model_matrix.shape == (16,):
         model_matrix = model_matrix.reshape(4, 4)
 
-    return model_matrix[:3, :3]
+    # return np.dot(model_matrix[:3, :3],np.array([[0., 1., 0.], [-1., 0., 0.], [0., 0., 1.]]))
+    return model_matrix[:3, : 3]
 
 
 def get_R_w2c():
@@ -431,8 +433,7 @@ def get_R_w2c():
     Returns: Rotation matrix for world to camera (3,3)
 
     """
-    return np.dot(np.array([[1., 0., 0.], [0., -1., 0.], [0., 0., -1.]]),
-                  np.array([[0., 1., 0.], [-1., 0., 0.], [0., 0., 1.]]))
+    return np.array([[1., 0., 0.], [0., 1., 0.], [0., 0., -1.]])
 
 
 def get_R_obj2c(model_matrix):
@@ -444,7 +445,8 @@ def get_R_obj2c(model_matrix):
     Returns: Rotation matrix for object to camera  (3,3)
 
     """
-    return np.dot(get_R_obj2w(model_matrix), get_R_w2c())
+    # return np.dot(get_R_obj2w(model_matrix), get_R_w2c())
+    return np.dot(get_R_w2c(), get_R_obj2w(model_matrix))
 
 
 def get_T_obj2w(model_matrix):
@@ -459,7 +461,7 @@ def get_T_obj2w(model_matrix):
     if model_matrix.shape == (16,):
         model_matrix = model_matrix.reshape(4, 4)
 
-    return np.array([- model_matrix[:3, 3:].reshape(1, 3)[0][i] for i in range(0, 3)])
+    return np.concatenate((-model_matrix[:2, -1], [model_matrix[2, -1]]))
 
 
 def get_T_w2c(fov):
@@ -485,3 +487,30 @@ def get_T_obj2c(model_matrix, fov):
 
     """
     return get_T_obj2w(model_matrix) + get_T_w2c(fov)
+
+
+def get_T_obj_bottom2center(obj_size):
+    """
+
+    Args:
+        obj_size: obj size (x,y,z) unit:meter
+
+    Returns: Translocation matrix from bottom to center (shape:(1,3) unit:meter)
+
+    """
+    return np.array([0, 0, obj_size[2] / 2])
+
+
+def load_model_ply(path_to_ply_file):
+    """
+   Loads a 3D model from a plyfile
+    Args:
+        path_to_ply_file: Path to the ply file containing the object's 3D model
+    Returns:
+        points_3d: numpy array with shape (num_3D_points, 3) containing the x-, y- and z-coordinates of all 3D model points
+
+    """
+    model_data = PlyData.read(path_to_ply_file)
+    vertex = model_data['vertex']
+    points_3d = np.stack([vertex[:]['x'], vertex[:]['y'], vertex[:]['z']], axis=-1)
+    return points_3d
