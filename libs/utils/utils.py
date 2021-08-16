@@ -433,7 +433,7 @@ def get_R_w2c():
     Returns: Rotation matrix for world to camera (3,3)
 
     """
-    return np.dot(np.dot(X), np.array([[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]]))
+    return np.dot(np.dot(Rotate_y_axis(180), Rotate_z_axis(-90)), np.array([[0., 1., 0.], [-1., 0., 0.], [0., 0., 1.]]))
 
 
 def get_R_obj2c(model_matrix):
@@ -446,7 +446,7 @@ def get_R_obj2c(model_matrix):
 
     """
     # return np.dot(get_R_obj2w(model_matrix), get_R_w2c())
-    return np.dot(get_R_obj2w(model_matrix), get_R_w2c())
+    return np.dot(get_R_w2c(), get_R_obj2w(model_matrix))
 
 
 def get_T_obj2w(model_matrix):
@@ -514,3 +514,57 @@ def load_model_ply(path_to_ply_file):
     vertex = model_data['vertex']
     points_3d = np.stack([vertex[:]['x'], vertex[:]['y'], vertex[:]['z']], axis=-1)
     return points_3d
+
+
+def load_model_ply(path_to_ply_file):
+    """
+   Loads a 3D model from a plyfile
+    Args:
+        path_to_ply_file: Path to the ply file containing the object's 3D model
+    Returns:
+        points_3d: numpy array with shape (num_3D_points, 3) containing the x-, y- and z-coordinates of all 3D model points
+
+    """
+    model_data = PlyData.read(path_to_ply_file)
+    vertex = model_data['vertex']
+    points_3d = np.stack([vertex[:]['x'], vertex[:]['y'], vertex[:]['z']], axis=-1)
+    return points_3d
+
+
+def Rotate_x_axis(theta):
+    """
+
+    Args:
+        theta: angle value
+
+    Returns: the matrix (3,3)
+
+    """
+    theta = radians(theta)
+    return np.array([[1., 0., 0.], [0., cos(theta), -sin(theta)], [0., sin(theta), cos(theta)]])
+
+
+def Rotate_y_axis(theta):
+    """
+
+    Args:
+        theta: angle value
+
+    Returns: the matrix (3,3)
+
+    """
+    theta = radians(theta)
+    return np.array([[cos(theta), 0., sin(theta)], [0., 1., 0.], [-sin(theta), 0., cos(theta)]])
+
+
+def Rotate_z_axis(theta):
+    """
+
+    Args:
+        theta: angle value
+
+    Returns: the matrix (3,3)
+
+    """
+    theta = radians(theta)
+    return np.array([[cos(theta), -sin(theta), 0.], [sin(theta), cos(theta), 0.], [0., 0., 1.]])
