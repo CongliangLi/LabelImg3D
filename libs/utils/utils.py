@@ -433,7 +433,7 @@ def get_R_w2c():
     Returns: Rotation matrix for world to camera (3,3)
 
     """
-    return np.array([[1., 0., 0.], [0., 1., 0.], [0., 0., -1.]])
+    return np.dot(np.dot(X), np.array([[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]]))
 
 
 def get_R_obj2c(model_matrix):
@@ -446,7 +446,7 @@ def get_R_obj2c(model_matrix):
 
     """
     # return np.dot(get_R_obj2w(model_matrix), get_R_w2c())
-    return np.dot(get_R_w2c(), get_R_obj2w(model_matrix))
+    return np.dot(get_R_obj2w(model_matrix), get_R_w2c())
 
 
 def get_T_obj2w(model_matrix):

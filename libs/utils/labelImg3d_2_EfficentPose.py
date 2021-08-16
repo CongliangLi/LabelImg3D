@@ -87,7 +87,7 @@ def img_trans(li3d_scene_path, ep_path):
                 T_model_bottom2center = get_T_obj_bottom2center(annotation_data["model"][str(i)]["size"])
 
                 R_obj2c = get_R_obj2c(np.array(annotation_data["model"][str(i)]["matrix"]))
-                cam_R_m2c = R_obj2c.reshape(1, 9).tolist()[0]
+                cam_R_m2c = R_obj2c.T.reshape(1, 9).tolist()[0]
 
                 T_obj2c = get_T_obj2c(np.array(annotation_data["model"][str(i)]["matrix"]),
                                       annotation_data["camera"]["fov"])
@@ -241,7 +241,7 @@ def test(ep_path):
         img_gt = draw_bbox(img_gt, annotations["obj_bb"])
 
         cv2.imwrite(
-            "F:/my_desktop/PycharmFiles/3D_detection/EfficientPose/kitti/data/02/truth/{}.png".format(i),
+            "F:/my_desktop/PycharmFiles/3D_detection/EfficientPose/kitti/data/02/truth_obj/{}.png".format(i),
             img_gt)
 
 
