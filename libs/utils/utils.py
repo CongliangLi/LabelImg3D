@@ -423,7 +423,6 @@ def get_R_obj2w(model_matrix):
     if model_matrix.shape == (16,):
         model_matrix = model_matrix.reshape(4, 4)
 
-    # return np.dot(model_matrix[:3, :3],np.array([[0., 1., 0.], [-1., 0., 0.], [0., 0., 1.]]))
     return model_matrix[:3, : 3]
 
 
@@ -568,3 +567,29 @@ def Rotate_z_axis(theta):
     """
     theta = radians(theta)
     return np.array([[cos(theta), -sin(theta), 0.], [sin(theta), cos(theta), 0.], [0., 0., 1.]])
+
+
+def rotation_mat_to_axis_angle(rotation_matrix):
+    """
+    Computes an axis angle rotation vector from a rotation matrix
+    Arguments:
+        rotation_matrix: numpy array with shape (3, 3) containing the rotation
+    Returns:
+        axis_angle: numpy array with shape (3,) containing the rotation
+    """
+    axis_angle, jacobian = cv2.Rodrigues(rotation_matrix)
+
+    return np.squeeze(axis_angle)
+
+
+def axis_angle_to_rotation_mat(rotation_vector):
+    """
+    Computes a rotation matrix from an axis angle rotation vector
+    Arguments:
+        rotation_vector: numpy array with shape (3,) containing the rotation
+    Returns:
+        rotation_mat: numpy array with shape (3, 3) containing the rotation
+    """
+    rotation_mat, jacobian = cv2.Rodrigues(np.expand_dims(rotation_vector, axis=-1))
+
+    return rotation_mat

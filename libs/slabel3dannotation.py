@@ -37,7 +37,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
 
     def RemoveKeyR(self, obj, event):
         key = self.GetInteractor().GetKeySym()
-        if key == 'r' or key == 'R':
+        if key in ['r', 'R', 'Control_L', 'Control_R']:
             return
         self.super.OnKeyPress()
 
@@ -253,7 +253,8 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         x, y = self.GetInteractor().GetEventPosition()
 
         # Right mouse button movement operation
-        if self.isPressedRight and not self.GetInteractor().GetShiftKey():
+        # if self.isPressedRight and not self.GetInteractor().GetShiftKey():
+        if self.isPressedRight:
             self.FindPokedRenderer(x, y)
             self.UniformScale(float(SystemConfig.config_data["model"]["scaling_factor"]))
             self.InvokeEvent(vtkCommand.InteractionEvent, None)

@@ -6,7 +6,8 @@ from PIL import Image
 import yaml
 from cv2 import imread, line, imshow, waitKey, imwrite
 from libs.utils.utils import get_all_path, get_camera_intrinsics, get_dirname, parse_yaml, draw_projected_box3d, \
-    get_R_obj2c, get_T_obj2c, load_model_ply, get_T_obj_bottom2center
+    get_R_obj2c, get_T_obj2c, load_model_ply, get_T_obj_bottom2center, axis_angle_to_rotation_mat, \
+    rotation_mat_to_axis_angle
 import numpy as np
 import cv2
 
@@ -87,7 +88,7 @@ def img_trans(li3d_scene_path, ep_path):
                 T_model_bottom2center = get_T_obj_bottom2center(annotation_data["model"][str(i)]["size"])
 
                 R_obj2c = get_R_obj2c(np.array(annotation_data["model"][str(i)]["matrix"]))
-                cam_R_m2c = R_obj2c.T.reshape(1, 9).tolist()[0]
+                cam_R_m2c = R_obj2c.reshape(1, 9).tolist()[0]
 
                 T_obj2c = get_T_obj2c(np.array(annotation_data["model"][str(i)]["matrix"]),
                                       annotation_data["camera"]["fov"])
@@ -110,7 +111,7 @@ def img_trans(li3d_scene_path, ep_path):
                     "{}.png".format("%04d" % num))
                 shutil.copyfile(this_img_path, copy_img_path)
 
-                # truth 2d bbox
+                # # truth 2d bbox
                 # truth2d_img_path = os.path.join(
                 #     ep_data_path + "/{}/truth_2d".format("%02d" % annotation_data["model"][str(i)]["class"]),
                 #     "{}.png".format("%04d" % num))
@@ -123,9 +124,9 @@ def img_trans(li3d_scene_path, ep_path):
                 # line(img, (cmin, rmax), (cmax, rmax), (0, 255, 0), 1)
                 # line(img, (cmax, rmin), (cmax, rmax), (0, 255, 0), 1)
                 # imwrite(truth2d_img_path, img)
-
+                #
                 # # end truth of 2d bbox
-
+                #
                 # # truth 3d bbox
                 # truth3d_img_path = os.path.join(
                 #     ep_data_path + "/{}/truth_3d".format("%02d" % annotation_data["model"][str(i)]["class"]),
@@ -134,7 +135,7 @@ def img_trans(li3d_scene_path, ep_path):
                 # img = imread(this_img_path)
                 # img = draw_projected_box3d(img.copy(), np.array(annotation_data["model"][str(i)]["3d_bbox"])[:, :2])
                 # imwrite(truth3d_img_path, img)
-
+                #
                 # # end truth of 3d bbox
 
                 num += 1
@@ -230,15 +231,23 @@ def test(ep_path):
         camera_matrix = np.array(info_yml[i]["cam_K"]).reshape(3, 3)
         annotations = gt_yml[i][0]
         assigned_translation = np.array(annotations["cam_t_m2c"])
-        assigned_rotation = np.array(annotations["cam_R_m2c"]).reshape(3, 3)
+        ass = np.array(annotations["cam_R_m2c"]).reshape(3, 3)
         model_3d_points = all_3d_models[0]
         # model_3d_points[:, :] = 0
-        transformed_points_gt = np.dot(model_3d_points, assigned_rotation) + np.squeeze(assigned_translation)
+        assigned_rotation = rotation_mat_to_axis_angle(ass)
+        assigned_rotation = axis_angle_to_rotation_mat(assigned_rotation)
+
+        transformed_points_gt = np.dot(model_3d_points, assigned_rotation.T) + np.squeeze(assigned_translation)
 
         # #draw transformed gt points in image to test the transformation
         img_gt = draw_point3d(img.copy(), camera_matrix, transformed_points_gt)
 
         img_gt = draw_bbox(img_gt, annotations["obj_bb"])
+
+        if not os.path.exists(
+                os.path.dirname("F:/my_desktop/PycharmFiles/3D_detection/EfficientPose/kitti/data/02/truth_obj/")):
+            os.makedirs(
+                os.path.dirname("F:/my_desktop/PycharmFiles/3D_detection/EfficientPose/kitti/data/02/truth_obj/"))
 
         cv2.imwrite(
             "F:/my_desktop/PycharmFiles/3D_detection/EfficientPose/kitti/data/02/truth_obj/{}.png".format(i),
