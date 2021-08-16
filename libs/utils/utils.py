@@ -5,6 +5,7 @@ from numpy.linalg import inv
 import cv2
 from math import atan, radians, degrees, cos, sin
 import yaml
+from plyfile import PlyData
 
 
 def getTransform(matrix):
@@ -408,3 +409,162 @@ def get_camera_intrinsics(fov_h, img_size):
                          0, 0, 1]
 
     return camera_intrinsics
+
+
+def get_R_obj2w(model_matrix):
+    """
+
+    Args:
+        model_matrix: model matrix of annotations  shape:(16,) or (4,4)
+
+    Returns: Rotation matrix for object to world  (3,3)
+
+    """
+    if model_matrix.shape == (16,):
+        model_matrix = model_matrix.reshape(4, 4)
+
+    # return np.dot(model_matrix[:3, :3],np.array([[0., 1., 0.], [-1., 0., 0.], [0., 0., 1.]]))
+    return model_matrix[:3, : 3]
+
+
+def get_R_w2c():
+    """
+
+    Returns: Rotation matrix for world to camera (3,3)
+
+    """
+    return np.dot(np.dot(Rotate_y_axis(180), Rotate_z_axis(-90)), np.array([[0., 1., 0.], [-1., 0., 0.], [0., 0., 1.]]))
+
+
+def get_R_obj2c(model_matrix):
+    """
+
+    Args:
+        model_matrix: model matrix of annotations  shape:(16,) or (4,4)
+
+    Returns: Rotation matrix for object to camera  (3,3)
+
+    """
+    # return np.dot(get_R_obj2w(model_matrix), get_R_w2c())
+    return np.dot(get_R_w2c(), get_R_obj2w(model_matrix))
+
+
+def get_T_obj2w(model_matrix):
+    """
+
+    Args:
+        model_matrix: model matrix of annotations  shape:(16,) or (4,4)
+
+    Returns: Rotation matrix for object to world  (shape:(1,3) unit:meter)
+
+    """
+    if model_matrix.shape == (16,):
+        model_matrix = model_matrix.reshape(4, 4)
+
+    return np.concatenate((-model_matrix[:2, -1], [model_matrix[2, -1]]))
+
+
+def get_T_w2c(fov):
+    """
+
+    Args:
+        fov: camera fov (angle value)
+
+    Returns: Translocation matrix of world to camera   (shape:(1,3) unit:meter)
+
+    """
+    return np.array([0, 0, -get_distance(fov)])
+
+
+def get_T_obj2c(model_matrix, fov):
+    """
+
+    Args:
+        model_matrix: model matrix of annotations  shape:(16,) or (4,4)
+        fov: camera fov (angle value)
+
+    Returns: Translocation matrix of world to camera (shape:(1,3) unit:meter)
+
+    """
+    return get_T_obj2w(model_matrix) + get_T_w2c(fov)
+
+
+def get_T_obj_bottom2center(obj_size):
+    """
+
+    Args:
+        obj_size: obj size (x,y,z) unit:meter
+
+    Returns: Translocation matrix from bottom to center (shape:(1,3) unit:meter)
+
+    """
+    return np.array([0, 0, obj_size[2] / 2])
+
+
+def load_model_ply(path_to_ply_file):
+    """
+   Loads a 3D model from a plyfile
+    Args:
+        path_to_ply_file: Path to the ply file containing the object's 3D model
+    Returns:
+        points_3d: numpy array with shape (num_3D_points, 3) containing the x-, y- and z-coordinates of all 3D model points
+
+    """
+    model_data = PlyData.read(path_to_ply_file)
+    vertex = model_data['vertex']
+    points_3d = np.stack([vertex[:]['x'], vertex[:]['y'], vertex[:]['z']], axis=-1)
+    return points_3d
+
+
+def load_model_ply(path_to_ply_file):
+    """
+   Loads a 3D model from a plyfile
+    Args:
+        path_to_ply_file: Path to the ply file containing the object's 3D model
+    Returns:
+        points_3d: numpy array with shape (num_3D_points, 3) containing the x-, y- and z-coordinates of all 3D model points
+
+    """
+    model_data = PlyData.read(path_to_ply_file)
+    vertex = model_data['vertex']
+    points_3d = np.stack([vertex[:]['x'], vertex[:]['y'], vertex[:]['z']], axis=-1)
+    return points_3d
+
+
+def Rotate_x_axis(theta):
+    """
+
+    Args:
+        theta: angle value
+
+    Returns: the matrix (3,3)
+
+    """
+    theta = radians(theta)
+    return np.array([[1., 0., 0.], [0., cos(theta), -sin(theta)], [0., sin(theta), cos(theta)]])
+
+
+def Rotate_y_axis(theta):
+    """
+
+    Args:
+        theta: angle value
+
+    Returns: the matrix (3,3)
+
+    """
+    theta = radians(theta)
+    return np.array([[cos(theta), 0., sin(theta)], [0., 1., 0.], [-sin(theta), 0., cos(theta)]])
+
+
+def Rotate_z_axis(theta):
+    """
+
+    Args:
+        theta: angle value
+
+    Returns: the matrix (3,3)
+
+    """
+    theta = radians(theta)
+    return np.array([[cos(theta), -sin(theta), 0.], [sin(theta), cos(theta), 0.], [0., 0., 1.]])
