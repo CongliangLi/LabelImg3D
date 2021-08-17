@@ -151,7 +151,8 @@ class Kitti2LabelImg3D(QObject):
         for i in reversed(range(0, len(a))):
             obj_class = a[0][i]
 
-            if obj_class == "DontCare" or obj_class == "Misc" or obj_class == "Person_sitting":
+            if obj_class == "DontCare" or obj_class == "Misc" or obj_class == "Person_sitting" or a[2][i] == 2 \
+                    or a[2][i] == 3 or a[1][i] > 0.7:
                 continue
 
             obj_position_c0 = np.array([[a[j][i] for j in range(11, 14)]])
