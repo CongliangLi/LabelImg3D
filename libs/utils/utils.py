@@ -593,3 +593,17 @@ def axis_angle_to_rotation_mat(rotation_vector):
     rotation_mat, jacobian = cv2.Rodrigues(np.expand_dims(rotation_vector, axis=-1))
 
     return rotation_mat
+
+
+def draw_box(image, box, color=(255, 255, 0), thickness=1):
+    """ Draws a box on an image with a given color.
+
+    # Arguments
+        image     : The image to draw on.
+        box       : A list of 4 elements (x1, y1, x2, y2).
+        color     : The color of the box.
+        thickness : The thickness of the lines to draw a box with.
+    """
+    b = np.array(box).astype(int)
+    cv2.rectangle(image, (b[0], b[1]), (b[2], b[3]), color, thickness, cv2.LINE_AA)
+    return image

@@ -1,0 +1,48 @@
+1:
+  diameter: 17384.15370387641
+  min_x: -1310.0
+  min_y: -8400.0
+  min_z: 0
+  size_x: 2620.0
+  size_y: 16800.0
+  size_z: 3620.0
+2:
+  diameter: 5015.974481593782
+  min_x: -900.0
+  min_y: -2200.0
+  min_z: 0
+  size_x: 1800.0
+  size_y: 4400.0
+  size_z: 1600.0
+3:
+  diameter: 7367.536901841754
+  min_x: -1275.0
+  min_y: -2850.0
+  min_z: 0
+  size_x: 2550.0
+  size_y: 5700.0
+  size_z: 3910.0
+4:
+  diameter: 5738.0833036825115
+  min_x: -930.0
+  min_y: -2490.0
+  min_z: 0
+  size_x: 1860.0
+  size_y: 4980.0
+  size_z: 2160.0
+5:
+  diameter: 2017.3993159511085
+  min_x: -455.0
+  min_y: -165.0
+  min_z: 0
+  size_x: 910.0
+  size_y: 330.0
+  size_z: 1770.0
+6:
+  diameter: 1571.65517846632
+  min_x: -230.0
+  min_y: -215.0
+  min_z: 0
+  size_x: 460.0
+  size_y: 430.0
+  size_z: 1440.0

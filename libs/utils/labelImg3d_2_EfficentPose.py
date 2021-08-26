@@ -7,7 +7,7 @@ import yaml
 from cv2 import imread, line, imshow, waitKey, imwrite
 from libs.utils.utils import get_all_path, get_camera_intrinsics, get_dirname, parse_yaml, draw_projected_box3d, \
     get_R_obj2c, get_T_obj2c, load_model_ply, get_T_obj_bottom2center, axis_angle_to_rotation_mat, \
-    rotation_mat_to_axis_angle
+    rotation_mat_to_axis_angle, draw_box
 import numpy as np
 import cv2
 
@@ -34,7 +34,7 @@ def model_trans(li3d_scene_path, ep_path):
 
                 model_data[d]["min_x"] = -model_json_data[j_d]["size"][0] / 2 * 1000
                 model_data[d]["min_y"] = -model_json_data[j_d]["size"][1] / 2 * 1000
-                model_data[d]["min_z"] = -model_json_data[j_d]["size"][2] / 2 * 1000
+                model_data[d]["min_z"] = 0
 
                 model_data[d]["size_x"] = model_json_data[j_d]["size"][0] * 1000
                 model_data[d]["size_y"] = model_json_data[j_d]["size"][1] * 1000
@@ -92,13 +92,14 @@ def img_trans(li3d_scene_path, ep_path):
 
                 T_obj2c = get_T_obj2c(np.array(annotation_data["model"][str(i)]["matrix"]),
                                       annotation_data["camera"]["fov"])
-                cam_t_m2c = (T_model_bottom2center + T_obj2c).reshape(1, 3).tolist()[0]
-                # cam_t_m2c = T_obj2c.reshape(1, 3).tolist()[0]
+                # cam_t_m2c = (T_model_bottom2center + T_obj2c).reshape(1, 3).tolist()[0]
+                cam_t_m2c = T_obj2c.reshape(1, 3).tolist()[0]
 
                 ep_data_path + "/" + "%02d" % annotation_data["model"][str(i)]["class"]
-                a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
-                rmin, rmax, cmin, cmax = int(b), int(d), int(a), int(c)
-                obj_bb = [rmin, rmax, cmin, cmax]
+                # a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
+                # rmin, rmax, cmin, cmax = int(b), int(d), int(a), int(c)
+                # obj_bb = [rmin, rmax, cmin, cmax]
+                obj_bb = annotation_data["model"][str(i)]["2d_bbox"]
 
                 gt_yml[num] = [{"cam_R_m2c": cam_R_m2c,
                                 "cam_t_m2c": [-cam_t_m2c[0] * 1000, cam_t_m2c[1] * 1000, -cam_t_m2c[2] * 1000],
@@ -117,12 +118,8 @@ def img_trans(li3d_scene_path, ep_path):
                 #     "{}.png".format("%04d" % num))
                 # # shutil.copyfile(this_img_path, copy_img_path)
                 # img = imread(this_img_path)
-                # a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
-                # rmin, rmax, cmin, cmax = int(b), int(d), int(a), int(c)
-                # line(img, (cmin, rmin), (cmin, rmax), (0, 255, 0), 1)
-                # line(img, (cmin, rmin), (cmax, rmin), (0, 255, 0), 1)
-                # line(img, (cmin, rmax), (cmax, rmax), (0, 255, 0), 1)
-                # line(img, (cmax, rmin), (cmax, rmax), (0, 255, 0), 1)
+                # # a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
+                # img = draw_box(img.copy(), annotation_data["model"][str(i)]["2d_bbox"])
                 # imwrite(truth2d_img_path, img)
                 #
                 # # end truth of 2d bbox
@@ -135,7 +132,6 @@ def img_trans(li3d_scene_path, ep_path):
                 # img = imread(this_img_path)
                 # img = draw_projected_box3d(img.copy(), np.array(annotation_data["model"][str(i)]["3d_bbox"])[:, :2])
                 # imwrite(truth3d_img_path, img)
-                #
                 # # end truth of 3d bbox
 
                 num += 1
@@ -219,7 +215,6 @@ def test(ep_path):
     name_to_model_3d_points = {"object": model_3d_points}
     all_3d_models = class_to_model_3d_points
 
-    all_3d_model_diameters = {0: 5015.974481593782}
     ep_data_2_rgb = os.path.join(os.path.join(ep_data_path, "02"), "rgb")
     all_img_paths = get_all_path(ep_data_2_rgb)
     info_yml = parse_yaml(os.path.join(os.path.join(ep_data_path, "02"), "info.yml"))
@@ -242,7 +237,7 @@ def test(ep_path):
         # #draw transformed gt points in image to test the transformation
         img_gt = draw_point3d(img.copy(), camera_matrix, transformed_points_gt)
 
-        img_gt = draw_bbox(img_gt, annotations["obj_bb"])
+        img_gt = draw_box(img_gt, annotations["obj_bb"])
 
         if not os.path.exists(
                 os.path.dirname("F:/my_desktop/PycharmFiles/3D_detection/EfficientPose/kitti/data/02/truth_obj/")):
@@ -273,16 +268,6 @@ def draw_point3d(image, camera_matrix, points_3d):
     # cv2.imshow('image', image)
     # cv2.waitKey(0)
     return image
-
-
-def draw_bbox(img, bbox):
-    rmin, rmax, cmin, cmax = bbox
-    rmin, rmax, cmin, cmax = int(rmin), int(rmax), int(cmin), int(cmax)
-    cv2.line(img, (cmin, rmin), (cmin, rmax), (0, 255, 0), 1)
-    cv2.line(img, (cmin, rmin), (cmax, rmin), (0, 255, 0), 1)
-    cv2.line(img, (cmin, rmax), (cmax, rmax), (0, 255, 0), 1)
-    cv2.line(img, (cmax, rmin), (cmax, rmax), (0, 255, 0), 1)
-    return img
 
 
 if __name__ == '__main__':
