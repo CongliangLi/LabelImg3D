@@ -37,7 +37,6 @@ class Draw3D(QtWidgets.QMainWindow):
         self.label_image.showImage()
         self.kitti_2_labelimg3d = Kitti2LabelImg3D(self)
 
-
         self.addDockWidget(Qt.RightDockWidgetArea, self.image_list)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.model_list)
         self.addDockWidget(Qt.RightDockWidgetArea, self.property3d)
@@ -59,12 +58,14 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui.actionkitti_2_labelimg3D.triggered.connect(self.kitti_2_labelimg3d.show)
         self.ui.actionSystem_Config.triggered.connect(self.system_config.show)
         # self.ui.actionKITTI.triggered.connect(self.exportKITTI)
+        self.ui.actionCopy.triggered.connect(self.ui.vtk_panel.copy)
+        self.ui.actionPaste.triggered.connect(self.ui.vtk_panel.paste)
+        self.ui.actioncopy_scene.triggered.connect(self.ui.vtk_panel.copy_scene)
 
         # rotate
         for s in ['X', 'Y', 'Z', 'X_M', 'Y_M', 'Z_M']:
             eval('self.ui.actionRoate{}.triggered.connect'.format(s))(eval('self.property3d.roate{}'.format(s)))
-        self.ui.actionCopy.triggered.connect(self.ui.vtk_panel.copy)
-        self.ui.actionPaste.triggered.connect(self.ui.vtk_panel.paste)
+
 
         # connect the signals and slots
         # self.image_list.signal_double_click.connect(self.ui.vtk_panel.loadImage)

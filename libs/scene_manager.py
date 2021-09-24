@@ -114,6 +114,3 @@ class SceneManager(QObject):
 
     def end(self):
         self[len(self) - 1]
-
-    def save(self):
-        pass

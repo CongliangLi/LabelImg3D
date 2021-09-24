@@ -86,6 +86,8 @@
     <addaction name="separator"/>
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
+    <addaction name="separator"/>
+    <addaction name="actioncopy_scene"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -255,6 +257,14 @@
   <action name="actionSystem_Config">
    <property name="text">
     <string>System Config</string>
+   </property>
+  </action>
+  <action name="actioncopy_scene">
+   <property name="text">
+    <string>Copy_Scene</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Space</string>
    </property>
   </action>
  </widget>

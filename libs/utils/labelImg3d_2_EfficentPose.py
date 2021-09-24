@@ -112,27 +112,27 @@ def img_trans(li3d_scene_path, ep_path):
                     "{}.png".format("%04d" % num))
                 shutil.copyfile(this_img_path, copy_img_path)
 
-                # # truth 2d bbox
-                # truth2d_img_path = os.path.join(
-                #     ep_data_path + "/{}/truth_2d".format("%02d" % annotation_data["model"][str(i)]["class"]),
-                #     "{}.png".format("%04d" % num))
-                # # shutil.copyfile(this_img_path, copy_img_path)
-                # img = imread(this_img_path)
-                # # a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
-                # img = draw_box(img.copy(), annotation_data["model"][str(i)]["2d_bbox"])
-                # imwrite(truth2d_img_path, img)
-                #
-                # # end truth of 2d bbox
-                #
-                # # truth 3d bbox
-                # truth3d_img_path = os.path.join(
-                #     ep_data_path + "/{}/truth_3d".format("%02d" % annotation_data["model"][str(i)]["class"]),
-                #     "{}.png".format("%04d" % num))
-                #
-                # img = imread(this_img_path)
-                # img = draw_projected_box3d(img.copy(), np.array(annotation_data["model"][str(i)]["3d_bbox"])[:, :2])
-                # imwrite(truth3d_img_path, img)
-                # # end truth of 3d bbox
+                # truth 2d bbox
+                truth2d_img_path = os.path.join(
+                    ep_data_path + "/{}/truth_2d".format("%02d" % annotation_data["model"][str(i)]["class"]),
+                    "{}.png".format("%04d" % num))
+                # shutil.copyfile(this_img_path, copy_img_path)
+                img = imread(this_img_path)
+                # a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
+                img = draw_box(img.copy(), annotation_data["model"][str(i)]["2d_bbox"])
+                imwrite(truth2d_img_path, img)
+
+                # end truth of 2d bbox
+
+                # truth 3d bbox
+                truth3d_img_path = os.path.join(
+                    ep_data_path + "/{}/truth_3d".format("%02d" % annotation_data["model"][str(i)]["class"]),
+                    "{}.png".format("%04d" % num))
+
+                img = imread(this_img_path)
+                img = draw_projected_box3d(img.copy(), np.array(annotation_data["model"][str(i)]["3d_bbox"])[:, :2])
+                imwrite(truth3d_img_path, img)
+                # end truth of 3d bbox
 
                 num += 1
 

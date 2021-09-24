@@ -542,3 +542,26 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
     def delete_model(self):
         self.actor_manager.delete_actor()
+
+    # copy scene when press down Ctrl+Space
+    def copy_scene(self):
+        print("Copy scene !")
+
+        self.is_first_scene = True
+
+        scene_foder = self.parent().parent().actor_manager.scene_folder
+        img_file = self.parent().parent().image_file
+        current_index = self.parent().parent().scene_manager.current_index
+        anno_list = self.parent().parent().annotation_name_list
+
+        # 更新 annotation 中的 model
+        # this annotation  pre annotation
+        # with open(Path(sys.argv[0]).parent.joinpath('system_config.json'), 'r') as load_f:
+        #     config_data = json.load(load_f)
+        # anno["model"]
+        self.loadScenes()
+
+
+
+
+        pass
