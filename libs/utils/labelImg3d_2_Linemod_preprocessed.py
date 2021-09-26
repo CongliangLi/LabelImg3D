@@ -12,14 +12,14 @@ import numpy as np
 import cv2
 
 
-# Convert labelimg3d model.json to EfficentPose models_info.yml
-def model_trans(li3d_scene_path, ep_path):
+# Convert labelimg3d model.json to Linemod_preprocessed models_info.yml
+def model_trans(li3d_scene_path, lp_path):
     li3d_models_path = li3d_scene_path + "/models"
     li3d_annotation_path = li3d_scene_path + "/annotations"
     li3d_img_path = li3d_scene_path + "/images"
 
-    ep_models_path = ep_path + "/models"
-    ep_data_path = ep_path + "/data"
+    lp_models_path = lp_path + "/models"
+    lp_data_path = lp_path + "/data"
 
     with open(li3d_models_path + "/models.json", 'r') as load_f:
         model_json_data = json.load(load_f)
@@ -41,22 +41,22 @@ def model_trans(li3d_scene_path, ep_path):
                 model_data[d]["size_z"] = model_json_data[j_d]["size"][2] * 1000
                 break
 
-    if not os.path.exists(os.path.dirname(ep_models_path + "/models_info.yml")):
-        os.makedirs(os.path.dirname(ep_models_path + "/models_info.yml"))
-    with open(ep_models_path + "/models_info.yml", "w", encoding="utf-8") as f:
+    if not os.path.exists(os.path.dirname(lp_models_path + "/models_info.yml")):
+        os.makedirs(os.path.dirname(lp_models_path + "/models_info.yml"))
+    with open(lp_models_path + "/models_info.yml", "w", encoding="utf-8") as f:
         yaml.dump(model_data, f, allow_unicode=True)
 
     # yaml_file = parse_yaml(model_path_output + "/models_info.yml")
 
 
-# Convert labelimg3d json to EfficentPose gt.yml
-def img_trans(li3d_scene_path, ep_path):
+# Convert labelimg3d json to Linemod_preprocessed gt.yml
+def img_trans(li3d_scene_path, lp_path):
     li3d_models_path = li3d_scene_path + "/models"
     li3d_annotation_path = li3d_scene_path + "/annotations"
     li3d_img_path = li3d_scene_path + "/images"
 
-    ep_models_path = ep_path + "/models"
-    ep_data_path = ep_path + "/data"
+    lp_models_path = lp_path + "/models"
+    lp_data_path = lp_path + "/data"
 
     with open(li3d_models_path + "/models.json", 'r') as load_f:
         model_json_data = json.load(load_f)
@@ -64,14 +64,14 @@ def img_trans(li3d_scene_path, ep_path):
     annotations = get_all_path(li3d_annotation_path)
 
     for class_num in range(1, len(model_json_data) + 1):
-        if not os.path.exists(os.path.dirname(ep_data_path + "/{}/rgb/".format("%02d" % class_num))):
-            os.makedirs(os.path.dirname(ep_data_path + "/{}/rgb/".format("%02d" % class_num)))
+        if not os.path.exists(os.path.dirname(lp_data_path + "/{}/rgb/".format("%02d" % class_num))):
+            os.makedirs(os.path.dirname(lp_data_path + "/{}/rgb/".format("%02d" % class_num)))
 
-        if not os.path.exists(os.path.dirname(ep_data_path + "/{}/truth_2d/".format("%02d" % class_num))):
-            os.makedirs(os.path.dirname(ep_data_path + "/{}/truth_2d/".format("%02d" % class_num)))
+        if not os.path.exists(os.path.dirname(lp_data_path + "/{}/truth_2d/".format("%02d" % class_num))):
+            os.makedirs(os.path.dirname(lp_data_path + "/{}/truth_2d/".format("%02d" % class_num)))
 
-        if not os.path.exists(os.path.dirname(ep_data_path + "/{}/truth_3d/".format("%02d" % class_num))):
-            os.makedirs(os.path.dirname(ep_data_path + "/{}/truth_3d/".format("%02d" % class_num)))
+        if not os.path.exists(os.path.dirname(lp_data_path + "/{}/truth_3d/".format("%02d" % class_num))):
+            os.makedirs(os.path.dirname(lp_data_path + "/{}/truth_3d/".format("%02d" % class_num)))
 
         gt_yml = {}
         num = 0
@@ -95,7 +95,7 @@ def img_trans(li3d_scene_path, ep_path):
                 # cam_t_m2c = (T_model_bottom2center + T_obj2c).reshape(1, 3).tolist()[0]
                 cam_t_m2c = T_obj2c.reshape(1, 3).tolist()[0]
 
-                ep_data_path + "/" + "%02d" % annotation_data["model"][str(i)]["class"]
+                lp_data_path + "/" + "%02d" % annotation_data["model"][str(i)]["class"]
                 # a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
                 # rmin, rmax, cmin, cmax = int(b), int(d), int(a), int(c)
                 # obj_bb = [rmin, rmax, cmin, cmax]
@@ -108,13 +108,13 @@ def img_trans(li3d_scene_path, ep_path):
 
                 this_img_path = os.path.join(li3d_scene_path, annotation_data["image_file"])
                 copy_img_path = os.path.join(
-                    ep_data_path + "/{}/rgb".format("%02d" % annotation_data["model"][str(i)]["class"]),
+                    lp_data_path + "/{}/rgb".format("%02d" % annotation_data["model"][str(i)]["class"]),
                     "{}.png".format("%04d" % num))
                 shutil.copyfile(this_img_path, copy_img_path)
 
                 # truth 2d bbox
                 truth2d_img_path = os.path.join(
-                    ep_data_path + "/{}/truth_2d".format("%02d" % annotation_data["model"][str(i)]["class"]),
+                    lp_data_path + "/{}/truth_2d".format("%02d" % annotation_data["model"][str(i)]["class"]),
                     "{}.png".format("%04d" % num))
                 # shutil.copyfile(this_img_path, copy_img_path)
                 img = imread(this_img_path)
@@ -126,7 +126,7 @@ def img_trans(li3d_scene_path, ep_path):
 
                 # truth 3d bbox
                 truth3d_img_path = os.path.join(
-                    ep_data_path + "/{}/truth_3d".format("%02d" % annotation_data["model"][str(i)]["class"]),
+                    lp_data_path + "/{}/truth_3d".format("%02d" % annotation_data["model"][str(i)]["class"]),
                     "{}.png".format("%04d" % num))
 
                 img = imread(this_img_path)
@@ -136,19 +136,19 @@ def img_trans(li3d_scene_path, ep_path):
 
                 num += 1
 
-        with open(ep_data_path + "/{}/gt.yml".format("%02d" % class_num), "w",
+        with open(lp_data_path + "/{}/gt.yml".format("%02d" % class_num), "w",
                   encoding="utf-8") as f:
             yaml.dump(gt_yml, f, default_flow_style=False)
 
 
-# Convert labelimg3d json to EfficentPose info.yml
-def camera_trans(li3d_scene_path, ep_path):
+# Convert labelimg3d json to Linemod_preprocessed info.yml
+def camera_trans(li3d_scene_path, lp_path):
     li3d_models_path = li3d_scene_path + "/models"
     li3d_annotation_path = li3d_scene_path + "/annotations"
     li3d_img_path = li3d_scene_path + "/images"
 
-    ep_models_path = ep_path + "/models"
-    ep_data_path = ep_path + "/data"
+    lp_models_path = lp_path + "/models"
+    lp_data_path = lp_path + "/data"
 
     annotations = get_all_path(li3d_annotation_path)
     with open(annotations[0], 'r') as load_f:
@@ -159,7 +159,7 @@ def camera_trans(li3d_scene_path, ep_path):
     images = get_all_path(li3d_img_path)
     depth_scale = 1.0
 
-    for path in get_dirname(ep_data_path):
+    for path in get_dirname(lp_data_path):
         file_path = os.path.join(path, "rgb")
         info_yml = {}
         all_img_opath = get_all_path(file_path)
@@ -176,9 +176,9 @@ def camera_trans(li3d_scene_path, ep_path):
         # yaml_file = parse_yaml(os.path.join(path, "info.yml"))
 
 
-def train_test(ep_path):
-    ep_data_path = ep_path + "/data"
-    for path in get_dirname(ep_data_path):
+def train_test(lp_path):
+    lp_data_path = lp_path + "/data"
+    for path in get_dirname(lp_data_path):
         rgb_path = os.path.join(path, "rgb")
         img_path = get_all_path(rgb_path)
         train_txt = []
@@ -197,7 +197,7 @@ def train_test(ep_path):
                 f.write(txt + '\n')
 
 
-def li3d_2_efficentpose(input_path, output_path):
+def li3d_2_Linemod_preprocessed(input_path, output_path):
     if not os.path.exists(os.path.dirname(output_path)):
         os.makedirs(os.path.dirname(output_path))
 
@@ -207,18 +207,18 @@ def li3d_2_efficentpose(input_path, output_path):
     train_test(output_path)
 
 
-def test(ep_path):
-    ep_models_path = ep_path + "/models"
-    ep_data_path = ep_path + "/data"
-    model_3d_points = load_model_ply(path_to_ply_file=os.path.join(ep_models_path, "obj_{:02}.ply".format(2)))
+def test(lp_path):
+    lp_models_path = lp_path + "/models"
+    lp_data_path = lp_path + "/data"
+    model_3d_points = load_model_ply(path_to_ply_file=os.path.join(lp_models_path, "obj_{:02}.ply".format(2)))
     class_to_model_3d_points = {0: model_3d_points}
     name_to_model_3d_points = {"object": model_3d_points}
     all_3d_models = class_to_model_3d_points
 
-    ep_data_2_rgb = os.path.join(os.path.join(ep_data_path, "02"), "rgb")
-    all_img_paths = get_all_path(ep_data_2_rgb)
-    info_yml = parse_yaml(os.path.join(os.path.join(ep_data_path, "02"), "info.yml"))
-    gt_yml = parse_yaml(os.path.join(os.path.join(ep_data_path, "02"), "gt.yml"))
+    lp_data_2_rgb = os.path.join(os.path.join(lp_data_path, "02"), "rgb")
+    all_img_paths = get_all_path(lp_data_2_rgb)
+    info_yml = parse_yaml(os.path.join(os.path.join(lp_data_path, "02"), "info.yml"))
+    gt_yml = parse_yaml(os.path.join(os.path.join(lp_data_path, "02"), "gt.yml"))
 
     for i in range(len(all_img_paths)):
         img = cv2.imread(all_img_paths[i])
@@ -272,6 +272,6 @@ def draw_point3d(image, camera_matrix, points_3d):
 
 if __name__ == '__main__':
     scene_path = "F:/my_desktop/kitti"
-    efficentPose_path = "F:/my_desktop/PycharmFiles/3D_detection/EfficientPose/kitti"
-    li3d_2_efficentpose(scene_path, efficentPose_path)
-    test(efficentPose_path)
+    Linemod_preprocessed_path = "F:/my_desktop/PycharmFiles/3D_detection/EfficientPose/kitti"
+    li3d_2_Linemod_preprocessed(scene_path, Linemod_preprocessed_path)
+    test(Linemod_preprocessed_path)
