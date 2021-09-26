@@ -549,19 +549,28 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         self.is_first_scene = True
 
-        scene_foder = self.parent().parent().actor_manager.scene_folder
-        img_file = self.parent().parent().image_file
+        scene_folder = self.parent().parent().scene_manager.scene_folder
+        annotations_folder = self.parent().parent().scene_manager.annotations_folder
+        images_folder = self.parent().parent().scene_manager.images_folder
         current_index = self.parent().parent().scene_manager.current_index
-        anno_list = self.parent().parent().annotation_name_list
-
+        if current_index == 0:
+            return
+        annotations_list = self.parent().parent().scene_manager.annotation_name_list
+        image_name_list = self.parent().parent().scene_manager.image_name_list
+        pre_img_file = os.path.join(annotations_folder, annotations_list[current_index - 1])
+        current_img_file = os.path.join(annotations_folder, annotations_list[current_index])
         # 更新 annotation 中的 model
         # this annotation  pre annotation
-        # with open(Path(sys.argv[0]).parent.joinpath('system_config.json'), 'r') as load_f:
-        #     config_data = json.load(load_f)
-        # anno["model"]
-        self.loadScenes()
+        with open(pre_img_file, 'r') as load_f:
+            config_data = json.load(load_f)
+            model = config_data["model"]
 
+        with open(current_img_file, 'r') as load_f:
+            config_data = json.load(load_f)
+            config_data["model"] = model
 
+        with open(current_img_file, 'w+') as f:
+            json.dump(config_data, f, indent=4)
 
-
-        pass
+        self.loadScenes(scene_folder, os.path.join(images_folder, image_name_list[current_index]),
+                        os.path.join(annotations_folder, annotations_list[current_index]))
