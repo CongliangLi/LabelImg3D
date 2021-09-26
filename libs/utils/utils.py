@@ -607,3 +607,89 @@ def draw_box(image, box, color=(255, 255, 0), thickness=1):
     b = np.array(box).astype(int)
     cv2.rectangle(image, (b[0], b[1]), (b[2], b[3]), color, thickness, cv2.LINE_AA)
     return image
+
+
+def trans_3d_2_2d(points_3d, R_obj2c, T_obj2c, camera_intrinsics):
+    """
+
+    Args:
+        points_3d: 3d points in object coordinate
+        R_obj2c: the rotation matrix from object coordinate to camera coordinate   (numpy, shape(3, 3))
+        T_obj2c: the trans matrix from object coordinate to camera coordinate   (numpy, shape(1, 3))
+        camera_intrinsics: the camera intrinsics  (numpy, shape(3, 3))
+
+    Returns:
+        points_2d: 2d points in image coordinate
+    """
+    points_3d = np.dot(points_3d, R_obj2c) + np.squeeze(T_obj2c)
+    points_2d, _ = cv2.projectPoints(points_3d, np.zeros((3,)), np.zeros((3,)), camera_intrinsics, None)
+
+    points_2d = np.squeeze(points_2d)
+    points_2d = np.copy(points_2d).astype(np.int32)
+    return points_2d
+
+
+def get_mask_img(img_size, model_3d_points, R_obj2c, T_obj2c, camera_intrinsics):
+    """ get image mask of a object
+
+    Args:
+        img_size: image size of the origin image [ , ]
+        model_3d_points: 3D points of model in object coordinate  (numpy)
+        R_obj2c: the rotation matrix from object coordinate to camera coordinate   (numpy, shape(3, 3))
+        T_obj2c: the trans matrix from object coordinate to camera coordinate   (numpy, shape(1, 3))
+        camera_intrinsics: the camera intrinsics  (numpy, shape(3, 3))
+
+    Returns:
+        mask_img: the mask image (numpy)
+
+    """
+    mask_img = np.zeros([img_size[1], img_size[0], 3], np.uint8)
+
+    model_2d_points = trans_3d_2_2d(model_3d_points, R_obj2c, T_obj2c, camera_intrinsics)
+    tuple_points = tuple(map(tuple, model_2d_points))
+    for x in range(img_size[1]):
+        start = img_size[0]
+        end = -1
+        for point in tuple_points:
+            if point[1] == x:
+                if point[0] > end:
+                    end = point[0]
+                if point[0] < start:
+                    start = point[0]
+
+        if start == -1 and end == -1:
+            continue
+
+        for y in range(start, end):
+            cv2.circle(mask_img, (y, x), 2, (255, 255, 255), -1)
+
+    return mask_img
+
+
+def get_fps_points(model_3d_points, model_center_3d_point, fps_num=8):
+    """
+
+    Args:
+        model_3d_points:  3D points of model in object coordinate  (numpy)
+        model_center_3d_point: 3D points of model center in object coordinate  (numpy)
+        fps_num: default 8
+
+    Returns:
+
+    """
+    fps_3d_points = [model_center_3d_point]
+
+    for _ in range(fps_num):
+        farthest_point = {"point": [], "distance": 0}
+        for point in model_3d_points:
+            distance = 0.
+            for fps in fps_3d_points:
+                distance += ((fps[0] - point[0]) ** 2 + (fps[1] - point[1]) ** 2 +
+                                               (fps[2] - point[2]) ** 2) ** 0.5
+            if distance > farthest_point["distance"]:
+                farthest_point["point"] = point
+                farthest_point["distance"] = distance
+
+        fps_3d_points.append(farthest_point["point"])
+
+    return np.array(fps_3d_points[1:])
