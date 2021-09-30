@@ -7,7 +7,7 @@ import yaml
 from cv2 import imread, line, imshow, waitKey, imwrite
 from libs.utils.utils import get_all_path, get_camera_intrinsics, get_dirname, parse_yaml, draw_projected_box3d, \
     get_R_obj2c, get_T_obj2c, load_model_ply, get_T_obj_bottom2center, axis_angle_to_rotation_mat, \
-    rotation_mat_to_axis_angle, draw_box
+    rotation_mat_to_axis_angle, draw_box, get_mask_img
 import numpy as np
 import cv2
 
@@ -67,11 +67,14 @@ def img_trans(li3d_scene_path, lp_path):
         if not os.path.exists(os.path.dirname(lp_data_path + "/{}/rgb/".format("%02d" % class_num))):
             os.makedirs(os.path.dirname(lp_data_path + "/{}/rgb/".format("%02d" % class_num)))
 
-        if not os.path.exists(os.path.dirname(lp_data_path + "/{}/truth_2d/".format("%02d" % class_num))):
-            os.makedirs(os.path.dirname(lp_data_path + "/{}/truth_2d/".format("%02d" % class_num)))
+        if not os.path.exists(os.path.dirname(lp_data_path + "/{}/mask/".format("%02d" % class_num))):
+            os.makedirs(os.path.dirname(lp_data_path + "/{}/mask/".format("%02d" % class_num)))
 
-        if not os.path.exists(os.path.dirname(lp_data_path + "/{}/truth_3d/".format("%02d" % class_num))):
-            os.makedirs(os.path.dirname(lp_data_path + "/{}/truth_3d/".format("%02d" % class_num)))
+        # if not os.path.exists(os.path.dirname(lp_data_path + "/{}/truth_2d/".format("%02d" % class_num))):
+        #     os.makedirs(os.path.dirname(lp_data_path + "/{}/truth_2d/".format("%02d" % class_num)))
+        #
+        # if not os.path.exists(os.path.dirname(lp_data_path + "/{}/truth_3d/".format("%02d" % class_num))):
+        #     os.makedirs(os.path.dirname(lp_data_path + "/{}/truth_3d/".format("%02d" % class_num)))
 
         gt_yml = {}
         num = 0
@@ -106,11 +109,28 @@ def img_trans(li3d_scene_path, lp_path):
                                 "obj_bb": obj_bb,
                                 "obj_id": annotation_data["model"][str(i)]["class"]}]
 
+                # move image
                 this_img_path = os.path.join(li3d_scene_path, annotation_data["image_file"])
                 copy_img_path = os.path.join(
                     lp_data_path + "/{}/rgb".format("%02d" % annotation_data["model"][str(i)]["class"]),
                     "{}.png".format("%04d" % num))
                 shutil.copyfile(this_img_path, copy_img_path)
+
+                # get mask
+                mask_path = os.path.join(
+                    lp_data_path + "/{}/mask".format("%02d" % annotation_data["model"][str(i)]["class"]),
+                    "{}.png".format("%04d" % num))
+                model_3d_points = load_model_ply(
+                    os.path.join(lp_models_path,
+                                 "obj_{}.ply".format("%02d" % annotation_data["model"][str(i)]["class"])))
+                img_size = Image.open(this_img_path).size
+                camera_intrinsics = get_camera_intrinsics(annotation_data["camera"]["fov"], img_size)
+                mask_img = get_mask_img(img_size,
+                                        model_3d_points,
+                                        R_obj2c,
+                                        np.array([-cam_t_m2c[0] * 1000, cam_t_m2c[1] * 1000, -cam_t_m2c[2] * 1000]),
+                                        np.array(camera_intrinsics).reshape(3, 3))
+                imwrite(mask_path, mask_img)
 
                 # truth 2d bbox
                 truth2d_img_path = os.path.join(
@@ -120,7 +140,7 @@ def img_trans(li3d_scene_path, lp_path):
                 img = imread(this_img_path)
                 # a, b, c, d = annotation_data["model"][str(i)]["2d_bbox"]
                 img = draw_box(img.copy(), annotation_data["model"][str(i)]["2d_bbox"])
-                imwrite(truth2d_img_path, img)
+                # imwrite(truth2d_img_path, img)
 
                 # end truth of 2d bbox
 
@@ -131,10 +151,11 @@ def img_trans(li3d_scene_path, lp_path):
 
                 img = imread(this_img_path)
                 img = draw_projected_box3d(img.copy(), np.array(annotation_data["model"][str(i)]["3d_bbox"])[:, :2])
-                imwrite(truth3d_img_path, img)
+                # imwrite(truth3d_img_path, img)
                 # end truth of 3d bbox
 
                 num += 1
+                print(num)
 
         with open(lp_data_path + "/{}/gt.yml".format("%02d" % class_num), "w",
                   encoding="utf-8") as f:
@@ -272,6 +293,6 @@ def draw_point3d(image, camera_matrix, points_3d):
 
 if __name__ == '__main__':
     scene_path = "F:/my_desktop/kitti"
-    Linemod_preprocessed_path = "F:/my_desktop/PycharmFiles/3D_detection/EfficientPose/kitti"
+    Linemod_preprocessed_path = "F:/my_desktop/PycharmFiles/3D_detection/3. PVN3D/Data/kitti"
     li3d_2_Linemod_preprocessed(scene_path, Linemod_preprocessed_path)
     test(Linemod_preprocessed_path)

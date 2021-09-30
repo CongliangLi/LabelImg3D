@@ -98,8 +98,8 @@ def img_trans(li3d_scene_path, type_path, fps_num=8):
             if annotation_data["model"][str(i)]["class_name"].strip() != this_class.strip():
                 continue
             this_class_num = annotation_data["model"][str(i)]["class"]
-            if this_class_num == 6:
-                this_class_num = 5
+            # if this_class_num == 6:
+            #     this_class_num = 5
 
             R_obj2c = get_R_obj2c(np.array(annotation_data["model"][str(i)]["matrix"])).T
 
@@ -155,27 +155,6 @@ def img_trans(li3d_scene_path, type_path, fps_num=8):
         json.dump(train_json, f, indent=4)
 
 
-def train_test(ep_path):
-    ep_data_path = ep_path + "/data"
-    for path in get_dirname(ep_data_path):
-        rgb_path = os.path.join(path, "rgb")
-        img_path = get_all_path(rgb_path)
-        train_txt = []
-        test_txt = []
-        for i in range(0, len(img_path)):
-            if i < len(img_path) / 2:
-                train_txt.append(img_path[i].split("\\")[-1].split(".")[0])
-            else:
-                test_txt.append(img_path[i].split("\\")[-1].split(".")[0])
-        with open(os.path.join(path, "train.txt"), 'w') as f:
-            for txt in train_txt:
-                f.write(txt + '\n')
-
-        with open(os.path.join(path, "test.txt"), 'w') as f:
-            for txt in train_txt:
-                f.write(txt + '\n')
-
-
 def li3d_2_PVNet(input_path, input_type, output_path):
     if not os.path.exists(os.path.dirname(output_path)):
         os.makedirs(os.path.dirname(output_path))
@@ -194,4 +173,5 @@ if __name__ == '__main__':
     scene_path = "F:/my_desktop/kitti"
     PVNet_path = "F:/my_desktop/PycharmFiles/3D_detection/2. PVNet/data/KITTI"
     li3d_type = ["Car", "Tram", "Truck", "Van", "Pedestrian"]
+    # li3d_type = ["Pedestrian"]
     li3d_2_PVNet(scene_path, li3d_type, PVNet_path)

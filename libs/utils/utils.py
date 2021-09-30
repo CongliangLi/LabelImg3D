@@ -647,23 +647,41 @@ def get_mask_img(img_size, model_3d_points, R_obj2c, T_obj2c, camera_intrinsics)
 
     model_2d_points = trans_3d_2_2d(model_3d_points, R_obj2c, T_obj2c, camera_intrinsics)
     tuple_points = tuple(map(tuple, model_2d_points))
-    for x in range(img_size[1]):
+    # Lines scan
+    for y in range(img_size[1]):
         start = img_size[0]
         end = -1
         for point in tuple_points:
-            if point[1] == x:
+            if point[1] == y:
                 if point[0] > end:
                     end = point[0]
                 if point[0] < start:
                     start = point[0]
 
-        if start == -1 and end == -1:
+        if start == img_size[0] and end == -1:
+            continue
+
+        for x in range(start, end):
+            cv2.circle(mask_img, (x, y), 1, (255, 255, 255), -1)
+
+    mask_img_fin = np.zeros([img_size[1], img_size[0], 3], np.uint8)
+    # Column scan fill hole area
+    for x in range(img_size[0]):
+        start = img_size[1]
+        end = -1
+        for y in range(img_size[1]):
+            if mask_img[y][x].tolist() == [255, 255, 255] and y > end:
+                end = y
+            if mask_img[y][x].tolist() == [255, 255, 255] and y < start:
+                start = y
+
+        if start == img_size[1] and end == -1:
             continue
 
         for y in range(start, end):
-            cv2.circle(mask_img, (y, x), 2, (255, 255, 255), -1)
+            cv2.circle(mask_img_fin, (x, y), 1, (255, 255, 255), -1)
 
-    return mask_img
+    return mask_img_fin
 
 
 def get_fps_points(model_3d_points, model_center_3d_point, fps_num=8):
@@ -685,7 +703,7 @@ def get_fps_points(model_3d_points, model_center_3d_point, fps_num=8):
             distance = 0.
             for fps in fps_3d_points:
                 distance += ((fps[0] - point[0]) ** 2 + (fps[1] - point[1]) ** 2 +
-                                               (fps[2] - point[2]) ** 2) ** 0.5
+                             (fps[2] - point[2]) ** 2) ** 0.5
             if distance > farthest_point["distance"]:
                 farthest_point["point"] = point
                 farthest_point["distance"] = distance
