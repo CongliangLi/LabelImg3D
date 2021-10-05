@@ -711,3 +711,44 @@ def get_fps_points(model_3d_points, model_center_3d_point, fps_num=8):
         fps_3d_points.append(farthest_point["point"])
 
     return np.array(fps_3d_points[1:])
+
+
+def get_model_bbox_3d(model_path):
+    """
+
+    Args:
+        model_path: the path of .ply model
+
+    Returns:
+       model_bbox_3d: 3d bbox of the model
+
+    """
+    model_3d_points = load_model_ply(model_path)
+    min_x = model_3d_points.T[0].min()
+    min_y = model_3d_points.T[1].min()
+    min_z = model_3d_points.T[2].min()
+    max_x = model_3d_points.T[0].max()
+    max_y = model_3d_points.T[1].max()
+    max_z = model_3d_points.T[2].max()
+
+    model_bbox_3d = [[min_x, min_y, min_z], [min_x, min_y, max_z],
+                     [min_x, max_y, min_z], [min_x, max_y, max_z],
+                     [max_x, min_y, min_z], [max_x, min_y, max_z],
+                     [max_x, max_y, min_z], [max_x, max_y, max_z]]
+
+    return model_bbox_3d
+
+
+def get_model_center_3d(model_path):
+    """
+
+    Args:
+        model_path: the path of .ply model
+
+    Returns:
+        model_center_3d: 3d center point of model
+    """
+    model_3d_points = load_model_ply(model_path)
+    model_center_3d = [0, 0, (model_3d_points.T[2].max() - model_3d_points.T[2].min()) / 2]
+
+    return model_center_3d

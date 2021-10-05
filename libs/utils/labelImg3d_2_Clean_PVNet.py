@@ -7,7 +7,7 @@ import yaml
 from cv2 import imread, line, imshow, waitKey, imwrite
 from libs.utils.utils import get_all_path, get_camera_intrinsics, get_dirname, parse_yaml, \
     get_R_obj2c, get_T_obj2c, load_model_ply, axis_angle_to_rotation_mat, \
-    rotation_mat_to_axis_angle, draw_box, get_mask_img, get_fps_points, trans_3d_2_2d
+    rotation_mat_to_axis_angle, draw_box, get_mask_img, get_fps_points, trans_3d_2_2d, get_model_bbox_3d
 import numpy as np
 import cv2
 
@@ -75,17 +75,7 @@ def img_trans(li3d_scene_path, type_path, fps_num=8):
     np.savetxt(fps_path, fps_points, fmt="%f", delimiter=" ")
 
     # get model 3d corner
-    min_x = model_3d_points.T[0].min()
-    min_y = model_3d_points.T[1].min()
-    min_z = model_3d_points.T[2].min()
-    max_x = model_3d_points.T[0].max()
-    max_y = model_3d_points.T[1].max()
-    max_z = model_3d_points.T[2].max()
-
-    model_corner_3d = [[min_x, min_y, min_z], [min_x, min_y, max_z],
-                       [min_x, max_y, min_z], [min_x, max_y, max_z],
-                       [max_x, min_y, min_z], [max_x, min_y, max_z],
-                       [max_x, max_y, min_z], [max_x, max_y, max_z]]
+    model_corner_3d = get_model_bbox_3d(os.path.join(type_path, "model.ply"))
 
     train_json = {"images": [], "annotations": [], "categories": []}
 
