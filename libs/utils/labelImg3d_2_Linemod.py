@@ -31,6 +31,7 @@ def li3d_2_linemod(li3d_path, li3d_type, lm_path):
         copy_model_path = os.path.join(this_class_path, "{}.obj".format(this_class))
         shutil.copyfile(this_model_path, copy_model_path)
         # TODO: Convert .obj format to .ply format, here we use meshlab to do that
+        # Attention: the .ply files' code is UTF-8
 
         img_w, img_h = Image.open(get_all_path(img_path)[1]).size
 
@@ -86,7 +87,7 @@ def li3d_2_linemod(li3d_path, li3d_type, lm_path):
                 this_img_path = os.path.join(this_class_path, "JPEGImages")
                 if not os.path.exists(this_img_path):
                     os.makedirs(this_img_path)
-                img_path_one = os.path.join(this_img_path, "{}.jpg".format("%06d" % num))
+                img_path_one = os.path.join(this_img_path, "{}.png".format("%06d" % num))
                 shutil.copyfile(li3d_img_path, img_path_one)
 
                 # get mask image
@@ -101,10 +102,11 @@ def li3d_2_linemod(li3d_path, li3d_type, lm_path):
 
                 # get train.txt, training_range.txt and test.txt
                 if num % 6 == 0:
-                    train_txt.append(img_path_one.split("/")[-1])
+                    train_txt.append(img_path_one.split("/")[-1].replace("\\", "/"))
                     train_range_txt.append(num)
                 else:
-                    test_txt.append(img_path_one.split("/")[-1])
+                    test_txt.append(img_path_one.split("/")[-1].replace("\\", "/"))
+                print(num)
                 num += 1
 
         test_txt_path = os.path.join(this_class_path, "test.txt")
@@ -163,7 +165,7 @@ def config_BB8(cfg_path, li3d_type, lm_path, fov):
 if __name__ == '__main__':
     labelImg3d_scene_path = "F:/my_desktop/kitti"
     linemod_path = "F:/my_desktop/PycharmFiles/3D_detection/segmentation_driven_pose/Data/kitti"
-    li3d_type = ["Car", "Tram", "Truck", "Van", "Pedestrian"]
+    li3d_type = ["Tram", "Car", "Truck", "Van", "Pedestrian"]
     fov = li3d_2_linemod(labelImg3d_scene_path, li3d_type, linemod_path)
 
     cfg_path = "F:/my_desktop/PycharmFiles/3D_detection/segmentation_driven_pose/Data/cfg"
