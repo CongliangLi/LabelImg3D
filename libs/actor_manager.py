@@ -173,9 +173,15 @@ class Actor:
         return [[int(p_i[i][0]), int(p_i[i][1])] for i in range(0, 8)]
 
     def toJson(self, scene_folder):
+        R_c2o = get_R_obj2c(np.array(matrix2List(self.actor.GetMatrix()))).reshape(1, 9).tolist()[0]
+        camera_fov = self.interactor.parent().parent().parent().camera_property.get("fov")
+        T_c2o = get_T_obj2c(np.array(matrix2List(self.actor.GetMatrix())), camera_fov)
+        T_c2o = np.array([-T_c2o[0], T_c2o[1], -T_c2o[2]]).reshape(1, 3).tolist()[0]
         return {
             "model_file": os.path.relpath(self.model_path, scene_folder),
             "matrix": matrix2List(self.actor.GetMatrix()),
+            "R_matrix_c2o": R_c2o,
+            "T_matrix_c2o": T_c2o,
             "class": self.type_class,
             "class_name": self.model_name,
             "size": listRound(self.size),
