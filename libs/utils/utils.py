@@ -1,3 +1,5 @@
+import math
+
 import vtk
 import os
 import numpy as np
@@ -6,6 +8,7 @@ import cv2
 from math import atan, radians, degrees, cos, sin
 import yaml
 from plyfile import PlyData
+import xml.etree.ElementTree as ET
 
 
 def getTransform(matrix):
@@ -685,7 +688,7 @@ def get_fps_points(model_3d_points, model_center_3d_point, fps_num=8):
             distance = 0.
             for fps in fps_3d_points:
                 distance += ((fps[0] - point[0]) ** 2 + (fps[1] - point[1]) ** 2 +
-                                               (fps[2] - point[2]) ** 2) ** 0.5
+                             (fps[2] - point[2]) ** 2) ** 0.5
             if distance > farthest_point["distance"]:
                 farthest_point["point"] = point
                 farthest_point["distance"] = distance
@@ -693,3 +696,62 @@ def get_fps_points(model_3d_points, model_center_3d_point, fps_num=8):
         fps_3d_points.append(farthest_point["point"])
 
     return np.array(fps_3d_points[1:])
+
+
+#  Get bbox_2d and truncation_ratio from each frame
+def read_mot_file(mot_file_path):
+    """Reading the xml mot_file. Returns a pd"""
+    xtree = ET.parse(mot_file_path)
+    xroot = xtree.getroot()
+
+    converted_data = []
+    for i in range(2, len(xroot)):
+        object_num = int(xroot[i].attrib['density'])
+        frame_index = int(xroot[i].attrib['num'])
+        node = xroot[i][0]
+        frame_data = []
+        for j in range(object_num):
+            track_id = int(node[j].attrib["id"])
+            l = float(node[j][0].attrib["left"])
+            t = float(node[j][0].attrib["top"])
+            w = float(node[j][0].attrib["width"])
+            h = float(node[j][0].attrib["height"])
+            r = l + w
+            b = t + h
+            object_type = node[j][1].attrib["vehicle_type"]
+            overlap_ratio = float(node[j][1].attrib["truncation_ratio"])
+
+            if object_type == "bus":
+                object_type = 1
+            elif object_type == "car" or object_type == "others":
+                object_type = 2
+            elif object_type == "truck":
+                object_type = 3
+            elif object_type == "van":
+                object_type = 4
+            elif object_type == "ped":
+                object_type = 5
+            elif object_type == "child":
+                object_type = 6
+            else:
+                raise ValueError(f"unsuport object type {object_type}")
+
+            if overlap_ratio < 0.5:
+                dictionary = {"id": track_id, "bbox_2d": [l, t, r, b], "overlap_ratio": overlap_ratio,
+                              "object_type": object_type}
+                frame_data.append(dictionary)
+        converted_data.append(frame_data)
+
+    return converted_data
+
+
+def calculate_3d_unit_vector(_3d_point1, _3d_point2):
+    # All the type of the input are list
+    x = _3d_point2[0] - _3d_point1[0]
+    y = _3d_point2[1] - _3d_point1[1]
+    z = _3d_point2[2] - _3d_point1[2]
+
+    distance = math.sqrt(math.pow(x, 2) + math.pow(y, 2) + math.pow(z, 2))
+
+    return [x / distance, y / distance, z / distance]
+
