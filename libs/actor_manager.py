@@ -21,7 +21,7 @@ from PIL import Image
 
 
 class Actor:
-    def __init__(self, render_window, interactor, model_path, model_class, model_name, layer_num):
+    def __init__(self, render_window, interactor, model_path, model_class, model_name, layer_num, actor_id=0):
         self.renderer_window = render_window
         self.interactor = interactor
         self.renderer = None
@@ -33,6 +33,7 @@ class Actor:
         self.loadModel(model_path, model_name)
         self.type_class = model_class
         self.size = []  # [w, l, h]
+        self.actor_id = actor_id
 
     def readObj(self, model_path):
         reader = vtk.vtkOBJReader()
@@ -180,6 +181,7 @@ class Actor:
         return {
             "model_file": os.path.relpath(self.model_path, scene_folder),
             "matrix": matrix2List(self.actor.GetMatrix()),
+            "actor_id": int(self.actor_id),
             "R_matrix_c2o": R_c2o,
             "T_matrix_c2o": T_c2o,
             "class": self.type_class,
@@ -241,8 +243,9 @@ class ActorManager(QObject):
         # self.bg_renderer.GetActiveCamera().SetClippingRange(0.00001, 1000000)
         self.actors = []
 
-    def newActor(self, model_path, model_class, model_name, actor_matrix=None, actor_size=[]):
-        actor = Actor(self.render_window, self.interactor, model_path, model_class, model_name, len(self.actors) + 1)
+    def newActor(self, model_path, model_class, model_name, actor_id=0, actor_matrix=None, actor_size=[]):
+        actor = Actor(self.render_window, self.interactor, model_path, model_class, model_name,
+                      len(self.actors) + 1, actor_id)
         if actor_matrix is None and actor_size == []:
             # only copy the matrix of previous actors
             if len(self.actors) > 0 and self.actors[-1].model_path == actor.model_path:
@@ -393,13 +396,20 @@ class ActorManager(QObject):
     def createActors(self, scene_folder, data):
         for i in range(data["model"]["num"]):
             model_path = os.path.join(scene_folder, data["model"][str(i)]["model_file"])
+
+            if "actor_id" not in (data["model"][str(i)].keys()):
+                data["model"][str(i)]["actor_id"] = 0
+
             self.newActor(model_path, data["model"][str(i)]["class"],
                           data["model"][str(i)]["class_name"],
+                          data["model"][str(i)]["actor_id"],
                           data["model"][str(i)]["matrix"],
-                          data["model"][str(i)]["size"])
+                          data["model"][str(i)]["size"]
+                          )
 
             # updata property when enter a scene
             self.signal_update_property_enter_scene.emit(
+                [self.actors[-1].actor_id] +
                 list(self.getCurrentActiveActor().GetPosition() + self.getCurrentActiveActor().GetOrientation()) +
                 self.actors[-1].size
             )

@@ -35,10 +35,14 @@ class SProperty(QDockWidget):
         self.config = ConfigManager()
         self.is_changed = True
 
-        for i, x in enumerate(['x', 'y', 'z', 'rx', 'ry', 'rz', 'w', 'l', 'h', 's']):
+        for i, x in enumerate(["actor_id", 'x', 'y', 'z', 'rx', 'ry', 'rz', 'w', 'l', 'h', 's']):
             width_spin = QDoubleSpinBox()
             width_spin.setMaximum(50000)
             width_spin.setMinimum(-50000)
+            if x == "actor_id":
+                width_spin.setDecimals(0)
+                width_spin.setValue(0)
+
             if x == "x" or x == "y" or x == "z":
                 width_spin.setDecimals(float(SystemConfig.config_data["model"]["position_accuracy"]))
             if x == "w" or x == "l" or x == "h":
@@ -88,14 +92,14 @@ class SProperty(QDockWidget):
     def update_property(self, data):
         # for i in range(len(data)):
         #     print(data[i])
-        if data[2] > float(SystemConfig.config_data["model"]["max_position"]):
+        if data[3] > float(SystemConfig.config_data["model"]["max_position"]):
             self.config.set("x", 0)
             self.config.set("y", 0)
             self.config.set("z", float(SystemConfig.config_data["model"]["initial_position"]))
 
         self.is_changed = False
         [self.config.set(s, d) for s, d in zip(
-            ["x", "y", "z", "rz", "rx", "ry", "w", "l", "h"], data)
+            ["actor_id", "x", "y", "z", "rz", "rx", "ry", "w", "l", "h"], data)
          ]
         self.is_changed = True
 
