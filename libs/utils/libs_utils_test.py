@@ -60,11 +60,11 @@ def get_real_model_position(camera_3d_point, _image_points, _model_width):
 
 if __name__ == '__main__':
     fov = 60
-    xml_path = "D:/TemporaryDocument/UA-DETRAC/DETRAC-Train-Annotations-XML/"
-    image_path = "D:/TemporaryDocument/UA-DETRAC/Insight-MVT_Annotation_Train/"
-    json_path = "D:/OtherFiles/PythonProject/labelimg3d/scenes/KITTI/annotations/"
-    base_json_path = "D:/TemporaryDocument/UA-DETRAC/img00002.json"
-    base_model_path = "D:/TemporaryDocument/UA-DETRAC/img00003.json"
+    xml_path = "E:/UA-DETRAC/DETRAC-Train-Annotations-XML/"
+    image_path = "E:/UA-DETRAC/Insight-MVT_Annotation_Train/"
+    json_path = "E:/UA-DETRAC/all_json"
+    base_json_path = "E:/UA-DETRAC/img00002.json"
+    base_model_path = "E:/UA-DETRAC/img00003.json"
     base_url = "images"
 
     for xml in os.listdir(xml_path):

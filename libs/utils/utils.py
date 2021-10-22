@@ -9,6 +9,7 @@ from math import atan, radians, degrees, cos, sin
 import yaml
 from plyfile import PlyData
 import xml.etree.ElementTree as ET
+import pandas as pd
 
 
 def getTransform(matrix):
@@ -704,6 +705,10 @@ def read_mot_file(mot_file_path):
     xtree = ET.parse(mot_file_path)
     xroot = xtree.getroot()
 
+    columns = [
+        "frame_index", "track_id", "bbox_2d",
+        "overlap_ratio", "object_type"
+    ]
     converted_data = []
     for i in range(2, len(xroot)):
         object_num = int(xroot[i].attrib['density'])
@@ -737,12 +742,18 @@ def read_mot_file(mot_file_path):
                 raise ValueError(f"unsuport object type {object_type}")
 
             if overlap_ratio < 0.5:
-                dictionary = {"id": track_id, "bbox_2d": [l, t, r, b], "overlap_ratio": overlap_ratio,
-                              "object_type": object_type}
-                frame_data.append(dictionary)
+    #             dictionary = {"id": track_id, "bbox_2d": [l, t, r, b], "overlap_ratio": overlap_ratio,
+    #                           "object_type": object_type}
+    #             frame_data.append(dictionary)
+    #     converted_data.append(frame_data)
+    # return converted_data
+                frame_data += [[
+                    frame_index, track_id, [l, t, r, b],
+                    overlap_ratio, object_type]]
+        frame_data = pd.DataFrame(frame_data, columns=columns)
         converted_data.append(frame_data)
-
     return converted_data
+
 
 
 def calculate_3d_unit_vector(_3d_point1, _3d_point2):
