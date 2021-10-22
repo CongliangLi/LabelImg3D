@@ -3,6 +3,8 @@ __pycache__/
 build/
 dist/
 scenes/KITTI/images/scene1/*.txt
+scenes/KITTI/images*
+scenes/KITTI/annotations*
 labelImg3d.exe
 .idea/
 .idea/workspace.xml
