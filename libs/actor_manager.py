@@ -173,6 +173,26 @@ class Actor:
         p_i = np.dot(P_v2i, cart2hom(p_v[:, :2]).T).T[:, :2]
         return [[int(p_i[i][0]), int(p_i[i][1])] for i in range(0, 8)]
 
+    def getBBox3D_w(self):
+        """
+               Returns:
+                   (8,2) array of vertices for the 3d box in following order:
+                   1 -------- 0
+                  /|         /|
+                 2 -------- 3 .
+                 | |        | |
+                 . 5 -------- 4
+                 |/         |/
+                 6 -------- 7
+
+               """
+        renderer = self.renderer
+        w, h = Image.open(self.interactor.parent().parent().parent().image_list.file_list[0]).size
+
+        P_v2i = getMatrixW2I(renderer, w, h)
+        pts_3d = getActorRotatedBounds(self.actor)
+        return pts_3d.tolist()
+
     def toJson(self, scene_folder):
         R_c2o = get_R_obj2c(np.array(matrix2List(self.actor.GetMatrix()))).reshape(1, 9).tolist()[0]
         camera_fov = self.interactor.parent().parent().parent().camera_property.get("fov")
@@ -188,7 +208,8 @@ class Actor:
             "class_name": self.model_name,
             "size": listRound(self.size),
             "2d_bbox": self.getBBox2D(),
-            "3d_bbox": self.getBBox3D()
+            "3d_bbox": self.getBBox3D(),
+            "3d_bbox_w": self.getBBox3D_w()
         }
 
     def toKITTI(self):
