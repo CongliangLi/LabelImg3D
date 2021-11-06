@@ -798,15 +798,14 @@ def read_mot_file(mot_file_path):
             else:
                 raise ValueError(f"unsuport object type {object_type}")
 
-            if overlap_ratio < 0.5:
     #             dictionary = {"id": track_id, "bbox_2d": [l, t, r, b], "overlap_ratio": overlap_ratio,
     #                           "object_type": object_type}
     #             frame_data.append(dictionary)
     #     converted_data.append(frame_data)
     # return converted_data
-                frame_data += [[
-                    frame_index, track_id, [l, t, r, b],
-                    overlap_ratio, object_type]]
+            frame_data += [[
+                frame_index, track_id, [l, t, r, b],
+                overlap_ratio, object_type]]
         frame_data = pd.DataFrame(frame_data, columns=columns)
         converted_data.append(frame_data)
     return converted_data
