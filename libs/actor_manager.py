@@ -21,7 +21,7 @@ from PIL import Image
 
 
 class Actor:
-    def __init__(self, render_window, interactor, model_path, model_class, model_name, layer_num):
+    def __init__(self, render_window, interactor, model_path, model_class, model_name, layer_num, actor_id=0):
         self.renderer_window = render_window
         self.interactor = interactor
         self.renderer = None
@@ -33,6 +33,7 @@ class Actor:
         self.loadModel(model_path, model_name)
         self.type_class = model_class
         self.size = []  # [w, l, h]
+        self.actor_id = actor_id
 
     def readObj(self, model_path):
         reader = vtk.vtkOBJReader()
@@ -172,15 +173,43 @@ class Actor:
         p_i = np.dot(P_v2i, cart2hom(p_v[:, :2]).T).T[:, :2]
         return [[int(p_i[i][0]), int(p_i[i][1])] for i in range(0, 8)]
 
+    def getBBox3D_w(self):
+        """
+               Returns:
+                   (8,2) array of vertices for the 3d box in following order:
+                   1 -------- 0
+                  /|         /|
+                 2 -------- 3 .
+                 | |        | |
+                 . 5 -------- 4
+                 |/         |/
+                 6 -------- 7
+
+               """
+        renderer = self.renderer
+        w, h = Image.open(self.interactor.parent().parent().parent().image_list.file_list[0]).size
+
+        P_v2i = getMatrixW2I(renderer, w, h)
+        pts_3d = getActorRotatedBounds(self.actor)
+        return pts_3d.tolist()
+
     def toJson(self, scene_folder):
+        R_c2o = get_R_obj2c(np.array(matrix2List(self.actor.GetMatrix()))).reshape(1, 9).tolist()[0]
+        camera_fov = self.interactor.parent().parent().parent().camera_property.get("fov")
+        T_c2o = get_T_obj2c(np.array(matrix2List(self.actor.GetMatrix())), camera_fov)
+        T_c2o = np.array([-T_c2o[0], T_c2o[1], -T_c2o[2]]).reshape(1, 3).tolist()[0]
         return {
             "model_file": os.path.relpath(self.model_path, scene_folder),
             "matrix": matrix2List(self.actor.GetMatrix()),
+            "actor_id": int(self.actor_id),
+            "R_matrix_c2o": R_c2o,
+            "T_matrix_c2o": T_c2o,
             "class": self.type_class,
             "class_name": self.model_name,
             "size": listRound(self.size),
             "2d_bbox": self.getBBox2D(),
-            "3d_bbox": self.getBBox3D()
+            "3d_bbox": self.getBBox3D(),
+            "3d_bbox_w": self.getBBox3D_w()
         }
 
     def toKITTI(self):
@@ -235,8 +264,9 @@ class ActorManager(QObject):
         # self.bg_renderer.GetActiveCamera().SetClippingRange(0.00001, 1000000)
         self.actors = []
 
-    def newActor(self, model_path, model_class, model_name, actor_matrix=None, actor_size=[]):
-        actor = Actor(self.render_window, self.interactor, model_path, model_class, model_name, len(self.actors) + 1)
+    def newActor(self, model_path, model_class, model_name, actor_id=0, actor_matrix=None, actor_size=[]):
+        actor = Actor(self.render_window, self.interactor, model_path, model_class, model_name,
+                      len(self.actors) + 1, actor_id)
         if actor_matrix is None and actor_size == []:
             # only copy the matrix of previous actors
             if len(self.actors) > 0 and self.actors[-1].model_path == actor.model_path:
@@ -387,13 +417,20 @@ class ActorManager(QObject):
     def createActors(self, scene_folder, data):
         for i in range(data["model"]["num"]):
             model_path = os.path.join(scene_folder, data["model"][str(i)]["model_file"])
+
+            if "actor_id" not in (data["model"][str(i)].keys()):
+                data["model"][str(i)]["actor_id"] = 0
+
             self.newActor(model_path, data["model"][str(i)]["class"],
                           data["model"][str(i)]["class_name"],
+                          data["model"][str(i)]["actor_id"],
                           data["model"][str(i)]["matrix"],
-                          data["model"][str(i)]["size"])
+                          data["model"][str(i)]["size"]
+                          )
 
             # updata property when enter a scene
             self.signal_update_property_enter_scene.emit(
+                [self.actors[-1].actor_id] +
                 list(self.getCurrentActiveActor().GetPosition() + self.getCurrentActiveActor().GetOrientation()) +
                 self.actors[-1].size
             )

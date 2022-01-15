@@ -165,7 +165,8 @@ def config_BB8(cfg_path, li3d_type, lm_path, fov):
 if __name__ == '__main__':
     labelImg3d_scene_path = "F:/my_desktop/kitti"
     linemod_path = "F:/my_desktop/PycharmFiles/3D_detection/segmentation_driven_pose/Data/kitti"
-    li3d_type = ["Tram", "Car", "Truck", "Van", "Pedestrian"]
+    # li3d_type = ["Tram", "Car", "Truck", "Van", "Pedestrian"]
+    li3d_type = ["Car", "Truck", "Van", "Pedestrian"]
     fov = li3d_2_linemod(labelImg3d_scene_path, li3d_type, linemod_path)
 
     cfg_path = "F:/my_desktop/PycharmFiles/3D_detection/segmentation_driven_pose/Data/cfg"

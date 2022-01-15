@@ -18,6 +18,7 @@ import numpy as np
 from pathlib import Path
 from libs.lsystem_config import SystemConfig
 
+
 # from PIL import Image
 
 
@@ -137,6 +138,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
         self.SetOpacity(1)
 
         self.slabel.signal_on_left_button_up.emit(
+            [self.slabel.actor_manager.actors[-1].actor_id] +
             list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation()) +
             self.slabel.actor_manager.actors[-1].size
         )
@@ -263,6 +265,7 @@ class MouseInteractorHighLightActor(vtkInteractorStyleTrackballActor):
             self.GetInteractor().Render()
 
         self.slabel.signal_on_left_button_up.emit(
+            [self.slabel.actor_manager.actors[-1].actor_id] +
             list(self.InteractionProp.GetPosition() + self.InteractionProp.GetOrientation()) +
             self.slabel.actor_manager.actors[-1].size
         )
@@ -346,7 +349,8 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
     def paste(self):
         if self.copy_actor is None:
             return
-        self.actor_manager.newActor(self.copy_actor.model_path, self.copy_actor.type_class, self.copy_actor.model_name)
+        self.actor_manager.newActor(self.copy_actor.model_path, self.copy_actor.type_class,
+                                    self.copy_actor.model_name, self.copy_actor.id)
 
     def start(self):
         self.interactor.Initialize()
@@ -392,8 +396,8 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         self.interactor.Render()
 
     @PyQt5.QtCore.pyqtSlot(str, int, str)
-    def loadModel(self, model_path, model_class, model_name):
-        self.actor_manager.newActor(model_path, model_class, model_name)
+    def loadModel(self, model_path, model_class, model_name, id=0):
+        self.actor_manager.newActor(model_path, model_class, model_name, id)
 
     def switchBoxWidgets(self, actor):
         index = self.actor_manager.getIndex(actor)
@@ -491,13 +495,15 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
                 return
 
             data = [self.parent().parent().property3d.config.get(p)
-                    for p in ["x", "y", "z", "rz", "rx", "ry"]]
+                    for p in ["actor_id", "x", "y", "z", "rz", "rx", "ry"]]
             # data = [round(Ro, 2) for Ro in data]
-            data = self.resize_Angle(data)
+            data = [data[0]] + self.resize_Angle(data[1:])
+
+            self.actor_manager.actors[-1].actor_id = data[0]
 
             Rotate = self.style.InteractionProp.GetOrientation()  # Z, X, Y
             Rotate = [round(Ro, 2) for Ro in Rotate]
-            Angle_dif = [Rotate[i] - data[i + 3] for i in range(3)]
+            Angle_dif = [Rotate[i] - data[i + 4] for i in range(3)]
 
             self.style.InteractionProp.SetPosition((0, 0, 0))
 
@@ -510,11 +516,11 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             # self.style.InteractionProp.SetOrientation([data[i + 3] for i in range(3)])
 
             Rotate = [round(Ro, 2) for Ro in self.style.InteractionProp.GetOrientation()]
-            data = [data[i] for i in range(3)] + [Rotate[i] for i in range(3)]
+            data =[data[0]] + [data[i+1] for i in range(3)] + [Rotate[i] for i in range(3)]
 
             self.parent().parent().property3d.update_property(data)
 
-            self.style.InteractionProp.SetPosition(*data[:3])
+            self.style.InteractionProp.SetPosition(*data[1:4])
 
             self.style.HighlightProp3D(self.style.InteractionProp)
             self.style.GetInteractor().Render()
