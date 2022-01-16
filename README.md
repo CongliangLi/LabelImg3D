@@ -56,9 +56,48 @@ pip install pyinstaller
 pyinstaller --clean -y LabelImg3D.spec
 ```
 
+## Data preparation
+Please download the [demo scene](./scenes/KITTI) and open with LabelImg3D.  
+```
+Scenes
+├── Scene1
+│   ├── images
+│   │   ├──  000000.png ......
+│   ├── models
+│   │   ├── Car.obj bus.obj ......
+|   ├── annotations
+|   │   ├── 000000.json ......
+├── Scene2
+├── ├── images
+│   │   ├── ......
+
+``` 
+
+## Hotkeys
+
+| Hot key                  | Description                          | 
+| ------------------------ | ------------------------------------ | 
+| Ctrl + s                 | Save                                 | 
+| Ctrl + o                 | Load scenes                          |
+| Ctrl + c                 | Copy model                           | 
+| Ctrl + v                 | Paste model                          | 
+| Ctrl + Space             | Copy Scene                           | 
+| 1                        | Previous image                       | 
+| Space                    | Next image                           | 
+| x                        | Delete Model                         |
+| w                        | Rotate around the positive x-axis    |
+| s                        |Rotate around the negative x-axis     |
+| e                        | Rotate around the positive y-axis    |
+| q                        |Rotate around the negative y-axis     |
+| a                        | Rotate around the positive z-axis    |
+| d                        |Rotate around the negative z-axis     |
+
+
 ## Dataset
 
-this is a dataset for our idea
+This is a dataset named [KITTI3D](https://drive.google.com/file/d/1eXtvURnTQbwCmiKDfhsWdGxfkv5Qqgep/view?usp=sharing)
+
+![](./libs/docs/imgs/KITTI3D.png)
 
 ***
 
@@ -68,5 +107,9 @@ this is a dataset for our idea
 | :---------------------------------------------------: | :---------------: |
 | [pyqtconfig](https://github.com/learnpyqt/pyqtconfig) | for gui configure |
 
+***
+
+## License
+The methods provided on this page are published under the [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License](http://creativecommons.org/licenses/by-nc-sa/3.0/) . This means that you must attribute the work in the manner specified by the authors, you may not use this work for commercial purposes and if you alter, transform, or build upon this work, you may distribute the resulting work only under the same license. If you are interested in commercial usage you can contact us for further options.
 
 
