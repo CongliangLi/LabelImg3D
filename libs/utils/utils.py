@@ -1,5 +1,4 @@
 import math
-
 import vtk
 import os
 import numpy as np
@@ -10,6 +9,7 @@ import yaml
 from plyfile import PlyData
 import xml.etree.ElementTree as ET
 import pandas as pd
+from scipy.spatial.transform import Rotation as R
 
 
 def getTransform(matrix):
@@ -365,7 +365,7 @@ def get_distance(fov):
 
 # Calculating fov(angle value) from distance
 def get_fov(distance):
-    return round(2 * atan(1 / (2 * distance)), 2)
+    return degrees(round(2 * atan(1 / (2 * distance)), 2))
 
 
 # parse yaml to dict
@@ -811,7 +811,6 @@ def read_mot_file(mot_file_path):
     return converted_data
 
 
-
 def calculate_3d_unit_vector(_3d_point1, _3d_point2):
     # All the type of the input are list
     x = _3d_point2[0] - _3d_point1[0]
@@ -822,3 +821,73 @@ def calculate_3d_unit_vector(_3d_point1, _3d_point2):
 
     return [x / distance, y / distance, z / distance]
 
+
+def get_translation_acc(trans_g, trans_l):
+    """
+
+    Args:
+        trans_g: the groundtruth of x, y or z
+        trans_l: the annotate result of x, y or z
+
+    Returns:
+        the acc of x,y or z
+    """
+    return round(math.exp(-math.fabs(trans_l - trans_g)), 5)
+
+
+def get_rotation_acc(rota_g, rota_l, mode="degrees"):
+    """
+
+    Args:
+        rota_g: the groundtruth of rx, ry or rz
+        rota_l: the annotate result of rx, ry or rz
+        mode: the mode of angle expression("degrees" or "radians")
+
+    Returns:
+        the acc of rx, ry or rz
+    """
+    if mode == "degrees":
+        rota_g = radians(rota_g)
+        rota_l = radians(rota_l)
+    elif mode == "radians":
+        rota_g = rota_g
+        rota_l = rota_l
+    else:
+        print("There are only two kinds of angle expression methods: degrees and radians")
+        return None
+    r = math.acos(cos(rota_g) * cos(rota_l) - sin(rota_g) * sin(rota_l))
+    return degrees(r)
+
+
+def iou(box1, box2):
+    """
+
+    Args:
+        box1: box1 (l, t, r, b)
+        box2: box2 (l, t, r, b)
+
+    Returns:
+        IoU of box1 and box2
+
+    """
+    h = max(0, min(box1[2], box2[2]) - max(box1[0], box2[0]))
+    w = max(0, min(box1[3], box2[3]) - max(box1[1], box2[1]))
+    area_box1 = ((box1[2] - box1[0]) * (box1[3] - box1[1]))
+    area_box2 = ((box2[2] - box2[0]) * (box2[3] - box2[1]))
+    inter = w * h
+    union = area_box1 + area_box2 - inter
+    return inter / union
+
+
+def box_cxcywh_to_xyxy(x):
+    x_c, y_c, w, h = x
+    b = [(x_c - 0.5 * w), (y_c - 0.5 * h),
+         (x_c + 0.5 * w), (y_c + 0.5 * h)]
+    return b
+
+
+def box_xyxy_to_cxcywh(x):
+    x0, y0, x1, y1 = x
+    b = [(x0 + x1) / 2, (y0 + y1) / 2,
+         (x1 - x0), (y1 - y0)]
+    return b
