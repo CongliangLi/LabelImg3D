@@ -1,9 +1,38 @@
-![](./libs/docs/imgs/demo.gif)
+<h1 align="center">
+  <img src="./libs/docs/imgs/icon.png" width="30%"><br/>labelImg3D
+</h1>
 
-## Purpose
+
+
+<h4 align="center">
+  RGB Image Object Pose Annotation with Python
+</h4>
+
+
+
+<br/>
+
+<div align="center">
+  <img src="./libs/docs/imgs/labeled_result.png" width="90%">
+</div>
+
+
+
+##  Description
+LabelImg3D is a labeling tool for image graphics. 
+It is written in Python and uses Qt for its graphical interface. 
+The annotations are saved as json files and used in the SMPOE network.
+
+<div align="center">
+  <img src="./libs/docs/imgs/demo.gif" width="90%">
+</div>
+
+<br/>
+***
+
+## Purpose 
 
 We human beings can do 3D reconstruction from single image. Instead of depth estimation from image, we humans beings seems to use a different way, which is to call 3D model in mind, re-align these 3D models and change hyper-parameters of 3D models in the virtual world of our brain. Therefore, why not try to find a way to realign 3D models by single image instead of directly estimating depth. 
-
 
 In this work, we try to find a **way to re-align 3D models in 3D space guided by the single images**.  There are two steps needs to be done, as follows:
 
@@ -11,26 +40,31 @@ In this work, we try to find a **way to re-align 3D models in 3D space guided by
 - Image-guided 3D Hyper-parameter of variants model estimation. 
 ![](./libs/docs/imgs/principle.png)
 
+***
 
-## Framework
-
-
+## Features
+- [x] Image annotation of the object's true pose relative to the camera.
+- [x] Annotation of the target's 2D boxes and 3D boxes in the image.
+- [x] GUI customization (predefined labels, auto-saving,  etc). 
+- [x] Exporting linemod dataset for 6D Pose Estimation. 
 
 ***
 
-## Roadmap
-
-| Task Name                | Start/End Date        | Des                                                         |
-| ------------------------ | --------------------- | ----------------------------------------------------------- |
-| Labeling                 | 2021/8/1 - now        | Start Labeling image with 3D vehicle model                  |
-| Optimize the label tools | 2021/6/1 - 2021/7/30  | Make the tools easy to use                                  |
-| Create the label tools   | 2021/3/3 - 2021/5/30  | Complete the creation of LabelImg3D                         |
-| Collect 3D Model         | 2021/1/12 - 2021/3/1  | Collect 3D vehicle model for this idea                      |
-| Design the label tools   | 2020/12/10 - 2021/3/2 | Start the idea of 3D detection and tracking in single image |
+## Requirements
+- Ubuntu / macOS / Windows
+- Python3
+- [PyQt5](http://www.riverbankcomputing.co.uk/software/pyqt/intro)
+- VTK
+- numpy
+- pandas
+- scipy
+- PyYAML
+- opencv-python
 
 ***
 
-## Run Label Tools
+## Installation
+### Install labelImg3D
 There are two ways for installing the labeltools:
 ```sh
 conda create -n labelimg3D python=3.8
@@ -48,15 +82,18 @@ conda activate pylabelimg3D
 python main.py
 ```
 
-## Package
+### Packages
 If you want to make the installer, you can use the `pyinstaller`. Try the following command:
 
-```sh
+```bash
 pip install pyinstaller
 pyinstaller --clean -y LabelImg3D.spec
 ```
 
-## Data preparation
+***
+
+## Usage
+### Data Preparation
 Please download the [demo scene](./scenes/KITTI) and open with LabelImg3D.  
 ```
 Scenes
@@ -71,19 +108,147 @@ Scenes
 ├── ├── images
 │   │   ├── ......
 
-``` 
+```
+### Run LabelImg3D
+```bash
+labelImg3D  # open gui
+```
+or
+```bash
+python3 labelImg3D.py
+```
+
+### Label Annotations
+The annotation files contain 3 main sections, as follows:
+
+Annotation.json
+├── image_file   [<sup>1</sup>](#R1): "images/0000.png"   
+├── model  [<sup>2</sup>](#R2)  
+│   ├── num  [<sup>3</sup>](#R3): 5  
+│   ├── 0  [<sup>4</sup>](#R4)  
+│   │   ├── model_file  [<sup>5</sup>](#R5): "models/Car.obj"  
+│   │   ├── matrix: [0, …, ] 					# (16x1) matrix  [<sup>6</sup>](#R6)  
+│   │   ├── R_matrix_c2o:[0, …, ] 				# (9x1) matrix  [<sup>7</sup>](#R7)  
+│   │   ├── T_matrix_c2o:[0, …, ] 				# (3x1) matrix  [<sup>8</sup>](#R8)  
+│   │   ├── 2d_bbox: [700, …, ]					# (4x1) matrix  [<sup>9</sup>](#R9)  
+│   │   ├── 3d_bbox: [[721,500] …, ]			# (8x2) matrix  [<sup>10</sup>](#R10)  
+│   │   ├── 3d_bbox_w: [[3.8, 2.4, 1.4],…，]		#(3x1) matrix  [<sup>11</sup>](#R11)  
+│   │   ├── class: 1 							# object class num [<sup>12</sup>](#R12)  
+│   │   ├── class_name: Car 					# object class name  [<sup>13</sup>](#R13)  
+│   │   ├── size: [1.99, 1.55, 18.24]			# (3x1) matrix  [<sup>14</sup>](#R14)  
+│   ├── 1[<sup>4</sup>](#R4)  
+│   │   ├── model_file  [<sup>5</sup>](#R5): "models/Car.obj"  
+│   │   ├── ......   
+├── camera  [<sup>15</sup>](#R15)  
+│   ├── matrix: [1.0, …, ] 						# (16x1) matrix  [<sup>16</sup>](#R16)  
+│   ├── position: [0.0, 0.0, 0.52]				# (3x1) matrix  [<sup>17</sup>](#R17)  
+│   ├── focalPoint: [0.0, 0.0, 0.0]				# (3x1) matrix  [<sup>18</sup>](#R18)  
+│   ├── fov: 88.0								# camera fov  [<sup>18</sup>](#R18)  
+│   ├── viewup: [0.0, 1.0, 0.0]					# camera viewup  [<sup>18</sup>](#R18)  
+│   ├── distance: 0.52							# camera distance  [<sup>18</sup>](#R18)  
+
+</br>
+
+<div><a name="R1"></a>
+1. image_file: The labeled image file path.  
+</div>
+
+<div><a name="R2"></a>
+2. model: Labeling results of objects
+</div>
+
+<div><a name="R3"></a>
+3. model──num: The number of objects
+</div>
+
+<div><a name="R4"></a>
+4. 0, 1, 2...: each labeled object 
+</div>
+
+<div><a name="R5"></a>
+5. model_file: the object model path
+</div>
+
+<div><a name="R6"></a>
+6. matrix:  the pose of object in twin space
+</div>
+
+<div><a name="R7"></a>
+7. R_matrix_c2o: Rotation matrix of the object from its own coordinate to the camera coordinate. 
+</div>
+
+<div><a name="R8"></a>
+8. T_matrix_c2o: Translation matrix of the object from its own coordinate to the camera coordinate.
+</div>
+
+<div><a name="R9"></a>
+9. 2d_bbox:  2D bounding box of the object in the image.
+</div>
+
+<div><a name="R10"></a>
+10. 3d_bbox: 3D bounding box of the object in the image.
+</div>
+
+<div><a name="R11"></a>
+11. 3d_bbox_w: 3D bounding box of the object in the camera coordinate in twin space.
+</div>
+
+<div><a name="R12"></a>
+12. class: the object class number.
+</div>
+
+<div><a name="R13"></a>
+13. class_name: the object class name.
+</div>
+
+<div><a name="R14"></a>
+14. size: the object size (Unit: meter).
+</div>
+
+<div><a name="R15"></a>
+15. camera: 
+</div>
+
+<div><a name="R16"></a>
+16. matrix: the pose of camera in twin space.
+</div>
+
+<div><a name="R17"></a>
+17. position: the position of the camera in twin space.
+</div>
+
+<div><a name="R18"></a>
+18. focalPoint, fov, viewup, distance: Camera parameters
+</div>
+
+
+
+***
+
+## Roadmap
+
+| Task Name                | Start/End Date        | Des                                                         |
+| ------------------------ | --------------------- | ----------------------------------------------------------- |
+| Improve the content                 | 2021/10/1 - now        | make the tool work for deeo learning networks                     |
+| Labeling                 | 2021/8/1 - 2021/10/1        | Start Labeling image with 3D vehicle model                  |
+| Optimize the label tools | 2021/6/1 - 2021/7/30  | Make the tools easy to use                                  |
+| Create the label tools   | 2021/3/3 - 2021/5/30  | Complete the creation of LabelImg3D                         |
+| Collect 3D Model         | 2021/1/12 - 2021/3/1  | Collect 3D vehicle model for this idea                      |
+| Design the label tools   | 2020/12/10 - 2021/3/2 | Start the idea of 3D detection and tracking in single image |
+
+***
 
 ## Hotkeys
 
-| Hot key                  | Description                          | 
-| ------------------------ | ------------------------------------ | 
-| Ctrl + s                 | Save                                 | 
+| Hot key                  | Description                          |
+| ------------------------ | ------------------------------------ |
+| Ctrl + s                 | Save                                 |
 | Ctrl + o                 | Load scenes                          |
-| Ctrl + c                 | Copy model                           | 
-| Ctrl + v                 | Paste model                          | 
-| Ctrl + Space             | Copy Scene                           | 
-| 1                        | Previous image                       | 
-| Space                    | Next image                           | 
+| Ctrl + c                 | Copy model                           |
+| Ctrl + v                 | Paste model                          |
+| Ctrl + Space             | Copy Scene                           |
+| 1                        | Previous image                       |
+| Space                    | Next image                           |
 | x                        | Delete Model                         |
 | w                        | Rotate around the positive x-axis    |
 | s                        |Rotate around the negative x-axis     |
@@ -95,10 +260,26 @@ Scenes
 
 ## Dataset
 
-This is a dataset named [KITTI3D](https://drive.google.com/file/d/1eXtvURnTQbwCmiKDfhsWdGxfkv5Qqgep/view?usp=sharing)
+This is a dataset named [KITTI3D](https://drive.google.com/file/d/1wFcWEl4Pkj9H-MEd5Tc_5Ld9KCRje9Jm/view?usp=sharing)
 
 ![](./libs/docs/imgs/KITTI3D.png)
 
+
+
+## Framework
+
+
+
+***
+
+
+
+## Developing
+
+```bash
+git clone https://github.com/CongliangLi/LabelImg3D.git
+cd labelImg3D
+```
 ***
 
 ## Third-Party Library

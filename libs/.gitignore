@@ -1,0 +1,6 @@
+.vscode/
+__pycache__/
+.idea/
+build/
+dist/
+scenes/KITTI/images/scene1/*.txt

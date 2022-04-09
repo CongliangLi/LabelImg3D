@@ -12,7 +12,7 @@
             0.0,
             0.0,
             1.0,
-            0.51,
+            0.52,
             0.0,
             0.0,
             0.0,
@@ -21,24 +21,24 @@
         "position": [
             0,
             0,
-            0.51
+            0.52
         ],
         "focalPoint": [
             0.0,
             0.0,
             0.0
         ],
-        "fov": 88.8,
+        "fov": 88.0,
         "viewup": [
             0.0,
             1.0,
             0.0
         ],
-        "distance": 0.51
+        "distance": 0.895
     },
     "model": {
         "initial_position": -30.0,
-        "max_position": 0.5,
+        "max_position": 0.0,
         "position_accuracy": 5,
         "size_accuracy": 2,
         "scaling_factor": 0.1

@@ -1,5 +1,6 @@
 include CONTRIBUTING.rst
 include HISTORY.md
+include LICENSE
 include README.md
 
 include resources.qrc
