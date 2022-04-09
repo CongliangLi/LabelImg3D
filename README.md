@@ -28,7 +28,6 @@ The annotations are saved as json files and used in the SMPOE network.
 </div>
 
 <br/>
-***
 
 ## Purpose 
 
