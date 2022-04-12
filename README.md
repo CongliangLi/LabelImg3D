@@ -36,7 +36,9 @@ We human beings can do 3D reconstruction from single image. Instead of depth est
 In this work, we try to find a **way to re-align 3D models in 3D space guided by the single images**.  There are two steps needs to be done, as follows:
 
 - Image-guided 3D Re-Alignment: object detection, 3D model matching, and 3D model pose estimation.
-- Image-guided 3D Hyper-parameter of variants model estimation. 
+- Image-guided 3D Hyper-parameter of variants model estimation.  
+
+
 ![](./libs/docs/imgs/principle.png)
 
 ***
