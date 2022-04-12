@@ -38,8 +38,9 @@ In this work, we try to find a **way to re-align 3D models in 3D space guided by
 - Image-guided 3D Re-Alignment: object detection, 3D model matching, and 3D model pose estimation.
 - Image-guided 3D Hyper-parameter of variants model estimation.  
 
-
-![](./libs/docs/imgs/principle.png)
+<div align="center">
+  <img src="./libs/docs/imgs/principle.png" width="90%">
+</div>
 
 ***
 
