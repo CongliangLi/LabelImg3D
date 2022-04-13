@@ -330,3 +330,4 @@ cd labelImg3D
 The methods provided on this page are published under the [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License](http://creativecommons.org/licenses/by-nc-sa/3.0/) . This means that you must attribute the work in the manner specified by the authors, you may not use this work for commercial purposes and if you alter, transform, or build upon this work, you may distribute the resulting work only under the same license. If you are interested in commercial usage you can contact us for further options.
 
 
+**Commercial Cooperation, Contact [shijieSun@chd.edu.cn](mailto:shijieSun@chd.edu.cn)**
