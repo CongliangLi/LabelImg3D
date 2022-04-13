@@ -101,10 +101,26 @@
     </property>
     <addaction name="actionSystem_Config"/>
    </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <widget class="QMenu" name="menuAuthors">
+     <property name="title">
+      <string>Authors</string>
+     </property>
+     <addaction name="actionCongliang_Li"/>
+     <addaction name="actionShijie_Sun"/>
+    </widget>
+    <addaction name="menuAuthors"/>
+    <addaction name="separator"/>
+    <addaction name="actionLicense"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menuEdit"/>
    <addaction name="menuConfig"/>
    <addaction name="menuTools"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Load_Scenes">
@@ -265,6 +281,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Space</string>
+   </property>
+  </action>
+  <action name="actionLicense">
+   <property name="text">
+    <string>License</string>
+   </property>
+  </action>
+  <action name="actionCongliang_Li">
+   <property name="text">
+    <string>Congliang Li</string>
+   </property>
+  </action>
+  <action name="actionShijie_Sun">
+   <property name="text">
+    <string>Shijie Sun</string>
    </property>
   </action>
  </widget>

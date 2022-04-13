@@ -62,6 +62,11 @@ class Draw3D(QtWidgets.QMainWindow):
         self.ui.actionPaste.triggered.connect(self.ui.vtk_panel.paste)
         self.ui.actioncopy_scene.triggered.connect(self.ui.vtk_panel.copy_scene)
 
+        # About
+        self.ui.actionCongliang_Li.triggered.connect(self.ui.vtk_panel.author_Congliang_Li)
+        self.ui.actionShijie_Sun.triggered.connect(self.ui.vtk_panel.author_Shijie_Sun)
+        self.ui.actionLicense.triggered.connect(self.ui.vtk_panel.license)
+
         # rotate
         for s in ['X', 'Y', 'Z', 'X_M', 'Y_M', 'Z_M']:
             eval('self.ui.actionRoate{}.triggered.connect'.format(s))(eval('self.property3d.roate{}'.format(s)))

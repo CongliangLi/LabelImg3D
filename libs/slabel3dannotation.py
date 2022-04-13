@@ -17,7 +17,7 @@ from libs.sproperty import *
 import numpy as np
 from pathlib import Path
 from libs.lsystem_config import SystemConfig
-
+import webbrowser
 
 # from PIL import Image
 
@@ -516,7 +516,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
             # self.style.InteractionProp.SetOrientation([data[i + 3] for i in range(3)])
 
             Rotate = [round(Ro, 2) for Ro in self.style.InteractionProp.GetOrientation()]
-            data =[data[0]] + [data[i+1] for i in range(3)] + [Rotate[i] for i in range(3)]
+            data = [data[0]] + [data[i + 1] for i in range(3)] + [Rotate[i] for i in range(3)]
 
             self.parent().parent().property3d.update_property(data)
 
@@ -580,3 +580,15 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
         self.loadScenes(scene_folder, os.path.join(images_folder, image_name_list[current_index]),
                         os.path.join(annotations_folder, annotations_list[current_index]))
+
+    def author_Congliang_Li(self):
+        print("Congliang Li")
+        webbrowser.open('https://github.com/CongliangLi')
+
+    def author_Shijie_Sun(self):
+        print("Shijie Sun")
+        webbrowser.open('https://github.com/ShijieS')
+
+    def license(self):
+        print("License")
+        webbrowser.open('https://creativecommons.org/licenses/by-nc-sa/3.0/')

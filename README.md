@@ -292,7 +292,7 @@ cd labelImg3D
 
 ***
 
-## Author Home
+## Authors Home
 [Congliang Li](https://github.com/CongliangLi)  
 [Shijie Sun](https://github.com/ShijieS)
 
