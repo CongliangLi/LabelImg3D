@@ -587,7 +587,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
 
     def author_Shijie_Sun(self):
         # print("Shijie Sun")
-        webbrowser.open('https://github.com/ShijieS')
+        webbrowser.open('https://js.chd.edu.cn/xxgcxy/ssj102/list.psp')
 
     def license(self):
         # print("License")
