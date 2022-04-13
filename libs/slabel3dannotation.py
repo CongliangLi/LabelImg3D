@@ -582,13 +582,13 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
                         os.path.join(annotations_folder, annotations_list[current_index]))
 
     def author_Congliang_Li(self):
-        print("Congliang Li")
+        # print("Congliang Li")
         webbrowser.open('https://github.com/CongliangLi')
 
     def author_Shijie_Sun(self):
-        print("Shijie Sun")
+        # print("Shijie Sun")
         webbrowser.open('https://github.com/ShijieS')
 
     def license(self):
-        print("License")
+        # print("License")
         webbrowser.open('https://creativecommons.org/licenses/by-nc-sa/3.0/')
