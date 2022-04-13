@@ -155,12 +155,10 @@ python3 labelImg3D.py
 
 The annotation will be saved to the Scenes/<Your Scene>/annotations.
 
-You can refer to the below hotkeys to speed up your workflow.
+You can refer to the below hotkeys to speed up your workflow.  
 
 
-
-
-## Hotkeys
+### Hotkeys
 
 | Hot key                  | Description                          |
 | ------------------------ | ------------------------------------ |
