@@ -182,9 +182,9 @@ You can refer to the below hotkeys to speed up your workflow.
 
 
 ### Label Annotations
-The annotation files contain 3 main sections, as follows:
+The annotation files contain 3 main sections, as follows:  
 
-Annotation.json
+Annotation.json  
 ├── image_file   [<sup>1</sup>](#R1): "images/0000.png"   
 ├── model  [<sup>2</sup>](#R2)  
 │   ├── num  [<sup>3</sup>](#R3): 5  
