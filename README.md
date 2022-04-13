@@ -44,6 +44,21 @@ In this work, we try to find a **way to re-align 3D models in 3D space guided by
 
 ***
 
+
+## Roadmap
+
+| Task Name                | Start/End Date        | Des                                                         |
+| ------------------------ | --------------------- | ----------------------------------------------------------- |
+| Improve the content                 | 2021/10/1 - now        | make the tool work for deeo learning networks                     |
+| Labeling                 | 2021/8/1 - 2021/10/1        | Start Labeling image with 3D vehicle model                  |
+| Optimize the label tools | 2021/6/1 - 2021/7/30  | Make the tools easy to use                                  |
+| Create the label tools   | 2021/3/3 - 2021/5/30  | Complete the creation of LabelImg3D                         |
+| Collect 3D Model         | 2021/1/12 - 2021/3/1  | Collect 3D vehicle model for this idea                      |
+| Design the label tools   | 2020/12/10 - 2021/3/2 | Start the idea of 3D detection and tracking in single image |
+
+***
+
+
 ## Features
 - [x] Image annotation of the object's true pose relative to the camera.
 - [x] Annotation of the target's 2D boxes and 3D boxes in the image.
@@ -119,6 +134,54 @@ or
 ```bash
 python3 labelImg3D.py
 ```
+
+### Steps
+1. Build and launch using the instructions above.
+2. Click 'Load Scenes' in Menu/File, and choose the scene folder as [Data Preparation](#data).
+3. Click 'System Config' in Menu/Config.
+4. Click "camera" at System_config Page, and set the FOV to the field of view of the camera taking the scene images. 
+5. Click "model" at System_config page, and you can set the initial position, max position, position accuracy, size accuracy, scaling factor of the model.
+   * initial position: The initial position of the model loaded into the scene.
+   * max position: The position of the model in the scene closest to the camera. Moving the model beyond this position resets the model to its initial position during the move.
+   * position accuracy: Display accuracy of model x,y,z position, located in 3DProperty module.
+   * size accuracy: Display accuracy of model size(w, l, h), located in 3DProperty module.
+   * scaling factor: Model movement speed in Z-axis.
+6. Click the model name at Models module, and we can see the model loaded to its initial position.
+
+   * If a model is selected and loaded as described above, if both model categories are the same, the new model will be loaded to the selected model location.
+7. You can press the Shift key and press the left mouse button to select the model and move the mouse position to move the model in X and Y axis.
+8. You can press the right mouse button to select the model and move the mouse position to move the model in the Z-axis.
+9. In the visual perception of the human eye, object labeling is considered to be over when the model in the scene completely overlaps with the image object.
+
+The annotation will be saved to the Scenes/<Your Scene>/annotations.
+
+You can refer to the below hotkeys to speed up your workflow.
+
+
+
+
+## Hotkeys
+
+| Hot key                  | Description                          |
+| ------------------------ | ------------------------------------ |
+| Ctrl + s                 | Save                                 |
+| Ctrl + o                 | Load scenes                          |
+| Ctrl + c                 | Copy model                           |
+| Ctrl + v                 | Paste model                          |
+| Ctrl + Space             | Copy Scene                           |
+| 1                        | Previous image                       |
+| Space                    | Next image                           |
+| x                        | Delete Model                         |
+| Shift + Left Mouse Button Move                        | Move the model along X, Y axis |
+| Right Mouse Button Move | Move the model along Z axis |
+| w                        | Rotate around the positive x-axis    |
+| s                        |Rotate around the negative x-axis     |
+| e                        | Rotate around the positive y-axis    |
+| q                        |Rotate around the negative y-axis     |
+| a                        | Rotate around the positive z-axis    |
+| d                        |Rotate around the negative z-axis     |
+
+
 
 ### Label Annotations
 The annotation files contain 3 main sections, as follows:
@@ -227,44 +290,13 @@ Annotation.json
 
 ***
 
-## Roadmap
-
-| Task Name                | Start/End Date        | Des                                                         |
-| ------------------------ | --------------------- | ----------------------------------------------------------- |
-| Improve the content                 | 2021/10/1 - now        | make the tool work for deeo learning networks                     |
-| Labeling                 | 2021/8/1 - 2021/10/1        | Start Labeling image with 3D vehicle model                  |
-| Optimize the label tools | 2021/6/1 - 2021/7/30  | Make the tools easy to use                                  |
-| Create the label tools   | 2021/3/3 - 2021/5/30  | Complete the creation of LabelImg3D                         |
-| Collect 3D Model         | 2021/1/12 - 2021/3/1  | Collect 3D vehicle model for this idea                      |
-| Design the label tools   | 2020/12/10 - 2021/3/2 | Start the idea of 3D detection and tracking in single image |
-
-***
-
-## Hotkeys
-
-| Hot key                  | Description                          |
-| ------------------------ | ------------------------------------ |
-| Ctrl + s                 | Save                                 |
-| Ctrl + o                 | Load scenes                          |
-| Ctrl + c                 | Copy model                           |
-| Ctrl + v                 | Paste model                          |
-| Ctrl + Space             | Copy Scene                           |
-| 1                        | Previous image                       |
-| Space                    | Next image                           |
-| x                        | Delete Model                         |
-| w                        | Rotate around the positive x-axis    |
-| s                        |Rotate around the negative x-axis     |
-| e                        | Rotate around the positive y-axis    |
-| q                        |Rotate around the negative y-axis     |
-| a                        | Rotate around the positive z-axis    |
-| d                        |Rotate around the negative z-axis     |
-
 
 ## Dataset
 
 This is a dataset named [KITTI3D](https://drive.google.com/file/d/1wFcWEl4Pkj9H-MEd5Tc_5Ld9KCRje9Jm/view?usp=sharing)
 
 ![](./libs/docs/imgs/KITTI3D.png)
+
 
 
 
@@ -292,7 +324,7 @@ cd labelImg3D
 
 ***
 
-## Authors Home
+## Author Home
 [Congliang Li](https://github.com/CongliangLi)  
 [Shijie Sun](https://github.com/ShijieS)
 
