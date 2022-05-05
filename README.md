@@ -94,7 +94,7 @@ or
 
 ```sh
 conda create -n pylabelimg3D python=3.8
-pip install -r requirement.txt
+pip install -r requirements.txt
 conda activate pylabelimg3D
 python main.py
 ```
