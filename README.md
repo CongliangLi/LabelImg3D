@@ -45,19 +45,6 @@ In this work, we try to find a **way to re-align 3D models in 3D space guided by
 ***
 
 
-## Roadmap
-
-| Task Name                | Start/End Date        | Des                                                         |
-| ------------------------ | --------------------- | ----------------------------------------------------------- |
-| Improve the content                 | 2021/10/1 - now        | make the tool work for deeo learning networks                     |
-| Labeling                 | 2021/8/1 - 2021/10/1        | Start Labeling image with 3D vehicle model                  |
-| Optimize the label tools | 2021/6/1 - 2021/7/30  | Make the tools easy to use                                  |
-| Create the label tools   | 2021/3/3 - 2021/5/30  | Complete the creation of LabelImg3D                         |
-| Collect 3D Model         | 2021/1/12 - 2021/3/1  | Collect 3D vehicle model for this idea                      |
-| Design the label tools   | 2020/12/10 - 2021/3/2 | Start the idea of 3D detection and tracking in single image |
-
-***
-
 
 ## Features
 - [x] Image annotation of the object's true pose relative to the camera.
