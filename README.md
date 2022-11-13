@@ -278,9 +278,9 @@ Annotation.json
 
 ## Dataset
 
-This is a dataset named [KITTI3D](https://drive.google.com/file/d/1wFcWEl4Pkj9H-MEd5Tc_5Ld9KCRje9Jm/view?usp=sharing)
+This is a dataset named [KITTI-6DoF](https://drive.google.com/file/d/1wFcWEl4Pkj9H-MEd5Tc_5Ld9KCRje9Jm/view?usp=sharing)
 
-![](./libs/docs/imgs/KITTI3D.png)
+![](./libs/docs/imgs/KITTI-6DoF.png)
 
 
 
