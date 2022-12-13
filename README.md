@@ -70,9 +70,7 @@ In this work, we try to find a **way to re-align 3D models in 3D space guided by
 ## Installation
 ### Install labelImg3D
 There are two ways for installing the labeltools:
-```sh
-conda create -n labelimg3D python=3.8
-```
+
 1. install from the released .exe
 
 or 
@@ -81,9 +79,9 @@ or
 
 ```sh
 conda create -n pylabelimg3D python=3.8
-pip install -r requirements.txt
 conda activate pylabelimg3D
-python main.py
+pip install -r requirements.txt
+python labelImg3d.py
 ```
 
 ### Packages
