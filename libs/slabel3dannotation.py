@@ -350,7 +350,7 @@ class SLabel3DAnnotation(QtWidgets.QFrame):
         if self.copy_actor is None:
             return
         self.actor_manager.newActor(self.copy_actor.model_path, self.copy_actor.type_class,
-                                    self.copy_actor.model_name, self.copy_actor.id)
+                                    self.copy_actor.model_name, self.copy_actor.actor_id)
 
     def start(self):
         self.interactor.Initialize()
